@@ -48,51 +48,80 @@ void TileMap::free()
 bool TileMap::loadLevel(const string &levelFile)
 {
 	ifstream fin;
-	string line, tilesheetFile;
+	string line, tilesheetFile, collisionFile;
 	stringstream sstream;
-	char tile;
 	
 	fin.open(levelFile.c_str());
 	if(!fin.is_open())
 		return false;
 	getline(fin, line);
-	if(line.compare(0, 7, "TILEMAP") != 0)
+	if(line.compare(0, 13, "BOX_COLLISION") != 0)
 		return false;
+
+	// Entire map size
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> mapSize.x >> mapSize.y;
+
+	// Section map size
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tileSize >> blockSize;
+	sstream >> sectionSize.x >> sectionSize.y;
+
+	// Block Size
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> blockSize;
+
+	// Map File
 	getline(fin, line);
 	sstream.str(line);
 	sstream >> tilesheetFile;
+
+	// Collisions File
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> collisionFile;
+
 	tilesheet.loadFromFile(tilesheetFile, TEXTURE_PIXEL_FORMAT_RGBA);
 	tilesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	tilesheet.setWrapT(GL_CLAMP_TO_EDGE);
 	tilesheet.setMinFilter(GL_NEAREST);
 	tilesheet.setMagFilter(GL_NEAREST);
+
+	// Number of block in Map
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> tilesheetSize.x >> tilesheetSize.y;
-	tileTexSize = glm::vec2(1.f / tilesheetSize.x, 1.f / tilesheetSize.y);
+	sstream >> blocksheetSize.x >> blocksheetSize.y;
+	tileTexSize = glm::vec2(1.f / blocksheetSize.x, 1.f / blocksheetSize.y);
 	
 	map = new int[mapSize.x * mapSize.y];
-	for(int j=0; j<mapSize.y; j++)
-	{
-		for(int i=0; i<mapSize.x; i++)
-		{
-			fin.get(tile);
-			if(tile == ' ')
-				map[j*mapSize.x+i] = 0;
-			else
-				map[j*mapSize.x+i] = tile - int('0');
-		}
-		fin.get(tile);
-#ifndef _WIN32
-		fin.get(tile);
-#endif
+
+	fin.close();
+
+	// Get collisions boxes
+	int collisionsSize;
+
+	fin.open(collisionFile.c_str());
+	if (!fin.is_open())
+		return false;
+
+	// Get number of collision boxes
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> collisionsSize;
+
+	collisions = new glm::ivec4[collisionsSize];
+	for (int i = 0; i < collisionsSize; ++i) {
+		int x, y, z, w;
+		stringstream aa;
+
+		getline(fin, line);
+		aa.str(line);
+		aa >> x >> y >> z >> w;
+		collisions[i] = glm::ivec4(x, y, z, w);
 	}
+
 	fin.close();
 	
 	return true;
@@ -153,7 +182,7 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program)
 
 bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
-	int x, y0, y1;
+	/*int x, y0, y1;
 	
 	x = pos.x / tileSize;
 	y0 = pos.y / tileSize;
@@ -163,13 +192,13 @@ bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) c
 		if(map[y*mapSize.x+x] != 0)
 			return true;
 	}
-	
+	*/
 	return false;
 }
 
 bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const
 {
-	int x, y0, y1;
+	/*int x, y0, y1;
 	
 	x = (pos.x + size.x - 1) / tileSize;
 	y0 = pos.y / tileSize;
@@ -179,13 +208,13 @@ bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) 
 		if(map[y*mapSize.x+x] != 0)
 			return true;
 	}
-	
+	*/
 	return false;
 }
 
 bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const
 {
-	int x0, x1, y;
+	/*int x0, x1, y;
 	
 	x0 = pos.x / tileSize;
 	x1 = (pos.x + size.x - 1) / tileSize;
@@ -201,7 +230,7 @@ bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, i
 			}
 		}
 	}
-	
+	*/
 	return false;
 }
 

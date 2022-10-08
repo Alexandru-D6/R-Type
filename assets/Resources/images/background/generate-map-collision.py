@@ -64,8 +64,12 @@ if sys.argv[1] == "2" or sys.argv[1] == "3":
 	rectangles.sort(key=lambda x: x[0])
 
 	#store the rectangles in a file as json format with the coordinate up left and down right
-	with open(sys.argv[3] + ".txt", "w") as f:
-		f.write(str(rectangles))
+	with open(sys.argv[3].split(".png")[0] + ".txt", "w") as f:
+		f.write(str(len(rectangles)) + "\n")
+		for rect in rectangles:
+			f.write(str(rect[0]) + " " + str(rect[1]) + " " + str(rect[2]) + " " + str(rect[3]) + str("\n"))
+
+
 
 	#draw the rectangles on the new image with dimension 23000x224
 	image2 = np.zeros((224,23000,3), np.uint8)
