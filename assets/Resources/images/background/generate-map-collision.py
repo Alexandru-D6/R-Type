@@ -52,7 +52,7 @@ if sys.argv[1] == "2" or sys.argv[1] == "3":
 		x,y,w,h = cv2.boundingRect(cnt)
 		if w*h > 5:
 			rectangles.append([x,y,x+w,y+h])
-			#cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
+			cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
 
 	for rect in rectangles:
 		rect[0] += int(rect[1]/224) * 2560
@@ -76,5 +76,8 @@ if sys.argv[1] == "2" or sys.argv[1] == "3":
 	for rect in rectangles:
 		cv2.rectangle(image2,(rect[0],rect[1]),(rect[2],rect[3]),(0,255,0),1)
 
+	#display image2
+	cv2.imshow('image',image)
+	cv2.waitKey(0)
 	# save image2
 	iio.imwrite(sys.argv[3] + "_collitionBoxes.png", image2)

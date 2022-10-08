@@ -6,6 +6,7 @@
 #include <GL/gl.h>
 #include <glm/gtc/matrix_transform.hpp>
 #include "TileMap.h"
+#include "Line.h"
 
 
 using namespace std;
@@ -102,9 +103,7 @@ bool TileMap::loadLevel(const string &levelFile) {
 
 	fin.close();
 
-	// Get collisions boxes
-	int collisionsSize;
-
+	// Get collisions boxe
 	fin.open(collisionFile.c_str());
 	if (!fin.is_open())
 		return false;
@@ -112,10 +111,10 @@ bool TileMap::loadLevel(const string &levelFile) {
 	// Get number of collision boxes
 	getline(fin, line);
 	sstream.str(line);
-	sstream >> collisionsSize;
+	sstream >> collidersSize;
 
-	collisions = new glm::ivec4[collisionsSize];
-	for (int i = 0; i < collisionsSize; ++i) {
+	collisions = new glm::ivec4[collidersSize];
+	for (int i = 0; i < collidersSize; ++i) {
 		int x, y, z, w;
 		stringstream aa;
 
@@ -123,6 +122,9 @@ bool TileMap::loadLevel(const string &levelFile) {
 		aa.str(line);
 		aa >> x >> y >> z >> w;
 		collisions[i] = glm::ivec4(x, y, z, w);
+
+		Line a = Line::Line(glm::vec3(x, y, 0), glm::vec3(z, y, 0));
+		a.draw();
 	}
 
 	fin.close();
@@ -139,7 +141,10 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program) 
 	for(int i=0; i<mapSize.x; i++) {
 		for(int j=0; j<mapSize.y; j++) {
 				posTile = glm::vec2(minCoords.x + i * blockSize, minCoords.y + j * blockSize);
-				texCoordTile[0] = glm::vec2(glm::mod(float(i * tileTexSize.x), 1.0f), glm::mod(float(j * tileTexSize.y) + int(float(i * tileTexSize.x)) * tileTexSize.y * mapSize.y, 1.0f) );
+				texCoordTile[0] = glm::vec2(
+											glm::mod(float(i * tileTexSize.x), 1.0f), 
+											glm::mod(float(j * tileTexSize.y) + (int(float(i * tileTexSize.x)) * tileTexSize.y * mapSize.y), 1.0f) 
+											);
 				texCoordTile[1] = texCoordTile[0] + tileTexSize;
 				// First triangle
 				vertices.push_back(posTile.x); vertices.push_back(posTile.y);
@@ -174,67 +179,72 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program) 
 // Method collisionMoveDown also corrects Y coordinate if the box is
 // already intersecting a tile below.
 
-bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) const {
-	/*int x, y0, y1;
-	
-	x = pos.x / tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
-	for(int y=y0; y<=y1; y++)
-	{
-		if(map[y*mapSize.x+x] != 0)
-			return true;
-	}
-	*/
-	return false;
-}
+bool TileMap::collisionMoveLeft(const glm::ivec2 &pos, const glm::ivec2 &size) {
+	glm::ivec4 objCollider = glm::ivec4(pos.x, pos.y, pos.x + size.x, pos.y + size.y);
 
-bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) const {
-	/*int x, y0, y1;
-	
-	x = (pos.x + size.x - 1) / tileSize;
-	y0 = pos.y / tileSize;
-	y1 = (pos.y + size.y - 1) / tileSize;
-	for(int y=y0; y<=y1; y++)
-	{
-		if(map[y*mapSize.x+x] != 0)
+	for (int i = 0; i < collidersSize; ++i) {
+		if (overlapHorizontal(objCollider, collisions[i])) {
 			return true;
-	}
-	*/
-	return false;
-}
-
-bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) const {
-	/*int x0, x1, y;
-	
-	x0 = pos.x / tileSize;
-	x1 = (pos.x + size.x - 1) / tileSize;
-	y = (pos.y + size.y - 1) / tileSize;
-	for(int x=x0; x<=x1; x++)
-	{
-		if(map[y*mapSize.x+x] != 0)
-		{
-			if(*posY - tileSize * y + size.y <= 4)
-			{
-				*posY = tileSize * y - size.y;
-				return true;
-			}
 		}
 	}
-	*/
 	return false;
 }
 
-int TileMap::binarySearch(int arr[], int l, int r, int x) {
-	if (r >= l) {
-		int mid = l + (r - l) / 2;
-		if (arr[mid] == x)
-			return mid;
-		if (arr[mid] > x)
-			return binarySearch(arr, l, mid - 1, x);
-		return binarySearch(arr, mid + 1, r, x);
+bool TileMap::collisionMoveRight(const glm::ivec2 &pos, const glm::ivec2 &size) {
+	glm::ivec4 objCollider = glm::ivec4(pos.x, pos.y, pos.x + size.x, pos.y + size.y);
+
+	for (int i = 0; i < collidersSize; ++i) {
+		if (overlapHorizontal(objCollider, collisions[i])) {
+			return true;
+		}
 	}
-	return -1;
+	return false;
+}
+
+bool TileMap::collisionMoveDown(const glm::ivec2 &pos, const glm::ivec2 &size, int *posY) {
+	glm::ivec4 objCollider = glm::ivec4(pos.x, pos.y, pos.x + size.x, pos.y+size.y);
+
+	for (int i = 0; i < collidersSize; ++i) {
+		if (overlapVertical(objCollider, collisions[i])) {
+			*posY = pos.y-4;
+			return true;
+		}
+	}
+
+	return false;
+}
+
+bool TileMap::overlapVertical(glm::ivec4 r1, glm::ivec4 r2) {
+	// if one rectangle is on left side of other
+	if (r1[0] > r2[2] || r2[0] > r1[2]) {
+		return false;
+	}
+
+	// if one rectangle is above other
+	if (r1[3] < r2[1] || r1[1] > r2[3]) {
+		return false;
+	}
+
+	return true;
+}
+
+bool TileMap::overlapHorizontal(glm::ivec4 r1, glm::ivec4 r2) {
+	// if one rectangle is on left side of other
+	if (r1[0] > r2[2] || r2[0] > r1[2]) {
+		return false;
+	}
+
+	// if one rectangle is above other
+	if (r1[3] < r2[1] || r1[1] > r2[3]) {
+		return false;
+	}
+
+	return true;
+}
+
+
+glm::ivec2 TileMap::getOffset(glm::ivec4 r1, glm::ivec4 r2) {
+	return glm::ivec2(0, 0);
 }
 
 
