@@ -25,6 +25,7 @@ public:
 
 	~TileMap();
 
+	void moveMap(int increment);
 	void render() const;
 	void free();
 	
@@ -43,12 +44,16 @@ private:
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	int nTiles;
-	glm::ivec2 position, mapSize, sectionSize, blocksheetSize;
+	glm::ivec2 mapSize, sectionSize, blocksheetSize;
 	int blockSize;
 	Texture tilesheet;
 	glm::vec2 tileTexSize;
 	int *map;
 	glm::ivec4 *collisions;
+
+	int position;
+
+	ShaderProgram *shaderProgram;
 
 };
 
