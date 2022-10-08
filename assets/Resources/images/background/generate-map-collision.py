@@ -3,50 +3,74 @@ import numpy as np
 import os
 import cv2
 import imutils
+import sys
 
-mapimage = "C:/Users/Alexa/Documents/GitHub/R-Type/assets/Resources/images/background/testing_original.png"
+if len(sys.argv) <= 1:
+	print("Few arguments, please enter mode (1 only transform image, 2 only generate collision map, 3 both)")
+	exit(1)
+elif len(sys.argv) <= 2:
+	print("Few arguments, please enter input file")
+	exit(1)
+elif len(sys.argv) <= 3:
+	print("Few arguments, please enter output file")
+	exit(1)
+
+mapimage = sys.argv[2]
 pic = iio.imread(mapimage)
 
 rows, cols = (pic.shape[0], pic.shape[1])
 arr = np.zeros((rows, cols))
 
-i = rows -1
-while i >= 0:
-	j = cols -1
-	while j >= 0:
-		if pic[i,j,0] == 63 and pic[i,j,1] == 72 and pic[i,j,2] == 204:
-			arr[i][j] = 0
-		else:
-			arr[i][j] = 255
-			#if (i + 1 < rows and arr[i+1][j] == 255) or (j + 1 < cols and arr[i][j+1] == 255):
-			#	arr[i][j] = 5
-			#elif (i + 1 < rows and arr[i+1][j] == 5) or (j + 1 < cols and arr[i][j+1] == 5):
-			#	arr[i][j] = 255
-		j -= 1
-	i -= 1
-	print((i / rows ) * 100, "%")
+if sys.argv[1] == "1" or sys.argv[1] == "3":
+	i = 0
+	while i < rows:
+		j = 0
+		while j < cols:
+			if pic[i,j,0] == 255 and pic[i,j,1] == 0 and pic[i,j,2] == 255:
+				arr[i][j] = 255
+			else:
+				arr[i][j] = 0
+			j += 1
+		i += 1
+		print((i / rows ) * 100, "%")
 
-image = iio.imwrite("C:/Users/Alexa/Documents/GitHub/R-Type/assets/Resources/images/background/testing.png", arr)
+	image = iio.imwrite(sys.argv[3], arr)
 
-image = cv2.imread("C:/Users/Alexa/Documents/GitHub/R-Type/assets/Resources/images/background/testing.png")
-gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
+if sys.argv[1] == "2" or sys.argv[1] == "3":
+	image = cv2.imread(sys.argv[3])
+	gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
-#create a binary thresholded image from gray image
-ret,thresh = cv2.threshold(gray,127,255,0)
+	#create a binary thresholded image from gray image
+	ret,thresh = cv2.threshold(gray,127,255,0)
 
-#find contours in the thresholded image
-contours,hierarchy = cv2.findContours(thresh,cv2.RETR_TREE,cv2.CHAIN_APPROX_SIMPLE)
+	#find contours in the thresholded image
+	contours,hierarchy = cv2.findContours(thresh,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
 
-#for all countours get an approximated inscribed rectangle
-for cnt in contours:
-	rect = cv2.minAreaRect(cnt)
-	box = cv2.boxPoints(rect)
-	box = np.int0(box)
-	cv2.drawContours(image,[box],0,(0,0,255),2)
+	#for all countours get an approximated inscribed rectangle with at least 5 pixels of area and draw them and store them with only the coordinate up left and down right
+	rectangles = []
+	for cnt in contours:
+		x,y,w,h = cv2.boundingRect(cnt)
+		if w*h > 5:
+			rectangles.append([x,y,x+w,y+h])
+			#cv2.rectangle(image,(x,y),(x+w,y+h),(0,255,0),2)
 
+	for rect in rectangles:
+		rect[0] += int(rect[1]/224) * 2560
+		rect[1] = int(rect[1]%224)
+		rect[2] += int(rect[3]/224) * 2560
+		rect[3] = int(rect[3]%224)
 
+	# sort rectangles by x
+	rectangles.sort(key=lambda x: x[0])
 
-# show the image
-cv2.imshow("thresh", thresh)
-cv2.imshow("Image", image)
-cv2.waitKey(0)
+	#store the rectangles in a file as json format with the coordinate up left and down right
+	with open(sys.argv[3] + ".txt", "w") as f:
+		f.write(str(rectangles))
+
+	#draw the rectangles on the new image with dimension 23000x224
+	image2 = np.zeros((224,23000,3), np.uint8)
+	for rect in rectangles:
+		cv2.rectangle(image2,(rect[0],rect[1]),(rect[2],rect[3]),(0,255,0),1)
+
+	# save image2
+	iio.imwrite(sys.argv[3] + "_collitionBoxes.png", image2)
