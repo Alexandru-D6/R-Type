@@ -4,10 +4,6 @@
 #include <glm/glm.hpp>
 #include <vector>
 
-#include "TrianglesRenderer.h"
-
-#include "GeneralDefines.h"
-
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
@@ -17,20 +13,8 @@
 class Collision {
 
 public:
-
-	enum CollisionGroups {
-		Player,
-		Map,
-		Enemy,
-		PlayerProjectiles,
-		EnemyProjectiles
-	};
-
 	Collision();
-	Collision(const glm::mat4 &project, CollisionGroups group);
 	~Collision();
-
-	void setProjection(const glm::mat4 &project);
 
 	void addCollider(const glm::ivec4 &boxCollider);
 	void removeCollider(const glm::ivec4 &boxCollider);
@@ -38,23 +22,20 @@ public:
 	void changePositionAbsolute(const glm::ivec2 &pos);
 	void changePositionRelative(const glm::ivec2 &pos);
 
-#ifdef SHOW_HIT_BOXES
-	void showHitBox();
-	void render();
-#endif // SHOW_HIT_BOXES
+	static bool collisionMoveLeft(const Collision &a, const Collision &b);
+	static bool collisionMoveRight(const Collision &a, const Collision &b);
+	static bool collisionMoveDown(const Collision &a, const Collision &b);
+	static bool collisionMoveUp(const Collision &a, const Collision &b);
 	
-public:
+private:
+	static bool overlapVertical(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
+	static bool overlapHorizontal(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
 
-	Collision::CollisionGroups collisionGroup;
-
+private:
 	int collidersSize;
 	glm::ivec4 *collisions;
 
 	glm::ivec2 position;
-
-private:
-
-	TrianglesRenderer* trianglesRenderer;
 
 };
 

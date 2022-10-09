@@ -4,11 +4,8 @@
 
 #include <glm/glm.hpp>
 #include "Collision.h"
-#include "CollisionSystem.h"
 #include "Texture.h"
 #include "ShaderProgram.h"
-
-#include "GeneralDefines.h"
 
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
@@ -21,16 +18,16 @@ class TileMap
 {
 
 private:
-	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
+	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
+	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
 
 	~TileMap();
 
 	void moveMap(int increment);
-	void render();
+	void render() const;
 	void free();
 	
 	int getTileSize() const { return blockSize; }
@@ -40,14 +37,13 @@ private:
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 public:
-
+	Collision collision;
 
 private:
 	GLuint vao;
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	ShaderProgram *shaderProgram;
-	glm::mat4 projection;
 
 	int nTiles;
 	glm::ivec2 mapSize, sectionSize, blocksheetSize;
@@ -57,9 +53,6 @@ private:
 	int *map;
 
 	int position;
-
-	Collision *collision;
-	CollisionSystem *collisionSystem;
 
 };
 
