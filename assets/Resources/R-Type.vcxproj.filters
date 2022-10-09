@@ -45,9 +45,6 @@
     <ClInclude Include="GameScene.h">
       <Filter>Archivos de encabezado</Filter>
     </ClInclude>
-    <ClInclude Include="Line.h">
-      <Filter>Archivos de encabezado</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Game.cpp">
@@ -78,9 +75,6 @@
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
     <ClCompile Include="GameScene.cpp">
-      <Filter>Archivos de código fuente</Filter>
-    </ClCompile>
-    <ClCompile Include="Line.cpp">
       <Filter>Archivos de código fuente</Filter>
     </ClCompile>
   </ItemGroup>
