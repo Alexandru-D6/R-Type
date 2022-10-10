@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "TrianglesRenderer.h"
+#include "CollisionSystem.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
@@ -16,7 +17,7 @@ class Collision {
 
 public:
 	Collision();
-	Collision(const glm::mat4 &project);
+	Collision(const glm::mat4 &project, CollisionSystem::CollisionGroups group);
 	~Collision();
 
 	void setProjection(const glm::mat4 &project);
@@ -27,18 +28,14 @@ public:
 	void changePositionAbsolute(const glm::ivec2 &pos);
 	void changePositionRelative(const glm::ivec2 &pos);
 
-	static bool collisionMoveLeft(const Collision &a, const Collision &b);
-	static bool collisionMoveRight(const Collision &a, const Collision &b);
-	static bool collisionMoveDown(const Collision &a, const Collision &b);
-	static bool collisionMoveUp(const Collision &a, const Collision &b);
-
-	//Debug only
+#ifdef DEBUG
 	void showHitBox();
 	void render();
+#endif // DEBUG
 	
-private:
-	static bool overlapVertical(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
-	static bool overlapHorizontal(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
+public:
+
+	CollisionSystem::CollisionGroups collisionGroup;
 
 private:
 	int collidersSize;
@@ -47,8 +44,6 @@ private:
 	TrianglesRenderer* trianglesRenderer;
 
 	glm::ivec2 position;
-
-	bool hitBoxSend = false;
 
 };
 

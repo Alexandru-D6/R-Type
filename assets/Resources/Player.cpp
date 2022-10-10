@@ -49,7 +49,10 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	collider.addCollider(glm::ivec4(0, 0, 27, 32));
 	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
+
+#ifdef DEBUG
 	collider.showHitBox();
+#endif // DEBUG
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -121,7 +124,9 @@ void Player::update(int deltaTime)
 void Player::render()
 {
 	sprite->render();
+#ifdef DEBUG
 	collider.render();
+#endif // DEBUG
 }
 
 void Player::setTileMap(TileMap *tileMap)

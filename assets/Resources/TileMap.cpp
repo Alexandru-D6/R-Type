@@ -44,7 +44,9 @@ void TileMap::render() {
 	glDrawArrays(GL_TRIANGLES, 0, 6 * nTiles);
 	glDisable(GL_TEXTURE_2D);
 
+#ifdef DEBUG
 	collision.render();
+#endif // DEBUG
 }
 
 void TileMap::free() {
@@ -112,6 +114,7 @@ bool TileMap::loadLevel(const string &levelFile) {
 	// Get number of collision boxes
 	int collidersSize;
 	collision = Collision(projection);
+
 	//TODO: Maybe remove this in the future??
 	collision.changePositionAbsolute(glm::vec2(-4,0));
 
@@ -129,7 +132,9 @@ bool TileMap::loadLevel(const string &levelFile) {
 		collision.addCollider(glm::ivec4(x, y, z, w));
 	}
 
+#ifdef DEBUG
 	collision.showHitBox();
+#endif // DEBUG
 
 	fin.close();
 	
