@@ -45,7 +45,7 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 
 	collider = Collision();
 	collider.addCollider(glm::ivec4(5, 5, 27, 32));
-	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x, tileMapDispl.y + 32));
+	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -60,12 +60,12 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(MOVE_LEFT);
 		posPlayer.x -= 2;
 		collider.changePositionRelative(glm::ivec2(-2, 0));
-		map->moveMap(2);
+		map->moveMap(8);
 		if(Collision::Collision().collisionMoveLeft(Player::collider, map->collision))
 		{
 			posPlayer.x += 2;
 			collider.changePositionRelative(glm::ivec2(2, 0));
-			map->moveMap(-2);
+			map->moveMap(-8);
 			sprite->changeAnimation(STAND_LEFT);
 		}
 	}
@@ -73,14 +73,15 @@ void Player::update(int deltaTime)
 	{
 		if(sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
+
 		posPlayer.x += 2;
 		collider.changePositionRelative(glm::ivec2(2, 0));
-		map->moveMap(-2);
+		map->moveMap(-8);
 		if(Collision::Collision().collisionMoveRight(Player::collider, map->collision))
 		{
 			posPlayer.x -= 2;
 			collider.changePositionRelative(glm::ivec2(-2, 0));
-			map->moveMap(2);
+			map->moveMap(8);
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
@@ -90,6 +91,24 @@ void Player::update(int deltaTime)
 			sprite->changeAnimation(STAND_LEFT);
 		else if(sprite->animation() == MOVE_RIGHT)
 			sprite->changeAnimation(STAND_RIGHT);
+	}
+
+	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+		posPlayer.y += 2;
+		collider.changePositionRelative(glm::ivec2(0, 2));
+		if (Collision::Collision().collisionMoveDown(Player::collider, map->collision))
+		{
+			posPlayer.y -= 2;
+			collider.changePositionRelative(glm::ivec2(0, -2));
+		}
+	}else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+		posPlayer.y -= 2;
+		collider.changePositionRelative(glm::ivec2(0, -2));
+		if (Collision::Collision().collisionMoveUp(Player::collider, map->collision))
+		{
+			posPlayer.y += 2;
+			collider.changePositionRelative(glm::ivec2(0, 2));
+		}
 	}
 	
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
@@ -109,6 +128,7 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 }
 
 

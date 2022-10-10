@@ -9,7 +9,7 @@
 #define SCREEN_Y 0
 
 //Init position of the player
-#define INIT_PLAYER_X_TILES 1
+#define INIT_PLAYER_X_TILES 7
 #define INIT_PLAYER_Y_TILES 1
 
 

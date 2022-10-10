@@ -29,7 +29,7 @@ TileMap::~TileMap() {
 
 void TileMap::moveMap(int increment) {
 	position += increment;
-	//collision.changePositionRelative(glm::ivec2(increment, 0));
+	collision.changePositionRelative(glm::ivec2(increment, 0));
 	render();
 }
 

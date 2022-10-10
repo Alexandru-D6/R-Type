@@ -16,6 +16,8 @@ public:
 	Collision();
 	~Collision();
 
+	void setInitColliderPos();
+
 	void addCollider(const glm::ivec4 &boxCollider);
 	void removeCollider(const glm::ivec4 &boxCollider);
 
