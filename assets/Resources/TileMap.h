@@ -18,19 +18,21 @@ class TileMap
 {
 
 private:
-	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
 
 public:
 	// Tile maps can only be created inside an OpenGL context
-	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program);
+	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
 
 	~TileMap();
 
 	void moveMap(int increment);
-	void render() const;
+	void render();
 	void free();
 	
 	int getTileSize() const { return blockSize; }
+
+	void showHitBoxes();
 	
 private:
 	bool loadLevel(const string &levelFile);
@@ -44,6 +46,7 @@ private:
 	GLuint vbo;
 	GLint posLocation, texCoordLocation;
 	ShaderProgram *shaderProgram;
+	glm::mat4 projection;
 
 	int nTiles;
 	glm::ivec2 mapSize, sectionSize, blocksheetSize;

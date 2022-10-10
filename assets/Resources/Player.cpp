@@ -16,6 +16,10 @@ enum PlayerAnims
 	STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT
 };
 
+Player::Player(glm::mat4 &project) {
+	projection = project;
+	collider = Collision(project);
+}
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 {
@@ -43,9 +47,9 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 
-	collider = Collision();
-	collider.addCollider(glm::ivec4(5, 5, 27, 32));
+	collider.addCollider(glm::ivec4(0, 0, 27, 32));
 	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
+	collider.showHitBox();
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -58,14 +62,14 @@ void Player::update(int deltaTime)
 	{
 		if(sprite->animation() != MOVE_LEFT)
 			sprite->changeAnimation(MOVE_LEFT);
-		posPlayer.x -= 2;
-		collider.changePositionRelative(glm::ivec2(-2, 0));
-		map->moveMap(8);
-		if(Collision::Collision().collisionMoveLeft(Player::collider, map->collision))
+		//posPlayer.x -= 2;
+		//collider.changePositionRelative(glm::ivec2(-2, 0));
+		map->moveMap(2);
+		if(collider.collisionMoveLeft(Player::collider, map->collision))
 		{
-			posPlayer.x += 2;
-			collider.changePositionRelative(glm::ivec2(2, 0));
-			map->moveMap(-8);
+			//posPlayer.x += 2;
+			//collider.changePositionRelative(glm::ivec2(2, 0));
+			map->moveMap(-2);
 			sprite->changeAnimation(STAND_LEFT);
 		}
 	}
@@ -74,14 +78,14 @@ void Player::update(int deltaTime)
 		if(sprite->animation() != MOVE_RIGHT)
 			sprite->changeAnimation(MOVE_RIGHT);
 
-		posPlayer.x += 2;
-		collider.changePositionRelative(glm::ivec2(2, 0));
-		map->moveMap(-8);
-		if(Collision::Collision().collisionMoveRight(Player::collider, map->collision))
+		//posPlayer.x += 2;
+		//collider.changePositionRelative(glm::ivec2(2, 0));
+		map->moveMap(-2);
+		if(collider.collisionMoveRight(Player::collider, map->collision))
 		{
-			posPlayer.x -= 2;
-			collider.changePositionRelative(glm::ivec2(-2, 0));
-			map->moveMap(8);
+			//posPlayer.x -= 2;
+			//collider.changePositionRelative(glm::ivec2(-2, 0));
+			map->moveMap(2);
 			sprite->changeAnimation(STAND_RIGHT);
 		}
 	}
@@ -96,7 +100,7 @@ void Player::update(int deltaTime)
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		posPlayer.y += 2;
 		collider.changePositionRelative(glm::ivec2(0, 2));
-		if (Collision::Collision().collisionMoveDown(Player::collider, map->collision))
+		if (collider.collisionMoveDown(Player::collider, map->collision))
 		{
 			posPlayer.y -= 2;
 			collider.changePositionRelative(glm::ivec2(0, -2));
@@ -104,7 +108,7 @@ void Player::update(int deltaTime)
 	}else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		posPlayer.y -= 2;
 		collider.changePositionRelative(glm::ivec2(0, -2));
-		if (Collision::Collision().collisionMoveUp(Player::collider, map->collision))
+		if (collider.collisionMoveUp(Player::collider, map->collision))
 		{
 			posPlayer.y += 2;
 			collider.changePositionRelative(glm::ivec2(0, 2));
@@ -117,6 +121,7 @@ void Player::update(int deltaTime)
 void Player::render()
 {
 	sprite->render();
+	collider.render();
 }
 
 void Player::setTileMap(TileMap *tileMap)

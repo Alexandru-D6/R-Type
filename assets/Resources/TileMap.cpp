@@ -11,13 +11,13 @@
 using namespace std;
 
 
-TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program) {
-	TileMap *map = new TileMap(levelFile, minCoords, program);
-	
+TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project) {
+	TileMap *map = new TileMap(levelFile, minCoords, program, project);
 	return map;
 }
 
-TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program) {
+TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project) {
+	projection = project;
 	loadLevel(levelFile);
 	prepareArrays(minCoords, program);
 }
@@ -29,11 +29,11 @@ TileMap::~TileMap() {
 
 void TileMap::moveMap(int increment) {
 	position += increment;
-	collision.changePositionRelative(glm::ivec2(increment, 0));
+	collision.changePositionRelative(glm::vec2(increment, 0));
 	render();
 }
 
-void TileMap::render() const {
+void TileMap::render() {
 	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position, 0.0f, 0.f));
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	glEnable(GL_TEXTURE_2D);
@@ -43,6 +43,8 @@ void TileMap::render() const {
 	glEnableVertexAttribArray(texCoordLocation);
 	glDrawArrays(GL_TRIANGLES, 0, 6 * nTiles);
 	glDisable(GL_TEXTURE_2D);
+
+	collision.render();
 }
 
 void TileMap::free() {
@@ -109,7 +111,9 @@ bool TileMap::loadLevel(const string &levelFile) {
 
 	// Get number of collision boxes
 	int collidersSize;
-	collision = Collision();
+	collision = Collision(projection);
+	//TODO: Maybe remove this in the future??
+	collision.changePositionAbsolute(glm::vec2(-4,0));
 
 	getline(fin, line);
 	sstream.str(line);
@@ -124,6 +128,8 @@ bool TileMap::loadLevel(const string &levelFile) {
 		aa >> x >> y >> z >> w;
 		collision.addCollider(glm::ivec4(x, y, z, w));
 	}
+
+	collision.showHitBox();
 
 	fin.close();
 	
