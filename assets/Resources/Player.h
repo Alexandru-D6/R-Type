@@ -14,31 +14,31 @@ class Player {
 
 public:
 
-	enum PlayerAnims { STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT };
+    enum PlayerAnims { STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT };
 
 public:
 
-	Player(glm::mat4 &project);
-	void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
-	void update(int deltaTime);
-	void render();
-	
-	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
-	
+    Player(glm::mat4 &project);
+    void init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram);
+    void update(int deltaTime);
+    void render();
+
+    void setTileMap(TileMap *tileMap);
+    void setPosition(const glm::vec2 &pos);
+
 private:
 
-	bool bJumping;
-	glm::ivec2 tileMapDispl, posPlayer;
-	int jumpAngle, startY;
-	Texture spritesheet;
-	Sprite *sprite;
-	TileMap *map;
+    bool bJumping;
+    glm::ivec2 tileMapDispl, posPlayer;
+    int jumpAngle, startY;
+    Texture spritesheet;
+    Sprite *sprite;
+    TileMap *map;
 
-	glm::mat4 projection;
+    glm::mat4 projection;
 
-	Collision *collider;
-	CollisionSystem *collisionSystem;
+    Collision *collider;
+    CollisionSystem *collisionSystem;
 
 };
 

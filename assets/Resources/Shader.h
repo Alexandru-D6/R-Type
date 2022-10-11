@@ -18,26 +18,26 @@ class Shader {
 
 public:
 
-	Shader();
+    Shader();
 
-	// These methods should be called with an active OpenGL context
-	void initFromSource(const ShaderType type, const string &source);
-	bool initFromFile(const ShaderType type, const string &filename);
-	void free();
+    // These methods should be called with an active OpenGL context
+    void initFromSource(const ShaderType type, const string &source);
+    bool initFromFile(const ShaderType type, const string &filename);
+    void free();
 
-	GLuint getId() const;
-	bool isCompiled() const;
-	const string &log() const;
-
-private:
-	
-	bool loadShaderSource(const string &filename, string &shaderSource);
+    GLuint getId() const;
+    bool isCompiled() const;
+    const string &log() const;
 
 private:
 
-	GLuint shaderId;
-	bool compiled;
-	string errorLog;
+    bool loadShaderSource(const string &filename, string &shaderSource);
+
+private:
+
+    GLuint shaderId;
+    bool compiled;
+    string errorLog;
 
 };
 

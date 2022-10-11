@@ -12,37 +12,37 @@ class TrianglesRenderer {
 
 private:
 
-	TrianglesRenderer::TrianglesRenderer();
-	~TrianglesRenderer();
+    TrianglesRenderer::TrianglesRenderer();
+    ~TrianglesRenderer();
 
-	void TrianglesRenderer::initShaders();
+    void TrianglesRenderer::initShaders();
 
 public:
 
-	static TrianglesRenderer *TrianglesRenderer::createTriangleRender(const glm::mat4 &project);
+    static TrianglesRenderer *TrianglesRenderer::createTriangleRender(const glm::mat4 &project);
 
-	void TrianglesRenderer::addTriangle(const glm::mat3x2 &vert);
-	void TrianglesRenderer::moveHitBoxesRelative(const glm::ivec2 &pos);
-	void TrianglesRenderer::moveHitBoxesAbsolute(const glm::ivec2 &pos);
+    void TrianglesRenderer::addTriangle(const glm::mat3x2 &vert);
+    void TrianglesRenderer::moveHitBoxesRelative(const glm::ivec2 &pos);
+    void TrianglesRenderer::moveHitBoxesAbsolute(const glm::ivec2 &pos);
 
-	int TrianglesRenderer::setColor(glm::vec3 color);
+    int TrianglesRenderer::setColor(glm::vec3 color);
 
-	void TrianglesRenderer::send();
-	int TrianglesRenderer::render();
+    void TrianglesRenderer::send();
+    int TrianglesRenderer::render();
 
 private:
 
-	ShaderProgram shaderProgram;
-	unsigned int VBO, VAO;
+    ShaderProgram shaderProgram;
+    unsigned int VBO, VAO;
 
-	vector<float> vertices;
-	int nTriangles;
+    vector<float> vertices;
+    int nTriangles;
 
-	GLint posLocation;
-	glm::mat4 projection;
+    GLint posLocation;
+    glm::mat4 projection;
 
-	glm::vec3 lineColor;
-	glm::ivec2 position;
+    glm::vec3 lineColor;
+    glm::ivec2 position;
 };
 
 #endif // _TRIANGLESRENDERER_INCLUDE

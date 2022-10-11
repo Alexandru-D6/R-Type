@@ -16,30 +16,30 @@ class Texture {
 
 public:
 
-	Texture();
+    Texture();
 
-	bool loadFromFile(const string &filename, PixelFormat format);
-	void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
+    bool loadFromFile(const string &filename, PixelFormat format);
+    void loadFromGlyphBuffer(unsigned char *buffer, int width, int height);
 
-	void createEmptyTexture(int width, int height);
-	void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height);
-	void generateMipmap();
-	
-	void setWrapS(GLint value);
-	void setWrapT(GLint value);
-	void setMinFilter(GLint value);
-	void setMagFilter(GLint value);
-	
-	void use() const;
-	
-	int width() const { return widthTex; }
-	int height() const { return heightTex; }
+    void createEmptyTexture(int width, int height);
+    void loadSubtextureFromGlyphBuffer(unsigned char *buffer, int x, int y, int width, int height);
+    void generateMipmap();
+
+    void setWrapS(GLint value);
+    void setWrapT(GLint value);
+    void setMinFilter(GLint value);
+    void setMagFilter(GLint value);
+
+    void use() const;
+
+    int width() const { return widthTex; }
+    int height() const { return heightTex; }
 
 private:
 
-	int widthTex, heightTex;
-	GLuint texId;
-	GLint wrapS, wrapT, minFilter, magFilter;
+    int widthTex, heightTex;
+    GLuint texId;
+    GLint wrapS, wrapT, minFilter, magFilter;
 
 };
 

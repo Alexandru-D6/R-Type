@@ -19,45 +19,45 @@ class TileMap {
 
 private:
 
-	TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
+    TileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
 
 public:
 
-	// Tile maps can only be created inside an OpenGL context
-	static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
+    // Tile maps can only be created inside an OpenGL context
+    static TileMap *createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project);
 
-	~TileMap();
+    ~TileMap();
 
-	void moveMap(int increment);
-	void render();
-	void free();
-	
-	int getTileSize() const { return blockSize; }
-	
-private:
+    void moveMap(int increment);
+    void render();
+    void free();
 
-	bool loadLevel(const string &levelFile);
-	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
+    int getTileSize() const { return blockSize; }
 
 private:
 
-	GLuint vao;
-	GLuint vbo;
-	GLint posLocation, texCoordLocation;
-	ShaderProgram *shaderProgram;
-	glm::mat4 projection;
+    bool loadLevel(const string &levelFile);
+    void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
-	int nTiles;
-	glm::ivec2 mapSize, sectionSize, blocksheetSize;
-	int blockSize;
-	Texture tilesheet;
-	glm::vec2 tileTexSize;
-	int *map;
+private:
 
-	int position;
+    GLuint vao;
+    GLuint vbo;
+    GLint posLocation, texCoordLocation;
+    ShaderProgram *shaderProgram;
+    glm::mat4 projection;
 
-	Collision *collision;
-	CollisionSystem *collisionSystem;
+    int nTiles;
+    glm::ivec2 mapSize, sectionSize, blocksheetSize;
+    int blockSize;
+    Texture tilesheet;
+    glm::vec2 tileTexSize;
+    int *map;
+
+    int position;
+
+    Collision *collision;
+    CollisionSystem *collisionSystem;
 
 };
 

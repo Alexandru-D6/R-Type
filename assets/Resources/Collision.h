@@ -13,43 +13,43 @@ class Collision {
 
 public:
 
-	enum CollisionGroups {
-		Player,
-		Map,
-		Enemy,
-		PlayerProjectiles,
-		EnemyProjectiles
-	};
+    enum CollisionGroups {
+        Player,
+        Map,
+        Enemy,
+        PlayerProjectiles,
+        EnemyProjectiles
+    };
 
-	Collision();
-	Collision(const glm::mat4 &project, CollisionGroups group);
-	~Collision();
+    Collision();
+    Collision(const glm::mat4 &project, CollisionGroups group);
+    ~Collision();
 
-	void setProjection(const glm::mat4 &project);
+    void setProjection(const glm::mat4 &project);
 
-	void addCollider(const glm::ivec4 &boxCollider);
-	void removeCollider(const glm::ivec4 &boxCollider);
+    void addCollider(const glm::ivec4 &boxCollider);
+    void removeCollider(const glm::ivec4 &boxCollider);
 
-	void changePositionAbsolute(const glm::ivec2 &pos);
-	void changePositionRelative(const glm::ivec2 &pos);
+    void changePositionAbsolute(const glm::ivec2 &pos);
+    void changePositionRelative(const glm::ivec2 &pos);
 
 #ifdef SHOW_HIT_BOXES
-	void showHitBox();
-	void render();
+    void showHitBox();
+    void render();
 #endif // SHOW_HIT_BOXES
-	
+
 public:
 
-	Collision::CollisionGroups collisionGroup;
+    Collision::CollisionGroups collisionGroup;
 
-	int collidersSize;
-	glm::ivec4 *collisions;
+    int collidersSize;
+    glm::ivec4 *collisions;
 
-	glm::ivec2 position;
+    glm::ivec2 position;
 
 private:
 
-	TrianglesRenderer* trianglesRenderer;
+    TrianglesRenderer* trianglesRenderer;
 
 };
 

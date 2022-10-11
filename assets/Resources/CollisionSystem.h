@@ -11,30 +11,30 @@ class CollisionSystem {
 
 public:
 
-	static CollisionSystem *instance_;
+    static CollisionSystem *instance_;
 
-	static CollisionSystem *getInstance();
+    static CollisionSystem *getInstance();
 
 public:
 
-	void addColliderIntoGroup(Collision* a);
-	void removeColliderFromGroup(Collision* a);
+    void addColliderIntoGroup(Collision* a);
+    void removeColliderFromGroup(Collision* a);
 
-	bool isColliding(const Collision* a);
-	
-private:
-
-	CollisionSystem();
-	~CollisionSystem();
-
-	static bool searchForCollision(const Collision* a, const Collision* b);
-
-	static bool overlapVertical(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
-	static bool overlapHorizontal(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
+    bool isColliding(const Collision* a);
 
 private:
 
-	vector<vector<Collision*>> groups = vector<vector<Collision*>>(5, vector<Collision*>(0));
+    CollisionSystem();
+    ~CollisionSystem();
+
+    static bool searchForCollision(const Collision* a, const Collision* b);
+
+    static bool overlapVertical(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
+    static bool overlapHorizontal(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
+
+private:
+
+    vector<vector<Collision*>> groups = vector<vector<Collision*>>(5, vector<Collision*>(0));
 
 };
 

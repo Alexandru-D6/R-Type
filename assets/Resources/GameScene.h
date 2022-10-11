@@ -14,25 +14,25 @@ class GameScene {
 
 public:
 
-	GameScene();
-	~GameScene();
+    GameScene();
+    ~GameScene();
 
-	void init();
-	void update(int deltaTime);
-	void render();
-
-private:
-
-	void initShaders();
+    void init();
+    void update(int deltaTime);
+    void render();
 
 private:
 
-	TileMap *map;
-	Player *player;
+    void initShaders();
 
-	ShaderProgram texProgram;
-	float currentTime;
-	glm::mat4 projection;
+private:
+
+    TileMap *map;
+    Player *player;
+
+    ShaderProgram texProgram;
+    float currentTime;
+    glm::mat4 projection;
 
 };
 
