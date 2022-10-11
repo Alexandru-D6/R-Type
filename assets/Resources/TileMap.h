@@ -4,8 +4,11 @@
 
 #include <glm/glm.hpp>
 #include "Collision.h"
+#include "CollisionSystem.h"
 #include "Texture.h"
 #include "ShaderProgram.h"
+
+#include "GeneralDefines.h"
 
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
@@ -31,15 +34,13 @@ public:
 	void free();
 	
 	int getTileSize() const { return blockSize; }
-
-	void showHitBoxes();
 	
 private:
 	bool loadLevel(const string &levelFile);
 	void prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program);
 
 public:
-	Collision collision;
+
 
 private:
 	GLuint vao;
@@ -56,6 +57,9 @@ private:
 	int *map;
 
 	int position;
+
+	Collision *collision;
+	CollisionSystem *collisionSystem;
 
 };
 

@@ -5,7 +5,6 @@
 #include "Player.h"
 #include "Game.h"
 
-
 #define JUMP_ANGLE_STEP 4
 #define JUMP_HEIGHT 96
 #define FALL_STEP 4
@@ -18,7 +17,10 @@ enum PlayerAnims
 
 Player::Player(glm::mat4 &project) {
 	projection = project;
-	collider = Collision(project);
+	collider = new Collision(project, Collision::Player);
+
+	collisionSystem = CollisionSystem::getInstance();
+	collisionSystem->addColliderIntoGroup(collider);
 }
 
 void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
@@ -47,12 +49,12 @@ void Player::init(const glm::ivec2 &tileMapPos, ShaderProgram &shaderProgram)
 	sprite->changeAnimation(0);
 	tileMapDispl = tileMapPos;
 
-	collider.addCollider(glm::ivec4(0, 0, 27, 32));
-	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
+	collider->addCollider(glm::ivec4(0, 0, 27, 32));
+	collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 
-#ifdef DEBUG
-	collider.showHitBox();
-#endif // DEBUG
+#ifdef SHOW_HIT_BOXES
+	collider->showHitBox();
+#endif // SHOW_HIT_BOXES
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 	
@@ -68,7 +70,7 @@ void Player::update(int deltaTime)
 		//posPlayer.x -= 2;
 		//collider.changePositionRelative(glm::ivec2(-2, 0));
 		map->moveMap(2);
-		if(collider.collisionMoveLeft(Player::collider, map->collision))
+		if(collisionSystem->isColliding(Player::collider))
 		{
 			//posPlayer.x += 2;
 			//collider.changePositionRelative(glm::ivec2(2, 0));
@@ -84,7 +86,7 @@ void Player::update(int deltaTime)
 		//posPlayer.x += 2;
 		//collider.changePositionRelative(glm::ivec2(2, 0));
 		map->moveMap(-2);
-		if(collider.collisionMoveRight(Player::collider, map->collision))
+		if(collisionSystem->isColliding(Player::collider))
 		{
 			//posPlayer.x -= 2;
 			//collider.changePositionRelative(glm::ivec2(-2, 0));
@@ -102,19 +104,19 @@ void Player::update(int deltaTime)
 
 	if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
 		posPlayer.y += 2;
-		collider.changePositionRelative(glm::ivec2(0, 2));
-		if (collider.collisionMoveDown(Player::collider, map->collision))
+		collider->changePositionRelative(glm::ivec2(0, 2));
+		if (collisionSystem->isColliding(Player::collider))
 		{
 			posPlayer.y -= 2;
-			collider.changePositionRelative(glm::ivec2(0, -2));
+			collider->changePositionRelative(glm::ivec2(0, -2));
 		}
 	}else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
 		posPlayer.y -= 2;
-		collider.changePositionRelative(glm::ivec2(0, -2));
-		if (collider.collisionMoveUp(Player::collider, map->collision))
+		collider->changePositionRelative(glm::ivec2(0, -2));
+		if (collisionSystem->isColliding(Player::collider))
 		{
 			posPlayer.y += 2;
-			collider.changePositionRelative(glm::ivec2(0, 2));
+			collider->changePositionRelative(glm::ivec2(0, 2));
 		}
 	}
 	
@@ -124,9 +126,9 @@ void Player::update(int deltaTime)
 void Player::render()
 {
 	sprite->render();
-#ifdef DEBUG
-	collider.render();
-#endif // DEBUG
+#ifdef SHOW_HIT_BOXES
+	collider->render();
+#endif // SHOW_HIT_BOXES
 }
 
 void Player::setTileMap(TileMap *tileMap)
@@ -138,7 +140,7 @@ void Player::setPosition(const glm::vec2 &pos)
 {
 	posPlayer = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-	collider.changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
+	collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 }
 
 

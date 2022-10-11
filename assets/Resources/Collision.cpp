@@ -1,8 +1,6 @@
 #include "Collision.h"
 
-using namespace std;
-
-Collision::Collision(const glm::mat4 &project, CollisionSystem::CollisionGroups group) {
+Collision::Collision(const glm::mat4 &project, Collision::CollisionGroups group) {
 	collidersSize = 0;
 	collisions = new glm::ivec4[1000];
 	collisionGroup = group;
@@ -60,7 +58,7 @@ void Collision::changePositionRelative(const glm::ivec2 &pos) {
 	trianglesRenderer->moveHitBoxesRelative(pos);
 }
 
-#ifdef DEBUG
+#ifdef SHOW_HIT_BOXES
 void Collision::showHitBox() {
 	trianglesRenderer->send();
 }
@@ -68,7 +66,7 @@ void Collision::showHitBox() {
 void Collision::render() {
 	trianglesRenderer->render();
 }
-#endif // DEBUG
+#endif // SHOW_HIT_BOXES
 
 
 

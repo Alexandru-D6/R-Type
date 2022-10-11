@@ -5,7 +5,8 @@
 #include <vector>
 
 #include "TrianglesRenderer.h"
-#include "CollisionSystem.h"
+
+#include "GeneralDefines.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
@@ -16,8 +17,17 @@
 class Collision {
 
 public:
+
+	enum CollisionGroups {
+		Player,
+		Map,
+		Enemy,
+		PlayerProjectiles,
+		EnemyProjectiles
+	};
+
 	Collision();
-	Collision(const glm::mat4 &project, CollisionSystem::CollisionGroups group);
+	Collision(const glm::mat4 &project, CollisionGroups group);
 	~Collision();
 
 	void setProjection(const glm::mat4 &project);
@@ -28,22 +38,23 @@ public:
 	void changePositionAbsolute(const glm::ivec2 &pos);
 	void changePositionRelative(const glm::ivec2 &pos);
 
-#ifdef DEBUG
+#ifdef SHOW_HIT_BOXES
 	void showHitBox();
 	void render();
-#endif // DEBUG
+#endif // SHOW_HIT_BOXES
 	
 public:
 
-	CollisionSystem::CollisionGroups collisionGroup;
+	Collision::CollisionGroups collisionGroup;
 
-private:
 	int collidersSize;
 	glm::ivec4 *collisions;
 
-	TrianglesRenderer* trianglesRenderer;
-
 	glm::ivec2 position;
+
+private:
+
+	TrianglesRenderer* trianglesRenderer;
 
 };
 

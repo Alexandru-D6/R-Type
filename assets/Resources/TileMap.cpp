@@ -7,10 +7,6 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include "TileMap.h"
 
-
-using namespace std;
-
-
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project) {
 	TileMap *map = new TileMap(levelFile, minCoords, program, project);
 	return map;
@@ -29,7 +25,7 @@ TileMap::~TileMap() {
 
 void TileMap::moveMap(int increment) {
 	position += increment;
-	collision.changePositionRelative(glm::vec2(increment, 0));
+	collision->changePositionRelative(glm::vec2(increment, 0));
 	render();
 }
 
@@ -44,9 +40,9 @@ void TileMap::render() {
 	glDrawArrays(GL_TRIANGLES, 0, 6 * nTiles);
 	glDisable(GL_TEXTURE_2D);
 
-#ifdef DEBUG
-	collision.render();
-#endif // DEBUG
+#ifdef SHOW_HIT_BOXES
+	collision->render();
+#endif // SHOW_HIT_BOXES
 }
 
 void TileMap::free() {
@@ -113,10 +109,13 @@ bool TileMap::loadLevel(const string &levelFile) {
 
 	// Get number of collision boxes
 	int collidersSize;
-	collision = Collision(projection);
+	collision = new Collision(projection, Collision::Map);
+
+	collisionSystem = CollisionSystem::getInstance();
+	collisionSystem->addColliderIntoGroup(collision);
 
 	//TODO: Maybe remove this in the future??
-	collision.changePositionAbsolute(glm::vec2(-4,0));
+	collision->changePositionAbsolute(glm::vec2(-4,0));
 
 	getline(fin, line);
 	sstream.str(line);
@@ -129,12 +128,12 @@ bool TileMap::loadLevel(const string &levelFile) {
 		getline(fin, line);
 		aa.str(line);
 		aa >> x >> y >> z >> w;
-		collision.addCollider(glm::ivec4(x, y, z, w));
+		collision->addCollider(glm::ivec4(x, y, z, w));
 	}
 
-#ifdef DEBUG
-	collision.showHitBox();
-#endif // DEBUG
+#ifdef SHOW_HIT_BOXES
+	collision->showHitBox();
+#endif // SHOW_HIT_BOXES
 
 	fin.close();
 	

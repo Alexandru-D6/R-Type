@@ -5,6 +5,9 @@
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Collision.h"
+#include "CollisionSystem.h"
+
+#include "GeneralDefines.h"
 
 
 // Player is basically a Sprite that represents the player. As such it has
@@ -33,7 +36,8 @@ private:
 
 	glm::mat4 projection;
 
-	Collision collider;
+	Collision *collider;
+	CollisionSystem *collisionSystem;
 
 };
 
