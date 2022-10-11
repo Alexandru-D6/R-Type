@@ -1,24 +1,21 @@
 #ifndef _GAME_INCLUDE
 #define _GAME_INCLUDE
 
+#include <GL/glew.h>
+#include <GL/glut.h>
 
 #include "GameScene.h"
-
-
-#define SCREEN_WIDTH 1280
-#define SCREEN_HEIGHT 720
-
+#include "GeneralDefines.h"
 
 // Game is a singleton (a class with a single instance) that represents our whole application
-
-
-class Game
-{
+class Game {
 
 private:
+
 	Game() {}
 	
 public:
+
 	static Game &instance()
 	{
 		static Game G;
@@ -43,6 +40,7 @@ public:
 	bool getSpecialKey(int key) const;
 
 private:
+
 	bool bPlay;                       // Continue to play game?
 	GameScene scene;                  // Scene to render
 	bool keys[256], specialKeys[256]; // Store key states so that 
@@ -50,7 +48,4 @@ private:
 
 };
 
-
 #endif // _GAME_INCLUDE
-
-

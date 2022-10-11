@@ -1,25 +1,25 @@
 #ifndef _SPRITE_INCLUDE
 #define _SPRITE_INCLUDE
 
-
 #include <vector>
+
 #include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+
 #include "Texture.h"
 #include "ShaderProgram.h"
 #include "AnimKeyframes.h"
 
-
 // This class is derived from code seen earlier in TexturedQuad but it is also
 // able to manage animations stored as a spritesheet. 
-
-
-class Sprite
-{
+class Sprite {
 
 private:
+
 	Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
 
 public:
+
 	// Textured quads can only be created inside an OpenGL context
 	static Sprite *createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program);
 
@@ -36,6 +36,7 @@ public:
 	void setPosition(const glm::vec2 &pos);
 
 private:
+
 	Texture *texture;
 	ShaderProgram *shaderProgram;
 	GLuint vao;
@@ -46,9 +47,6 @@ private:
 	float timeAnimation;
 	glm::vec2 texCoordDispl;
 	vector<AnimKeyframes> animations;
-
 };
 
-
 #endif // _SPRITE_INCLUDE
-

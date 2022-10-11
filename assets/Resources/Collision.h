@@ -1,9 +1,6 @@
 #ifndef _COLLISION_INCLUDE
 #define _COLLISION_INCLUDE
 
-#include <glm/glm.hpp>
-#include <vector>
-
 #include "TrianglesRenderer.h"
 
 #include "GeneralDefines.h"
@@ -12,8 +9,6 @@
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
-
-
 class Collision {
 
 public:
@@ -58,7 +53,4 @@ private:
 
 };
 
-
 #endif // _COLLISION_INCLUDE
-
-

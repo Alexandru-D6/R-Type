@@ -1,16 +1,12 @@
 #ifndef _TRIANGLESRENDERER_INCLUDE
 #define _TRIANGLESRENDERER_INCLUDE
 
-
-#include <string>
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <cmath>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include "ShaderProgram.h"
 #include <iostream>
 #include <vector>
+
+#include <glm/gtc/matrix_transform.hpp>
+
+#include "ShaderProgram.h"
 
 class TrianglesRenderer {
 
@@ -18,6 +14,7 @@ private:
 
 	TrianglesRenderer::TrianglesRenderer();
 	~TrianglesRenderer();
+
 	void TrianglesRenderer::initShaders();
 
 public:
@@ -34,6 +31,7 @@ public:
 	int TrianglesRenderer::render();
 
 private:
+
 	ShaderProgram shaderProgram;
 	unsigned int VBO, VAO;
 
@@ -44,9 +42,7 @@ private:
 	glm::mat4 projection;
 
 	glm::vec3 lineColor;
-
 	glm::ivec2 position;
 };
-
 
 #endif // _TRIANGLESRENDERER_INCLUDE

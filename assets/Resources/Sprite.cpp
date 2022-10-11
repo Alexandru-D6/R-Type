@@ -1,25 +1,18 @@
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include "Sprite.h"
 
-
-Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
-{
+Sprite *Sprite::createSprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program) {
 	Sprite *quad = new Sprite(quadSize, sizeInSpritesheet, spritesheet, program);
 
 	return quad;
 }
 
-
-Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program)
-{
-	float vertices[24] = {0.f, 0.f, 0.f, 0.f, 
-												quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
-												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
-												0.f, 0.f, 0.f, 0.f, 
-												quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
-												0.f, quadSize.y, 0.f, sizeInSpritesheet.y};
+Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Texture *spritesheet, ShaderProgram *program) {
+	float vertices[24] = {	0.f, 0.f, 0.f, 0.f, 
+							quadSize.x, 0.f, sizeInSpritesheet.x, 0.f, 
+							quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
+							0.f, 0.f, 0.f, 0.f, 
+							quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y, 
+							0.f, quadSize.y, 0.f, sizeInSpritesheet.y};
 
 	glGenVertexArrays(1, &vao);
 	glBindVertexArray(vao);
@@ -34,22 +27,20 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
 	position = glm::vec2(0.f);
 }
 
-void Sprite::update(int deltaTime)
-{
-	if(currentAnimation >= 0)
-	{
+void Sprite::update(int deltaTime) {
+	if(currentAnimation >= 0) {
 		timeAnimation += deltaTime;
-		while(timeAnimation > animations[currentAnimation].millisecsPerKeyframe)
-		{
+
+		while(timeAnimation > animations[currentAnimation].millisecsPerKeyframe) {
 			timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
 			currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
 		}
+
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
 	}
 }
 
-void Sprite::render() const
-{
+void Sprite::render() const {
 	glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
 	shaderProgram->setUniformMatrix4f("modelview", modelview);
 	shaderProgram->setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
@@ -62,33 +53,27 @@ void Sprite::render() const
 	glDisable(GL_TEXTURE_2D);
 }
 
-void Sprite::free()
-{
+void Sprite::free() {
 	glDeleteBuffers(1, &vbo);
 }
 
-void Sprite::setNumberAnimations(int nAnimations)
-{
+void Sprite::setNumberAnimations(int nAnimations) {
 	animations.clear();
 	animations.resize(nAnimations);
 }
 
-void Sprite::setAnimationSpeed(int animId, int keyframesPerSec)
-{
+void Sprite::setAnimationSpeed(int animId, int keyframesPerSec) {
 	if(animId < int(animations.size()))
 		animations[animId].millisecsPerKeyframe = 1000.f / keyframesPerSec;
 }
 
-void Sprite::addKeyframe(int animId, const glm::vec2 &displacement)
-{
+void Sprite::addKeyframe(int animId, const glm::vec2 &displacement) {
 	if(animId < int(animations.size()))
 		animations[animId].keyframeDispl.push_back(displacement);
 }
 
-void Sprite::changeAnimation(int animId)
-{
-	if(animId < int(animations.size()))
-	{
+void Sprite::changeAnimation(int animId) {
+	if(animId < int(animations.size())) {
 		currentAnimation = animId;
 		currentKeyframe = 0;
 		timeAnimation = 0.f;
@@ -96,15 +81,10 @@ void Sprite::changeAnimation(int animId)
 	}
 }
 
-int Sprite::animation() const
-{
+int Sprite::animation() const {
 	return currentAnimation;
 }
 
-void Sprite::setPosition(const glm::vec2 &pos)
-{
+void Sprite::setPosition(const glm::vec2 &pos) {
 	position = pos;
 }
-
-
-

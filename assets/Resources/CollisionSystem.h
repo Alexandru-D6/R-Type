@@ -1,18 +1,13 @@
 #ifndef _COLLISIONSYSTEM_INCLUDE
 #define _COLLISIONSYSTEM_INCLUDE
 
-#include <glm/glm.hpp>
-#include <vector>
-
 #include "Collision.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
 // simple format (see level01.txt for an example). With this information
 // it builds a single VBO that contains all tiles. As a result the render
 // method draws the whole map independently of what is visible.
-
-
-class CollisionSystem{
+class CollisionSystem {
 
 public:
 
@@ -28,6 +23,7 @@ public:
 	bool isColliding(const Collision* a);
 	
 private:
+
 	CollisionSystem();
 	~CollisionSystem();
 
@@ -42,7 +38,4 @@ private:
 
 };
 
-
 #endif // _COLLISION_INCLUDE
-
-

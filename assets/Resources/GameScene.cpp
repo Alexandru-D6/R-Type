@@ -1,26 +1,13 @@
-#include <iostream>
-#include <cmath>
-#include <glm/gtc/matrix_transform.hpp>
 #include "GameScene.h"
 #include "Game.h"
+#include "GeneralDefines.h"
 
-
-#define SCREEN_X 0
-#define SCREEN_Y 0
-
-//Init position of the player
-#define INIT_PLAYER_X_TILES 7
-#define INIT_PLAYER_Y_TILES 2
-
-
-GameScene::GameScene()
-{
+GameScene::GameScene() {
 	map = NULL;
 	player = NULL;
 }
 
-GameScene::~GameScene()
-{
+GameScene::~GameScene() {
 	if(map != NULL)
 		delete map;
 	if(player != NULL)
@@ -28,9 +15,8 @@ GameScene::~GameScene()
 }
 
 
-void GameScene::init()
-{
-	// 224.0f is the amount of pixel that has the map as height
+void GameScene::init() {
+	// 224.0f is the amount of pixel that has the map as height, it may need a rework to get that value directly from level.txt
 	projection = glm::ortho(0.f, float((SCREEN_WIDTH / float(SCREEN_HEIGHT / 224.0f)) - 1), float((SCREEN_HEIGHT / float(SCREEN_HEIGHT / 224.0f)) - 1), 0.f);
 	currentTime = 0.0f;
 
@@ -42,14 +28,12 @@ void GameScene::init()
 	player->setTileMap(map);
 }
 
-void GameScene::update(int deltaTime)
-{
+void GameScene::update(int deltaTime) {
 	currentTime += deltaTime;
 	player->update(deltaTime);
 }
 
-void GameScene::render()
-{
+void GameScene::render() {
 	glm::mat4 modelview;
 
 	texProgram.use();
@@ -71,8 +55,7 @@ void GameScene::render()
 	player->render();
 }
 
-void GameScene::initShaders()
-{
+void GameScene::initShaders() {
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/level-obstacles.vert");
@@ -100,6 +83,3 @@ void GameScene::initShaders()
 	vShader.free();
 	fShader.free();
 }
-
-
-

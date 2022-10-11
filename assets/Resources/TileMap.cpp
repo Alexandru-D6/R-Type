@@ -1,10 +1,3 @@
-#include <iostream>
-#include <fstream>
-#include <sstream>
-#include <vector>
-#include <GL/glew.h>
-#include <GL/gl.h>
-#include <glm/gtc/matrix_transform.hpp>
 #include "TileMap.h"
 
 TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoords, ShaderProgram &program, glm::mat4 &project) {
@@ -182,32 +175,3 @@ void TileMap::prepareArrays(const glm::vec2 &minCoords, ShaderProgram &program) 
 	shaderProgram = &program;
 	position = 0;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

@@ -1,22 +1,18 @@
 #ifndef _SHADER_PROGRAM_INCLUDE
 #define _SHADER_PROGRAM_INCLUDE
 
-
-#include <GL/glew.h>
-#include <GL/gl.h>
 #include <glm/glm.hpp>
-#include "Shader.h"
+#include <glm/gtc/type_ptr.hpp>
 
+#include "Shader.h"
 
 // Using the Shader class ShaderProgram can link a vertex and a fragment shader
 // together, bind input attributes to their corresponding vertex shader names, 
 // and bind the fragment output to a name from the fragment shader
-
-
-class ShaderProgram
-{
+class ShaderProgram {
 
 public:
+
 	ShaderProgram();
 
 	void init();
@@ -38,11 +34,11 @@ public:
 	const string &log() const;
 
 private:
+
 	GLuint programId;
 	bool linked;
 	string errorLog;
 
 };
-
 
 #endif // _SHADER_PROGRAM_INCLUDE

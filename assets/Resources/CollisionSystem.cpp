@@ -18,11 +18,12 @@ void CollisionSystem::addColliderIntoGroup(Collision* a) {
 }
 
 void CollisionSystem::removeColliderFromGroup(Collision* a) {
-	int group = int(a->collisionGroup);
+	// Unused
+	/*int group = int(a->collisionGroup);
 	for (int i = 0; i < groups[group].size(); ++i) {
 		//Do this with iterator
 		//if (groups[group][i] == a) groups.erase(i);
-	}
+	}*/
 }
 
 bool CollisionSystem::isColliding(const Collision* a) {
@@ -33,6 +34,7 @@ bool CollisionSystem::isColliding(const Collision* a) {
 			}
 		}
 	}
+
 	return false;
 }
 

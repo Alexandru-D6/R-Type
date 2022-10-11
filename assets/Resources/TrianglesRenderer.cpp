@@ -8,8 +8,13 @@ TrianglesRenderer::TrianglesRenderer() {
 	nTriangles = 0;
 }
 
-void TrianglesRenderer::initShaders()
-{
+TrianglesRenderer::~TrianglesRenderer() {
+	glDeleteVertexArrays(1, &VAO);
+	glDeleteBuffers(1, &VBO);
+	shaderProgram.free();
+}
+
+void TrianglesRenderer::initShaders() {
 	Shader vShader, fShader;
 
 	vShader.initFromFile(VERTEX_SHADER, "shaders/hitBox.vert");
@@ -55,7 +60,6 @@ void TrianglesRenderer::addTriangle(const glm::mat3x2 &vert) {
 			vertices.push_back(vert[i][j]);
 		}
 	}
-
 }
 
 void TrianglesRenderer::moveHitBoxesRelative(const glm::ivec2 &pos) {
@@ -64,12 +68,6 @@ void TrianglesRenderer::moveHitBoxesRelative(const glm::ivec2 &pos) {
 
 void TrianglesRenderer::moveHitBoxesAbsolute(const glm::ivec2 &pos) {
 	position = pos;
-}
-
-TrianglesRenderer::~TrianglesRenderer() {
-	glDeleteVertexArrays(1, &VAO);
-	glDeleteBuffers(1, &VBO);
-	shaderProgram.free();
 }
 
 int TrianglesRenderer::setColor(glm::vec3 color) {
