@@ -1,21 +1,20 @@
-#ifndef _GAMESCENE_INCLUDE
-#define _GAMESCENE_INCLUDE
+#ifndef _MAIN_MENU_SCENE_INCLUDE
+#define _MAIN_MENU_SCENE_INCLUDE
 
 #include <glm/glm.hpp>
 
 #include "ShaderProgram.h"
 #include "TileMap.h"
-#include "Player.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
-class GameScene {
+class MainMenuScene {
 
 public:
 
-    GameScene();
-    ~GameScene();
+    MainMenuScene();
+    ~MainMenuScene();
 
     void init();
     void update(int deltaTime);
@@ -23,17 +22,11 @@ public:
 
 private:
 
-    void initShaders();
-
-private:
-
     TileMap *map;
-    Player *player;
 
-    ShaderProgram texProgram;
     float currentTime;
     glm::mat4 projection;
 
 };
 
-#endif // _SCENE_INCLUDE
+#endif // _MAIN_MENU_SCENE_INCLUDE

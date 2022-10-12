@@ -22,10 +22,10 @@ public:
     };
 
     Collision();
-    Collision(const glm::mat4 &project, CollisionGroups group);
+    Collision(glm::mat4 *project, CollisionGroups group);
     ~Collision();
 
-    void setProjection(const glm::mat4 &project);
+    void setProjection(glm::mat4 *project);
 
     void addCollider(const glm::ivec4 &boxCollider);
     void removeCollider(const glm::ivec4 &boxCollider);

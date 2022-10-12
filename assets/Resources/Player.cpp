@@ -4,7 +4,7 @@
 
 Player::Player(glm::mat4 &project) {
     projection = project;
-    collider = new Collision(project, Collision::Player);
+    collider = new Collision(&project, Collision::Player);
 
     collisionSystem = CollisionSystem::getInstance();
     collisionSystem->addColliderIntoGroup(collider);
