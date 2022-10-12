@@ -4,11 +4,14 @@
 
 MainMenuScene::MainMenuScene() {
     map = NULL;
+    button = NULL;
 }
 
 MainMenuScene::~MainMenuScene() {
-    if(map != NULL)
+    if (map != NULL)
         delete map;
+    if (button != NULL)
+        delete button;
 }
 
 
@@ -18,6 +21,7 @@ void MainMenuScene::init() {
     currentTime = 0.0f;
 
     map = TileMap::createTileMap("levels/MainMenu.txt", glm::vec2(SCREEN_X, SCREEN_Y), &projection);
+
 }
 
 void MainMenuScene::update(int deltaTime) {
@@ -26,4 +30,5 @@ void MainMenuScene::update(int deltaTime) {
 
 void MainMenuScene::render() {
     map->render();
+    button->render();
 }
