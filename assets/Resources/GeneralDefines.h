@@ -1,7 +1,7 @@
 #ifndef _GENERALDEFINES_INCLUDE
 #define _GENERALDEFINES_INCLUDE
 
-#define SHOW_HIT_BOXES true
+#define SHOW_HIT_BOXES 1
 
 #define SCREEN_X 0
 #define SCREEN_Y 0

@@ -23,7 +23,6 @@ Text::Text()
 
 Text::~Text()
 {
-	destroy();
 	if(quad != NULL)
 	{
 		quad->free();
@@ -65,11 +64,6 @@ bool Text::init(const char *filename)
 	quad = TexturedQuad::createTexturedQuad(geom, texCoords, program);
 	
 	return true;
-}
-
-void Text::destroy()
-{
-	FT_Done_Face(face);
 }
 
 ShaderProgram &Text::getProgram()
@@ -214,6 +208,3 @@ void Text::createTextureAtlas()
 	textureAtlas.setWrapS(GL_CLAMP_TO_EDGE);
 	textureAtlas.setWrapT(GL_CLAMP_TO_EDGE);
 }
-
-
-

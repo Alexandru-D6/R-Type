@@ -42,7 +42,7 @@ void TileMap::render() {
 
 #ifdef SHOW_HIT_BOXES
     //TODO: find a way to indicate if the collision boxes are loaded
-    //collision->render();
+    collision->render();
 #endif // SHOW_HIT_BOXES
 }
 

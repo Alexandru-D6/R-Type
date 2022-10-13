@@ -25,7 +25,7 @@ public:
 private:
 
     TileMap *map;
-    UI_Button *button;
+    UI_Button button;
 
     float currentTime;
     glm::mat4 projection;

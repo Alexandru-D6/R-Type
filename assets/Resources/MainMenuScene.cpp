@@ -1,17 +1,15 @@
 #include "MainMenuScene.h"
 #include "Game.h"
+#include "UI_Button.h"
 #include "GeneralDefines.h"
 
 MainMenuScene::MainMenuScene() {
     map = NULL;
-    button = NULL;
 }
 
 MainMenuScene::~MainMenuScene() {
     if (map != NULL)
         delete map;
-    if (button != NULL)
-        delete button;
 }
 
 
@@ -21,7 +19,7 @@ void MainMenuScene::init() {
     currentTime = 0.0f;
 
     map = TileMap::createTileMap("levels/MainMenu.txt", glm::vec2(SCREEN_X, SCREEN_Y), &projection);
-
+	button.init(glm::ivec2(SCREEN_X, SCREEN_Y), "hola");
 }
 
 void MainMenuScene::update(int deltaTime) {
@@ -30,5 +28,5 @@ void MainMenuScene::update(int deltaTime) {
 
 void MainMenuScene::render() {
     map->render();
-    button->render();
+    button.render();
 }

@@ -2,6 +2,7 @@
 #define _UI_BUTTON_INCLUDE
 
 #include "Sprite.h"
+#include "Text.h"
 
 #include "GeneralDefines.h"
 
@@ -15,9 +16,10 @@ public:
 
 public:
 
+	UI_Button();
     UI_Button(glm::mat4 *project);
 
-    void init(const glm::ivec2 &tileMapPos, const string &spriteFile);
+    void init(glm::ivec2 &tileMapPos, const string &buttonText);
     void update(int deltaTime);
     void render();
 
@@ -26,8 +28,9 @@ public:
 private:
 
     glm::ivec2 tileMapDispl, posButton;
-    Texture spritesheet;
-    Sprite *sprite;
+
+	string buttonText;
+	Text text;
 
     glm::mat4 *projection;
 

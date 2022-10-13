@@ -34,7 +34,6 @@ public:
 	~Text();
 	
 	bool init(const char *filename);
-	void destroy();
 	
 	ShaderProgram &getProgram();
 	int getSize() const;
