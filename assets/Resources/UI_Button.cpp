@@ -2,41 +2,63 @@
 #include "GeneralDefines.h"
 
 UI_Button::UI_Button() {
-	projection = NULL;
 	text = Text();
+
+    textAlignment = Text::Center;
+    buttonState = UI_Button::Unselected;
+    color = glm::vec4(1,1,1,1);
 }
 
-UI_Button::UI_Button(glm::mat4 *project) {
-    projection = project;
-}
+void UI_Button::init(const glm::vec2 &pos, const string &_buttonText, const int &size) {
+    posButton = pos;
+    fontSize = size;
+    currentFontSize = fontSize;
+    buttonText = _buttonText;
 
-void UI_Button::init(glm::ivec2 &tileMapPos, const string &buttonText) {
-
-    tileMapDispl = tileMapPos;
-
-	this->buttonText = buttonText;
-	// Select which font you want to use
-	if (!text.init("fonts/OpenSans-Regular.ttf"))
-		//if(!text.init("fonts/OpenSans-Bold.ttf"))
-		//if(!text.init("fonts/DroidSerif.ttf"))
+	if(!text.init("fonts/OpenSans-Bold.ttf"))
 		cout << "Could not load font!!!" << endl;
-
-    //sprite->setPosition(glm::vec2(float(tileMapDispl.x + posButton.x), float(tileMapDispl.y + posButton.y)));
 }
 
 void UI_Button::update(int deltaTime)
 {
-    //sprite->update(deltaTime);
- 
-    //sprite->setPosition(glm::vec2(float(tileMapDispl.x + posButton.x), float(tileMapDispl.y + posButton.y)));
 }
 
 void UI_Button::render() {
-    //sprite->render();
-	text.render("Rebots: ", glm::vec2(10, 30), 32, glm::vec4(1, 1, 1, 1));
+    text.render(buttonText, glm::vec2(posButton.x, posButton.y), currentFontSize, glm::vec4(1, 1, 1, 1), textAlignment);
 }
 
-void UI_Button::setPosition(const glm::vec2 &pos) {
-    posButton = pos;
-    //sprite->setPosition(glm::vec2(float(tileMapDispl.x + posButton.x), float(tileMapDispl.y + posButton.y)));
+void UI_Button::setPosition(const glm::vec2 &_pos) {
+    posButton = _pos;
+
+    render();
+}
+
+void UI_Button::setColor(const glm::vec4 &_color) {
+    color = glm::vec4(_color.x, _color.y, _color.z, 1);
+
+    render();
+}
+
+void UI_Button::setSize(const int &_size) {
+    fontSize = _size;
+
+    if (buttonState == UI_Button::Unselected) currentFontSize = fontSize;
+    else currentFontSize = fontSize * 1.3f;
+
+    render();
+}
+
+void UI_Button::setAlignment(const Text::textAlignment _align) {
+    textAlignment = _align;
+
+    render();
+}
+
+void UI_Button::setState(const UI_Button::ButtonState _state) {
+    buttonState = _state;
+
+    if (buttonState != UI_Button::Unselected) currentFontSize = fontSize * 1.3f;
+    else currentFontSize = fontSize;
+
+    render();
 }

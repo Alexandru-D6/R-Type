@@ -1,11 +1,12 @@
 #ifndef _MAIN_MENU_SCENE_INCLUDE
 #define _MAIN_MENU_SCENE_INCLUDE
 
+#include <vector>
+
 #include <glm/glm.hpp>
 
 #include "ShaderProgram.h"
 #include "TileMap.h"
-
 #include "UI_Button.h"
 
 // Scene contains all the entities of our game.
@@ -25,10 +26,14 @@ public:
 private:
 
     TileMap *map;
-    UI_Button button;
+
+    vector<UI_Button> buttons;
+    int selectedButton;
 
     float currentTime;
     glm::mat4 projection;
+
+    bool latchKeys[256];
 
 };
 

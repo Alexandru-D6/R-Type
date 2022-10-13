@@ -12,27 +12,36 @@ class UI_Button {
 
 public:
 
-    enum ButtonState { UNSELECTED, SELECTED, CLICKED };
+    enum ButtonState { Unselected, Selected, Clicked };
 
 public:
 
 	UI_Button();
-    UI_Button(glm::mat4 *project);
 
-    void init(glm::ivec2 &tileMapPos, const string &buttonText);
+    void init(const glm::vec2 &pos, const string &buttonText, const int &size);
     void update(int deltaTime);
     void render();
 
     void setPosition(const glm::vec2 &pos);
+    void setColor(const glm::vec4 &_color);
+    void setSize(const int &_size);
+    void setAlignment(const Text::textAlignment align);
+    void setState(const UI_Button::ButtonState _state);
 
 private:
 
     glm::ivec2 tileMapDispl, posButton;
 
 	string buttonText;
+    ButtonState buttonState;
+
 	Text text;
 
-    glm::mat4 *projection;
+    int fontSize;
+    int currentFontSize;
+
+    Text::textAlignment textAlignment;
+    glm::vec4 color;
 
 };
 
