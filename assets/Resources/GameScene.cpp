@@ -2,6 +2,11 @@
 #include "Game.h"
 #include "GeneralDefines.h"
 
+GameScene *GameScene::getGame() {
+    GameScene *scene = new GameScene();
+    return scene;
+}
+
 GameScene::GameScene() {
     map = NULL;
     player = NULL;

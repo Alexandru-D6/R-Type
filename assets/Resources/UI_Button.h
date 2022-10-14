@@ -18,12 +18,12 @@ public:
 
 	UI_Button();
 
-    void init(const glm::vec2 &pos, const string &buttonText, const int &size);
+    void init(int id, const glm::vec2 &pos, const string &buttonText, const int &size, void *context);
     void update(int deltaTime);
     void render();
 
     void setPosition(const glm::vec2 &pos);
-    void setColor(const glm::vec4 &_color);
+    void setColor(const glm::vec3 &_color);
     void setSize(const int &_size);
     void setAlignment(const Text::textAlignment align);
     void setState(const UI_Button::ButtonState _state);
@@ -42,6 +42,13 @@ private:
 
     Text::textAlignment textAlignment;
     glm::vec4 color;
+
+    // in seconds
+    int animationTime = 300; 
+    int currentAnimationTime = 0;
+
+    void *buttonContext;
+    int buttonId;
 
 };
 

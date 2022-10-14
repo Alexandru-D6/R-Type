@@ -3,6 +3,7 @@
 
 #include <GL/glew.h>
 #include <GL/glut.h>
+#include <GL/freeglut.h>
 
 #include "GameScene.h"
 #include "MainMenuScene.h"
@@ -28,6 +29,11 @@ public:
     bool update(int deltaTime);
     void render();
 
+    void changeToInstruction();
+    void changeToCredits();
+    void changeToGame();
+    void exit();
+
     // Input callback methods
     void keyPressed(int key);
     void keyReleased(int key);
@@ -43,7 +49,7 @@ public:
 private:
 
     bool bPlay;                       // Continue to play game?
-    MainMenuScene scene;              // Scene to render
+    Scene *scene;              // Scene to render
     bool keys[256], specialKeys[256]; // Store key states so that
                                       // we can have access at any time
 

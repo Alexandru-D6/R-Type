@@ -5,6 +5,7 @@
 
 #include <glm/glm.hpp>
 
+#include "Scene.h"
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "UI_Button.h"
@@ -12,16 +13,22 @@
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
-class MainMenuScene {
+class MainMenuScene : public Scene {
+
+private:
+
+    MainMenuScene();
 
 public:
 
-    MainMenuScene();
+    static MainMenuScene *getMainMenu();
     ~MainMenuScene();
 
-    void init();
-    void update(int deltaTime);
-    void render();
+    void init() override;
+    void update(int deltaTime) override;
+    void render() override;
+
+    void buttonCallback(int id) override;
 
 private:
 
