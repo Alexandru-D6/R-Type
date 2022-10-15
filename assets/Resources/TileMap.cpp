@@ -60,7 +60,8 @@ bool TileMap::loadLevel(const string &levelFile) {
     getline(fin, line);
 
     if (line.compare(0, 13, "BOX_COLLISION") == 0) return loadGame(fin);
-    else if (line.compare(0, 9, "MAIN_MENU") == 0) return loadMainMenu(fin);
+    else if (line.compare(0, 9, "MAIN_MENU") == 0) return loadStaticImage(fin);
+    else if (line.compare(0, 7, "LOADING") == 0) return loadStaticImage(fin);
 
     return true;
 }
@@ -117,7 +118,7 @@ bool TileMap::loadGame(ifstream &fin) {
     return true;
 }
 
-bool TileMap::loadMainMenu(ifstream &fin) {
+bool TileMap::loadStaticImage(ifstream &fin) {
     string line, tilesheetFile, collisionFile;
     stringstream sstream;
 

@@ -34,6 +34,7 @@ private:
 
 	string buttonText;
     ButtonState buttonState;
+    bool buttonPressed;
 
 	Text text;
 

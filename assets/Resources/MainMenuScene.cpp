@@ -33,6 +33,7 @@ void MainMenuScene::init() {
     buttons[3].init(3, glm::ivec2(SCREEN_WIDTH / 2.0f, SCREEN_HEIGHT / 2.0f + 150),    "Quit Game",    32, this);
 
     buttons[selectedButton].setState(UI_Button::Selected);
+    enableControls = true;
 }
 
 void MainMenuScene::update(int deltaTime) {
@@ -40,33 +41,36 @@ void MainMenuScene::update(int deltaTime) {
 
     for (int i = 0; i < 4; i++) buttons[i].update(deltaTime);
 
-    if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !latchKeys[GLUT_KEY_UP]) {
-        latchKeys[GLUT_KEY_UP] = true;
-        buttons[selectedButton].setState(UI_Button::Unselected);
+    if (enableControls) {
+        if (Game::instance().getSpecialKey(GLUT_KEY_UP) && !latchKeys[GLUT_KEY_UP]) {
+            latchKeys[GLUT_KEY_UP] = true;
+            buttons[selectedButton].setState(UI_Button::Unselected);
 
-        selectedButton--;
-        if (selectedButton < 0) selectedButton = buttons.size() - 1;
+            selectedButton--;
+            if (selectedButton < 0) selectedButton = buttons.size() - 1;
 
-        buttons[selectedButton].setState(UI_Button::Selected);
+            buttons[selectedButton].setState(UI_Button::Selected);
 
-    } else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !latchKeys[GLUT_KEY_DOWN]) {
-        latchKeys[GLUT_KEY_DOWN] = true;
-        buttons[selectedButton].setState(UI_Button::Unselected);
+        }
+        else if (Game::instance().getSpecialKey(GLUT_KEY_DOWN) && !latchKeys[GLUT_KEY_DOWN]) {
+            latchKeys[GLUT_KEY_DOWN] = true;
+            buttons[selectedButton].setState(UI_Button::Unselected);
 
-        selectedButton++;
-        if (selectedButton >= buttons.size()) selectedButton = 0;
+            selectedButton++;
+            if (selectedButton >= buttons.size()) selectedButton = 0;
 
-        buttons[selectedButton].setState(UI_Button::Selected);
+            buttons[selectedButton].setState(UI_Button::Selected);
+        }
+        else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !latchKeys[GLUT_KEY_LEFT]) {
+            latchKeys[GLUT_KEY_LEFT] = true;
+
+            buttons[selectedButton].setState(UI_Button::Clicked);
+        }
+
+        if (!Game::instance().getSpecialKey(GLUT_KEY_DOWN) && latchKeys[GLUT_KEY_DOWN]) latchKeys[GLUT_KEY_DOWN] = false;
+        else if (!Game::instance().getSpecialKey(GLUT_KEY_UP) && latchKeys[GLUT_KEY_UP]) latchKeys[GLUT_KEY_UP] = false;
+        else if (!Game::instance().getSpecialKey(GLUT_KEY_LEFT) && latchKeys[GLUT_KEY_LEFT]) latchKeys[GLUT_KEY_LEFT] = false;
     }
-    else if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && !latchKeys[GLUT_KEY_LEFT]) {
-        latchKeys[GLUT_KEY_LEFT] = true;
-
-        buttons[selectedButton].setState(UI_Button::Clicked);
-    }
-
-    if (!Game::instance().getSpecialKey(GLUT_KEY_DOWN) && latchKeys[GLUT_KEY_DOWN]) latchKeys[GLUT_KEY_DOWN] = false;
-    else if (!Game::instance().getSpecialKey(GLUT_KEY_UP) && latchKeys[GLUT_KEY_UP]) latchKeys[GLUT_KEY_UP] = false;
-    else if (!Game::instance().getSpecialKey(GLUT_KEY_LEFT) && latchKeys[GLUT_KEY_LEFT]) latchKeys[GLUT_KEY_LEFT] = false;
 }
 
 void MainMenuScene::render() {
@@ -77,16 +81,20 @@ void MainMenuScene::render() {
 void MainMenuScene::buttonCallback(int id) {
     switch (id) {
     case 0:
-        Game::instance().changeToGame();
+        Game::instance().changeToGame(true);
+        enableControls = false;
         break;
     case 1:
         Game::instance().changeToInstruction();
+        enableControls = false;
         break;
     case 2:
         Game::instance().changeToCredits();
+        enableControls = false;
         break;
     case 3:
         Game::instance().exit();
+        enableControls = false;
         break;
     }
 }

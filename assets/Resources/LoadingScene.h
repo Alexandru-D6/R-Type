@@ -1,47 +1,41 @@
-#ifndef _MAIN_MENU_SCENE_INCLUDE
-#define _MAIN_MENU_SCENE_INCLUDE
-
-#include <vector>
+#ifndef _LOADING_SCENE_INCLUDE
+#define _LOADING_SCENE_INCLUDE
 
 #include <glm/glm.hpp>
 
 #include "Scene.h"
-#include "ShaderProgram.h"
 #include "TileMap.h"
-#include "UI_Button.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
 
-class MainMenuScene : public Scene {
+class LoadingScene : public Scene {
 
 private:
 
-    MainMenuScene();
+    LoadingScene();
 
 public:
 
-    static MainMenuScene *getMainMenu();
-    ~MainMenuScene();
+    static LoadingScene *getLoading();
+    ~LoadingScene();
 
     void init() override;
     void update(int deltaTime) override;
     void render() override;
 
     void buttonCallback(int id) override;
+    void nextScreen(string screen);
 
 private:
 
     TileMap *map;
 
-    vector<UI_Button> buttons;
-    int selectedButton;
-
     float currentTime;
     glm::mat4 projection;
 
-    bool latchKeys[256];
-    bool enableControls;
+    string nextScreenName;
+    int waitingTime;
 };
 
-#endif // _MAIN_MENU_SCENE_INCLUDE
+#endif // _LOADING_SCENE_INCLUDE

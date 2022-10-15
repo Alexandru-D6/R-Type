@@ -39,7 +39,7 @@ private:
     bool loadLevel(const string &levelFile);
 
     bool loadGame(ifstream &fin);
-    bool loadMainMenu(ifstream &fin);
+    bool loadStaticImage(ifstream &fin);
     bool loadInstructions(ifstream &fin);
     bool loadCredits(ifstream &fin);
 

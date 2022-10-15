@@ -25,12 +25,22 @@ void Game::changeToInstruction() {
 }
 
 void Game::changeToCredits() {
-    return;
+    scene = LoadingScene::getLoading();
+    scene->init();
 }
 
-void Game::changeToGame() {
-    scene = GameScene::getGame();
-    scene->init();
+void Game::changeToGame(bool lateRender) {
+    if (lateRender) {
+        scene = LoadingScene::getLoading();
+        scene->init();
+        scene->render();
+        reinterpret_cast<LoadingScene*>(scene)->nextScreen("GAME");
+    }
+
+    if (!lateRender) {
+        scene = GameScene::getGame();
+        scene->init();
+    }
 }
 
 void Game::exit() {

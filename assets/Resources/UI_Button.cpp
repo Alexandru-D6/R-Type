@@ -8,6 +8,7 @@ UI_Button::UI_Button() {
     textAlignment = Text::Center;
     buttonState = UI_Button::Unselected;
     color = glm::vec4(1,1,1,1);
+    buttonPressed = false;
 }
 
 void UI_Button::init(int id, const glm::vec2 &pos, const string &_buttonText, const int &size, void *context) {
@@ -24,6 +25,10 @@ void UI_Button::init(int id, const glm::vec2 &pos, const string &_buttonText, co
 
 void UI_Button::update(int deltaTime)
 {
+    if (buttonPressed) {
+        reinterpret_cast<Scene*>(buttonContext)->buttonCallback(buttonId);
+        buttonPressed = false;
+    }
     if (currentAnimationTime > 0) {
         if (int(currentAnimationTime / (3*int(TIME_PER_FRAME))) % 2 == 0) setColor(glm::vec3(1, 0, 0));
         else setColor(glm::vec3(1, 1, 0));
@@ -35,7 +40,8 @@ void UI_Button::update(int deltaTime)
         currentAnimationTime = 0;
         setColor(glm::vec3(1, 1, 1));
         setState(UI_Button::Unselected);
-        reinterpret_cast<Scene*>(buttonContext)->buttonCallback(buttonId);
+        render();
+        buttonPressed = true;
     }
 }
 
@@ -45,14 +51,10 @@ void UI_Button::render() {
 
 void UI_Button::setPosition(const glm::vec2 &_pos) {
     posButton = _pos;
-
-    render();
 }
 
 void UI_Button::setColor(const glm::vec3 &_color) {
     color = glm::vec4(_color.x, _color.y, _color.z, 1);
-
-    render();
 }
 
 void UI_Button::setSize(const int &_size) {
@@ -60,14 +62,10 @@ void UI_Button::setSize(const int &_size) {
 
     if (buttonState == UI_Button::Unselected) currentFontSize = fontSize;
     else currentFontSize = fontSize * 1.3f;
-
-    render();
 }
 
 void UI_Button::setAlignment(const Text::textAlignment _align) {
     textAlignment = _align;
-
-    render();
 }
 
 void UI_Button::setState(const UI_Button::ButtonState _state) {
@@ -78,6 +76,4 @@ void UI_Button::setState(const UI_Button::ButtonState _state) {
     else currentFontSize = fontSize;
 
     if (buttonState == UI_Button::Clicked) currentAnimationTime = animationTime;
-
-    render();
 }
