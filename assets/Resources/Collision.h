@@ -18,7 +18,8 @@ public:
         Map,
         Enemy,
         PlayerProjectiles,
-        EnemyProjectiles
+        EnemyProjectiles,
+        uknown
     };
 
     Collision();

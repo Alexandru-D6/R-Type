@@ -8,7 +8,7 @@ TileMap *TileMap::createTileMap(const string &levelFile, const glm::vec2 &minCoo
 TileMap::TileMap(const string &levelFile, const glm::vec2 &minCoords, glm::mat4 *project) {
     projection = project;
     initShaders();
-    loadLevel(levelFile);
+    loadLevel(levelFile, minCoords);
     prepareArrays(minCoords);
 }
 
@@ -50,7 +50,7 @@ void TileMap::free() {
     glDeleteBuffers(1, &vbo);
 }
 
-bool TileMap::loadLevel(const string &levelFile) {
+bool TileMap::loadLevel(const string &levelFile, const glm::vec2 &minCoords) {
     ifstream fin;
     string line, tilesheetFile, collisionFile;
     stringstream sstream;
@@ -59,14 +59,14 @@ bool TileMap::loadLevel(const string &levelFile) {
     if(!fin.is_open()) return false;
     getline(fin, line);
 
-    if (line.compare(0, 13, "BOX_COLLISION") == 0) return loadGame(fin);
-    else if (line.compare(0, 9, "MAIN_MENU") == 0) return loadStaticImage(fin);
-    else if (line.compare(0, 7, "LOADING") == 0) return loadStaticImage(fin);
+    if (line.compare(0, 13, "BOX_COLLISION") == 0) return loadGame(fin, minCoords);
+    else if (line.compare(0, 9, "MAIN_MENU") == 0) return loadStaticImage(fin, minCoords);
+    else if (line.compare(0, 7, "LOADING") == 0) return loadStaticImage(fin, minCoords);
 
     return true;
 }
 
-bool TileMap::loadGame(ifstream &fin) {
+bool TileMap::loadGame(ifstream &fin, const glm::vec2 &minCoords) {
     string line, tilesheetFile, collisionFile;
     stringstream sstream;
 
@@ -118,7 +118,7 @@ bool TileMap::loadGame(ifstream &fin) {
     return true;
 }
 
-bool TileMap::loadStaticImage(ifstream &fin) {
+bool TileMap::loadStaticImage(ifstream &fin, const glm::vec2 &minCoords) {
     string line, tilesheetFile, collisionFile;
     stringstream sstream;
 
@@ -167,15 +167,14 @@ bool TileMap::loadStaticImage(ifstream &fin) {
 
     fin.close();
 
+    collision = new Collision(projection, Collision::uknown);
+    collision->addCollider(glm::ivec4(-1,0,-2,1));
+
+#ifdef SHOW_HIT_BOXES
+    collision->showHitBox();
+#endif // SHOW_HIT_BOXES
+
     return true;
-}
-
-bool TileMap::loadInstructions(ifstream &fin) {
-    return false;
-}
-
-bool TileMap::loadCredits(ifstream &fin) {
-    return false;
 }
 
 bool TileMap::getCollisions(const string &collisionFile) {

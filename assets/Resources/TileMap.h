@@ -36,12 +36,10 @@ public:
 
 private:
 
-    bool loadLevel(const string &levelFile);
+    bool loadLevel(const string &levelFile, const glm::vec2 &minCoords);
 
-    bool loadGame(ifstream &fin);
-    bool loadStaticImage(ifstream &fin);
-    bool loadInstructions(ifstream &fin);
-    bool loadCredits(ifstream &fin);
+    bool loadGame(ifstream &fin, const glm::vec2 &minCoords);
+    bool loadStaticImage(ifstream &fin, const glm::vec2 &minCoords);
 
     bool getCollisions(const string &collisionFile);
 

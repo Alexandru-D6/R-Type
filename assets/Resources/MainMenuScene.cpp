@@ -22,7 +22,7 @@ MainMenuScene::~MainMenuScene() {
 
 void MainMenuScene::init() {
     // 256.0f is the amount of pixel that has the map as height, it may need a rework to get that value directly from level.txt
-    projection = glm::ortho(0.f, float((SCREEN_WIDTH / float(SCREEN_HEIGHT / 256.0f)) - 1), float((SCREEN_HEIGHT / float(SCREEN_HEIGHT / 256.0f)) - 1), 0.f);
+    projection = glm::ortho(0.f, float((SCREEN_WIDTH / float(SCREEN_HEIGHT / 255.0f))-2), float((SCREEN_HEIGHT / float(SCREEN_HEIGHT / 255.0f))-2), 0.f);
     currentTime = 0.0f;
 
     map = TileMap::createTileMap("levels/MainMenu.txt", glm::vec2(SCREEN_X, SCREEN_Y), &projection);
