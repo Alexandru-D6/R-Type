@@ -14,7 +14,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
     spritesheet.loadFromFile("images/player/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
     sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, &shaderProgram);
-    sprite->setNumberAnimations(8);
+    sprite->setNumberAnimations(7);
 
         sprite->setAnimationSpeed(STAND_RIGHT, 8);
         sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*8.0, 0.f));
@@ -22,7 +22,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 		sprite->setAnimationSpeed(STAND_UP, 8);
 		sprite->addKeyframe(STAND_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
 		
-		sprite->setAnimationSpeed(MOVE_UP, 8);
+		sprite->setAnimationSpeed(MOVE_UP, 3);
 		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*0.0, 0.0625*2.0f));
 		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*1.0, 0.0625*2.0f));
 		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
@@ -72,11 +72,11 @@ void Player::update(int deltaTime)
             sprite->changeAnimation(STAND_RIGHT);
         //posPlayer.x -= 2;
         //collider.changePositionRelative(glm::ivec2(-2, 0));
-        map->moveMap(2);
+        map->moveMap(1);
         if(collisionSystem->isColliding(Player::collider)) {
             //posPlayer.x += 2;
             //collider.changePositionRelative(glm::ivec2(2, 0));
-            map->moveMap(-2);
+            map->moveMap(-1);
             sprite->changeAnimation(STAND_RIGHT);
         }
     }
@@ -105,7 +105,10 @@ void Player::update(int deltaTime)
     }
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
         posPlayer.y -= 2;
-		if (sprite->animation() == STAND_RIGHT)sprite->changeAnimation(MOVE_UP);
+		if (sprite->animation() == STAND_RIGHT) {
+			sprite->changeAnimation(MOVE_UP);
+			sprite->setFinishedAnimation(false);
+		}
 		else if (sprite->animation() == STAND_DOWN || sprite->animation() == MOVE_DOWN)sprite->changeAnimation(DOWN_RETURN);
         collider->changePositionRelative(glm::ivec2(0, -2));
         if (collisionSystem->isColliding(Player::collider))
@@ -114,9 +117,9 @@ void Player::update(int deltaTime)
             collider->changePositionRelative(glm::ivec2(0, 2));
         }
     }
-	if (sprite->animation() == MOVE_UP && sprite->isFinidhedAnimation) {
+	if (sprite->animation() == MOVE_UP && sprite->isFinidhedAnimation() == true) {
 		sprite->changeAnimation(STAND_UP);
-	}
+	} 
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
 }

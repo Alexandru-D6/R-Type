@@ -31,6 +31,7 @@ public:
     void free();
 
     void setNumberAnimations(int nAnimations);
+	void setFinishedAnimation(bool finish);
 	bool isFinidhedAnimation();
     void setAnimationSpeed(int animId, int keyframesPerSec);
     void addKeyframe(int animId, const glm::vec2 &frame);

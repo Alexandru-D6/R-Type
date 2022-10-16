@@ -39,12 +39,13 @@ void Sprite::update(int deltaTime) {
             timeAnimation -= animations[currentAnimation].millisecsPerKeyframe;
             currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
         }
-
-		if (currentKeyframe == animations[currentAnimation].keyframeDispl.size() - 1) {
-			texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
+		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
+		if (currentKeyframe != animations[currentAnimation].keyframeDispl.size() - 1) {
 			finishedAnimation = false;
 		}
-		else finishedAnimation = true;
+		else if(currentAnimation == 3){
+			finishedAnimation = true;
+		}
     }
 }
 
@@ -73,6 +74,11 @@ void Sprite::setNumberAnimations(int nAnimations) {
     animations.clear();
     animations.resize(nAnimations);
 }
+
+void Sprite::setFinishedAnimation(bool finish){
+	finishedAnimation = finish;
+
+}
 bool Sprite::isFinidhedAnimation() {
 	return finishedAnimation;
 }
@@ -89,11 +95,12 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement) {
 
 void Sprite::changeAnimation(int animId) {
     if(animId < int(animations.size())) {
+		finishedAnimation = false;
         currentAnimation = animId;
         currentKeyframe = 0;
         timeAnimation = 0.f;
         texCoordDispl = animations[animId].keyframeDispl[0];
-		finishedAnimation = false;
+		
     }
 }
 
