@@ -13,48 +13,21 @@ Enemy1::Enemy1(glm::mat4 *project) {
 void Enemy1::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
     spritesheet.loadFromFile("images/Enemies/basic-enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    sprite = Sprite::createSprite(glm::ivec2(16,24), glm::vec2(1/32.0, 1/64.0), &spritesheet, projection);
-    sprite->setNumberAnimations(8);
+    spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+    spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+    spritesheet.setMinFilter(GL_NEAREST);
+    spritesheet.setMagFilter(GL_NEAREST);
+
+    sprite = Sprite::createSprite(glm::ivec2(24,24), glm::vec2(1/16.0, 1/10.0), &spritesheet, projection);
+    sprite->setNumberAnimations(2);
 
         sprite->setAnimationSpeed(STAND_LEFT, 8);
-        sprite->addKeyframe(STAND_LEFT, glm::vec2(1/32*4.0, 1/64*5.0));
+        sprite->addKeyframe(STAND_LEFT, glm::vec2((1.0/16.0)*0.0, (1.0/10.0)*0.0));
 
 		sprite->setAnimationSpeed(MOVE_LEFT, 8);
-		sprite->addKeyframe(MOVE_LEFT, glm::vec2(1 / 32 * 3.0, 1 / 64 * 5.0));
+		sprite->addKeyframe(MOVE_LEFT, glm::vec2((1.0/16.0)*0.0, (1.0/10.0)*0.0));
 
-		sprite->setAnimationSpeed(STAND_UP, 8);
-		sprite->addKeyframe(STAND_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
-		
-		sprite->setAnimationSpeed(MOVE_UP, 3);
-		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*0.0, 0.0625*2.0f));
-		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*1.0, 0.0625*2.0f));
-		sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
-
-		sprite->setAnimationSpeed(STAND_DOWN, 8);
-		sprite->addKeyframe(STAND_DOWN, glm::vec2(0.0625*3.0, 0.0625*4.0f));
-
-		sprite->setAnimationSpeed(MOVE_DOWN, 8);
-		sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*5.0, 0.0625*2.0f));
-		sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*4.0, 0.0625*2.0f));
-		sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*3.0, 0.0625*2.0f));
-
-		sprite->setAnimationSpeed(UP_RETURN, 8);
-		sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
-		sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*1.0, 0.0625*2.0f));
-		sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*0.0, 0.0625*2.0f));
-		sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
-
-
-		sprite->setAnimationSpeed(DOWN_RETURN, 8);
-		sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*3.0, 0.0625*2.0f));
-		sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*4.0, 0.0625*2.0f));
-		sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*5.0, 0.0625*2.0f));
-		sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
-
-
-
-
-    sprite->changeAnimation(0, false);
+    sprite->changeAnimation(STAND_LEFT, false);
     tileMapDispl = tileMapPos;
 
     collider->addCollider(glm::ivec4(3, 3, 30, 14));
@@ -72,11 +45,11 @@ void Enemy1::update(int deltaTime)
     sprite->update(deltaTime);
         if(sprite->animation() != STAND_LEFT)
             sprite->changeAnimation(MOVE_LEFT, false);
-        posEnemy1.x -= 0.5;
-        collider->changePositionRelative(glm::ivec2(-0.5, 0));
+        posEnemy1.x -= 0;
+        collider->changePositionRelative(glm::ivec2(-0, 0));
         if(collisionSystem->isColliding(Enemy1::collider)) {
-            posEnemy1.x += 0.5;
-            collider->changePositionRelative(glm::ivec2(0.5, 0));
+            posEnemy1.x += 0;
+            collider->changePositionRelative(glm::ivec2(0, 0));
             sprite->changeAnimation(STAND_LEFT, false);
         }
 

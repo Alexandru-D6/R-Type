@@ -13,6 +13,10 @@ Player::Player(glm::mat4 *project) {
 void Player::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
     spritesheet.loadFromFile("images/player/player.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+    spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+    spritesheet.setMinFilter(GL_NEAREST);
+    spritesheet.setMagFilter(GL_NEAREST);
     sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
     sprite->setNumberAnimations(7);
 
