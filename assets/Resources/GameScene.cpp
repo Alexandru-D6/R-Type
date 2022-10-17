@@ -31,17 +31,67 @@ void GameScene::init() {
     player->init(glm::ivec2(SCREEN_X, SCREEN_Y));
     player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
     player->setTileMap(map);
+
+    power1 = new PowerUp(&projection);
+    power1->init(PowerUp::ModifierMBlue);
+    power1->setPosition(glm::vec2(0.0,0.0));
+
+    power2 = new PowerUp(&projection);
+    power2->init(PowerUp::ModifierMRed);
+    power2->setPosition(glm::vec2(16.0, 0.0));
+
+    power3 = new PowerUp(&projection);
+    power3->init(PowerUp::ModifierS);
+    power3->setPosition(glm::vec2(32.0, 0.0));
+
+    power4 = new PowerUp(&projection);
+    power4->init(PowerUp::PowerUpBlack);
+    power4->setPosition(glm::vec2(48.0, 0.0));
+
+    power5 = new PowerUp(&projection);
+    power5->init(PowerUp::PowerUpBlue);
+    power5->setPosition(glm::vec2(64.0, 0.0));
+
+    power6 = new PowerUp(&projection);
+    power6->init(PowerUp::PowerUpGreen);
+    power6->setPosition(glm::vec2(80.0, 0.0));
+
+    power7 = new PowerUp(&projection);
+    power7->init(PowerUp::PowerUpRed);
+    power7->setPosition(glm::vec2(96.0, 0.0));
+
+    power8 = new PowerUp(&projection);
+    power8->init(PowerUp::PowerUpYellow);
+    power8->setPosition(glm::vec2(112.0, 0.0));
 }
 
 void GameScene::update(int deltaTime) {
     currentTime += deltaTime;
     player->update(deltaTime);
+
+    power1->update(deltaTime);
+    power2->update(deltaTime);
+    power3->update(deltaTime);
+    power4->update(deltaTime);
+    power5->update(deltaTime);
+    power6->update(deltaTime);
+    power7->update(deltaTime);
+    power8->update(deltaTime);
 }
 
 void GameScene::render() {
     map->render();
 
     player->render();
+
+    power1->render();
+    power2->render();
+    power3->render();
+    power4->render();
+    power5->render();
+    power6->render();
+    power7->render();
+    power8->render();
 }
 
 void GameScene::initShaders() {

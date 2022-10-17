@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "PowerUp.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -34,6 +35,15 @@ private:
 
     TileMap *map;
     Player *player;
+
+    PowerUp *power1;
+    PowerUp *power2;
+    PowerUp *power3;
+    PowerUp *power4;
+    PowerUp *power5;
+    PowerUp *power6;
+    PowerUp *power7;
+    PowerUp *power8;
 
     ShaderProgram texProgram;
     float currentTime;
