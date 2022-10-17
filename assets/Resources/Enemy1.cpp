@@ -31,7 +31,7 @@ void Enemy1::init(const glm::ivec2 &tileMapPos) {
     tileMapDispl = tileMapPos;
 
     collider->addCollider(glm::ivec4(3, 3, 30, 14));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posEnemy1.x, tileMapDispl.y + posEnemy1.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posEnemy1.x, tileMapDispl.y + posEnemy1.y));
 
 #ifdef SHOW_HIT_BOXES
     collider->showHitBox();
@@ -46,10 +46,10 @@ void Enemy1::update(int deltaTime)
         if(sprite->animation() != STAND_LEFT)
             sprite->changeAnimation(MOVE_LEFT, false);
         posEnemy1.x -= 0;
-        collider->changePositionRelative(glm::ivec2(-0, 0));
+        collider->changePositionRelative(glm::vec2(-0, 0));
         if(collisionSystem->isColliding(Enemy1::collider)) {
             posEnemy1.x += 0;
-            collider->changePositionRelative(glm::ivec2(0, 0));
+            collider->changePositionRelative(glm::vec2(0, 0));
             sprite->changeAnimation(STAND_LEFT, false);
         }
 
@@ -71,5 +71,5 @@ void Enemy1::setTileMap(TileMap *tileMap) {
 void Enemy1::setPosition(const glm::vec2 &pos) {
     posEnemy1 = pos;
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy1.x), float(tileMapDispl.y + posEnemy1.y)));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posEnemy1.x, tileMapDispl.y + posEnemy1.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posEnemy1.x, tileMapDispl.y + posEnemy1.y));
 }

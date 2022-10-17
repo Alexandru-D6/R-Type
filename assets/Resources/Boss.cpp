@@ -55,7 +55,7 @@ void Boss::init(const glm::ivec2 &tileMapPos) {
     tileMapDispl = tileMapPos;
 
     collider->addCollider(glm::ivec4(3, 3, 30, 14));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posBoss.x, tileMapDispl.y + posBoss.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posBoss.x, tileMapDispl.y + posBoss.y));
 
 #ifdef SHOW_HIT_BOXES
     collider->showHitBox();

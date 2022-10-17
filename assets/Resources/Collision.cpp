@@ -5,7 +5,7 @@ Collision::Collision(glm::mat4 *project, Collision::CollisionGroups group) {
     collisions = new glm::ivec4[1000];
     collisionGroup = group;
 
-    position = glm::ivec2(0, 0);
+    position = glm::vec2(0, 0);
 
     trianglesRenderer = TrianglesRenderer::createTriangleRender(project);
 }
@@ -14,13 +14,13 @@ Collision::Collision() {
     collidersSize = 0;
     collisions = new glm::ivec4[1000];
 
-    position = glm::ivec2(0, 0);
+    position = glm::vec2(0, 0);
 }
 
 Collision::~Collision() {
     collidersSize = 0;
 
-    position = glm::ivec2(0, 0);
+    position = glm::vec2(0, 0);
 }
 
 void Collision::setProjection(glm::mat4 *project) {
@@ -48,12 +48,12 @@ void Collision::removeCollider(const glm::ivec4 &boxCollider) {
     // Unused
 }
 
-void Collision::changePositionAbsolute(const glm::ivec2 &pos) {
+void Collision::changePositionAbsolute(const glm::vec2 &pos) {
     position = pos;
     trianglesRenderer->moveHitBoxesRelative(pos);
 }
 
-void Collision::changePositionRelative(const glm::ivec2 &pos) {
+void Collision::changePositionRelative(const glm::vec2 &pos) {
     position += pos;
     trianglesRenderer->moveHitBoxesRelative(pos);
 }

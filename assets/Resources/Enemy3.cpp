@@ -55,7 +55,7 @@ void Enemy3::init(const glm::ivec2 &tileMapPos) {
     tileMapDispl = tileMapPos;
 
     collider->addCollider(glm::ivec4(3, 3, 30, 14));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posEnemy3.x, tileMapDispl.y + posEnemy3.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posEnemy3.x, tileMapDispl.y + posEnemy3.y));
 
 #ifdef SHOW_HIT_BOXES
     collider->showHitBox();
@@ -71,11 +71,11 @@ void Enemy3::update(int deltaTime)
         if(sprite->animation() != STAND_RIGHT)
             sprite->changeAnimation(STAND_RIGHT, false);
         //posEnemy3.x -= 2;
-        //collider.changePositionRelative(glm::ivec2(-2, 0));
+        //collider.changePositionRelative(glm::vec2(-2, 0));
         map->moveMap(1);
         if(collisionSystem->isColliding(Enemy3::collider)) {
             //posEnemy3.x += 2;
-            //collider.changePositionRelative(glm::ivec2(2, 0));
+            //collider.changePositionRelative(glm::vec2(2, 0));
             map->moveMap(-1);
             sprite->changeAnimation(STAND_RIGHT, false);
         }
@@ -84,11 +84,11 @@ void Enemy3::update(int deltaTime)
         if(sprite->animation() == STAND_UP)sprite->changeAnimation(UP_RETURN, false);
 
         //posEnemy3.x += 2;
-        //collider.changePositionRelative(glm::ivec2(2, 0));
+        //collider.changePositionRelative(glm::vec2(2, 0));
         map->moveMap(-2);
         if(collisionSystem->isColliding(Enemy3::collider)) {
             //posEnemy3.x -= 2;
-            //collider.changePositionRelative(glm::ivec2(-2, 0));
+            //collider.changePositionRelative(glm::vec2(-2, 0));
             map->moveMap(2);
             sprite->changeAnimation(STAND_RIGHT, false);
         }
@@ -96,11 +96,11 @@ void Enemy3::update(int deltaTime)
 
     if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
         posEnemy3.y += 2;
-        collider->changePositionRelative(glm::ivec2(0, 2));
+        collider->changePositionRelative(glm::vec2(0, 2));
         if (collisionSystem->isColliding(Enemy3::collider))
         {
             posEnemy3.y -= 2;
-            collider->changePositionRelative(glm::ivec2(0, -2));
+            collider->changePositionRelative(glm::vec2(0, -2));
         }
     }
 	else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
@@ -110,11 +110,11 @@ void Enemy3::update(int deltaTime)
 			sprite->setFinishedAnimation(false);
 		}
 		else if (sprite->animation() == STAND_DOWN || sprite->animation() == MOVE_DOWN)sprite->changeAnimation(DOWN_RETURN, false);
-        collider->changePositionRelative(glm::ivec2(0, -2));
+        collider->changePositionRelative(glm::vec2(0, -2));
         if (collisionSystem->isColliding(Enemy3::collider))
         {
             posEnemy3.y += 2;
-            collider->changePositionRelative(glm::ivec2(0, 2));
+            collider->changePositionRelative(glm::vec2(0, 2));
         }
     }
 	if (sprite->animation() == MOVE_UP && sprite->isFinidhedAnimation() == true) {
@@ -139,5 +139,5 @@ void Enemy3::setTileMap(TileMap *tileMap) {
 void Enemy3::setPosition(const glm::vec2 &pos) {
     posEnemy3 = pos;
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posEnemy3.x), float(tileMapDispl.y + posEnemy3.y)));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posEnemy3.x, tileMapDispl.y + posEnemy3.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posEnemy3.x, tileMapDispl.y + posEnemy3.y));
 }
