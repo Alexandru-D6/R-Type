@@ -43,9 +43,9 @@ void Sprite::update(int deltaTime) {
 		if (currentKeyframe != animations[currentAnimation].keyframeDispl.size() - 1) {
 			finishedAnimation = false;
 		}
-		else if(currentAnimation == 3){
+		else 
 			finishedAnimation = true;
-		}
+		
     }
 }
 
@@ -93,13 +93,18 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement) {
         animations[animId].keyframeDispl.push_back(displacement);
 }
 
-void Sprite::changeAnimation(int animId) {
+void Sprite::changeAnimation(int animId, bool special) {
     if(animId < int(animations.size())) {
 		finishedAnimation = false;
+		int pastKeyframe = currentKeyframe;
         currentAnimation = animId;
         currentKeyframe = 0;
         timeAnimation = 0.f;
-        texCoordDispl = animations[animId].keyframeDispl[0];
+        if(!special)texCoordDispl = animations[animId].keyframeDispl[0];
+		else {
+			currentKeyframe = animations[animId].keyframeDispl.size() - 1 - pastKeyframe;
+			texCoordDispl = animations[animId].keyframeDispl[currentKeyframe];
+		}
 		
     }
 }

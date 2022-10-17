@@ -7,6 +7,7 @@
 #include "ShaderProgram.h"
 #include "TileMap.h"
 #include "Player.h"
+#include "Enemy1.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -34,6 +35,7 @@ private:
 
     TileMap *map;
     Player *player;
+	Enemy1 *enemy1;
 
     ShaderProgram texProgram;
     float currentTime;
