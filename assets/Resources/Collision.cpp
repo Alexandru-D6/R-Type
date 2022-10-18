@@ -50,7 +50,7 @@ void Collision::removeCollider(const glm::ivec4 &boxCollider) {
 
 void Collision::changePositionAbsolute(const glm::ivec2 &pos) {
     position = pos;
-    trianglesRenderer->moveHitBoxesRelative(pos);
+    trianglesRenderer->moveHitBoxesAbsolute(pos);
 }
 
 void Collision::changePositionRelative(const glm::ivec2 &pos) {

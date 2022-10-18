@@ -46,37 +46,32 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 
     forceDevice = new ForceDevice(projection);
     forceDevice->init(glm::ivec2(SCREEN_X, SCREEN_Y));
-    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)), true);
 }
 
 void Player::update(int deltaTime)
 {
     sprite->update(deltaTime);
     if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
-        if(sprite->animation() != MOVE_LEFT)
-            sprite->changeAnimation(MOVE_LEFT);
-        //posPlayer.x -= 2;
-        //collider.changePositionRelative(glm::ivec2(-2, 0));
-        map->moveMap(2);
-        if(collisionSystem->isColliding(Player::collider)) {
-            //posPlayer.x += 2;
-            //collider.changePositionRelative(glm::ivec2(2, 0));
-            map->moveMap(-2);
+        if(sprite->animation() != MOVE_LEFT) sprite->changeAnimation(MOVE_LEFT);
+
+        if (collisionSystem->isColliding(Player::collider, glm::ivec2(-2, 0)) || collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(-2, 0))) {
             sprite->changeAnimation(STAND_LEFT);
+        } else {
+            posPlayer.x -= 2;
+            collider->changePositionRelative(glm::vec2(-2, 0));
+            //map->moveMap(2);
         }
     }
     else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
-        if(sprite->animation() != MOVE_RIGHT)
-            sprite->changeAnimation(MOVE_RIGHT);
+        if(sprite->animation() != MOVE_RIGHT) sprite->changeAnimation(MOVE_RIGHT);
 
-        //posPlayer.x += 2;
-        //collider.changePositionRelative(glm::ivec2(2, 0));
-        map->moveMap(-2);
-        if(collisionSystem->isColliding(Player::collider)) {
-            //posPlayer.x -= 2;
-            //collider.changePositionRelative(glm::ivec2(-2, 0));
-            map->moveMap(2);
+        if(collisionSystem->isColliding(Player::collider, glm::ivec2(2, 0)) || collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(2, 0))) {
             sprite->changeAnimation(STAND_RIGHT);
+        } else {
+            posPlayer.x += 2;
+            collider->changePositionRelative(glm::vec2(2, 0));
+            //map->moveMap(-2);
         }
     }
     else {
@@ -87,35 +82,31 @@ void Player::update(int deltaTime)
     }
 
     if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
-        posPlayer.y += 2;
-        collider->changePositionRelative(glm::ivec2(0, 2));
-        if (collisionSystem->isColliding(Player::collider))
-        {
-            posPlayer.y -= 2;
-            collider->changePositionRelative(glm::ivec2(0, -2));
+        if (!(collisionSystem->isColliding(Player::collider, glm::ivec2(0, 2)) || collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, 2)))) {
+            posPlayer.y += 2;
+            collider->changePositionRelative(glm::vec2(0, 2));
         }
     }else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
-        posPlayer.y -= 2;
-        collider->changePositionRelative(glm::ivec2(0, -2));
-        if (collisionSystem->isColliding(Player::collider))
-        {
-            posPlayer.y += 2;
-            collider->changePositionRelative(glm::ivec2(0, 2));
+        if (!(collisionSystem->isColliding(Player::collider, glm::vec2(0, -2)) || collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, -2)))) {
+            posPlayer.y -= 2;
+            collider->changePositionRelative(glm::vec2(0, -2));
         }
     }
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
+
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)), false);
     forceDevice->update(deltaTime);
 }
 
 void Player::render() {
     sprite->render();
-    forceDevice->render();
 
 #ifdef SHOW_HIT_BOXES
     collider->render();
 #endif // SHOW_HIT_BOXES
+
+    forceDevice->render();
 }
 
 void Player::setTileMap(TileMap *tileMap) {
@@ -125,6 +116,6 @@ void Player::setTileMap(TileMap *tileMap) {
 void Player::setPosition(const glm::vec2 &pos) {
     posPlayer = pos;
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
-    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)), true);
     collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 }

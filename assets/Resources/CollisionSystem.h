@@ -20,14 +20,14 @@ public:
     void addColliderIntoGroup(Collision* a);
     void removeColliderFromGroup(Collision* a);
 
-    bool isColliding(const Collision* a);
+    bool isColliding(const Collision* a, const glm::ivec2 &offset);
 
 private:
 
     CollisionSystem();
     ~CollisionSystem();
 
-    static bool searchForCollision(const Collision* a, const Collision* b);
+    static bool searchForCollision(const Collision* a, const Collision* b, const glm::ivec2 &offset);
 
     static bool overlapVertical(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
     static bool overlapHorizontal(const glm::ivec4 &a, const glm::ivec4 &b, const glm::ivec2 &posA, const glm::ivec2 &posB);
