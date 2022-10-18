@@ -43,6 +43,10 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 #endif // SHOW_HIT_BOXES
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+
+    forceDevice = new ForceDevice(projection);
+    forceDevice->init(glm::ivec2(SCREEN_X, SCREEN_Y));
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
 }
 
 void Player::update(int deltaTime)
@@ -101,10 +105,13 @@ void Player::update(int deltaTime)
     }
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
+    forceDevice->update(deltaTime);
 }
 
 void Player::render() {
     sprite->render();
+    forceDevice->render();
 
 #ifdef SHOW_HIT_BOXES
     collider->render();
@@ -118,5 +125,6 @@ void Player::setTileMap(TileMap *tileMap) {
 void Player::setPosition(const glm::vec2 &pos) {
     posPlayer = pos;
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
+    forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x + 32.f), float(tileMapDispl.y + posPlayer.y)));
     collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 }

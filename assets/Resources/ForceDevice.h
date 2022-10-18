@@ -1,42 +1,36 @@
-#ifndef _PLAYER_INCLUDE
-#define _PLAYER_INCLUDE
+#ifndef _FORCE_DEVICE_INCLUDE
+#define _FORCE_DEVICE_INCLUDE
 
 #include "Sprite.h"
 #include "TileMap.h"
 #include "Collision.h"
 #include "CollisionSystem.h"
-#include "ForceDevice.h"
 
 #include "GeneralDefines.h"
 
 // Player is basically a Sprite that represents the player. As such it has
 // all properties it needs to track its movement, jumping, and collisions.
-class Player {
+class ForceDevice {
 
 public:
 
-    enum PlayerAnims { STAND_LEFT, STAND_RIGHT, MOVE_LEFT, MOVE_RIGHT };
+    enum ForceDeviceMk { ForceMK1, ForceMK2, ForceMK3 };
 
 public:
 
-    Player(glm::mat4 *project);
+    ForceDevice(glm::mat4 *project);
     void init(const glm::ivec2 &tileMapPos);
     void update(int deltaTime);
     void render();
 
-    void setTileMap(TileMap *tileMap);
     void setPosition(const glm::vec2 &pos);
 
 private:
 
-    bool bJumping;
-    glm::ivec2 tileMapDispl, posPlayer;
-    int jumpAngle, startY;
+    glm::vec2 posForce;
     Texture spritesheet;
     Sprite *sprite;
     TileMap *map;
-
-    ForceDevice *forceDevice;
 
     glm::mat4 *projection;
 
@@ -45,4 +39,4 @@ private:
 
 };
 
-#endif // _PLAYER_INCLUDE
+#endif // _FORCE_DEVICE_INCLUDE
