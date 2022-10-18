@@ -5,7 +5,6 @@
 #include "TileMap.h"
 #include "Collision.h"
 #include "CollisionSystem.h"
-#include "ForceDevice.h"
 
 #include "GeneralDefines.h"
 
@@ -26,6 +25,7 @@ public:
 
     void setTileMap(TileMap *tileMap);
     void setPosition(const glm::vec2 &pos);
+    glm::vec2 getPosition() { return posPlayer; };
 
 private:
 
@@ -36,8 +36,6 @@ private:
     Texture spritesheet;
     Sprite *sprite;
     TileMap *map;
-
-    ForceDevice *forceDevice;
 
     glm::mat4 *projection;
 
