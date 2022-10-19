@@ -54,9 +54,6 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 		sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*5.0, 0.0625*4.0f));
 		//sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
 
-
-
-
     sprite->changeAnimation(0, false);
     tileMapDispl = tileMapPos;
 
@@ -101,7 +98,7 @@ void Player::update(int deltaTime)
             sprite->changeAnimation(UP_RETURN, false);
         }
 
-        if (collisionSystem->isColliding(Player::collider, glm::vec2(0, 2))){
+        if (!collisionSystem->isColliding(Player::collider, glm::vec2(0, 2))){
             posPlayer.y += 2;
             collider->changePositionRelative(glm::vec2(0, 2));
         }
@@ -115,7 +112,7 @@ void Player::update(int deltaTime)
             sprite->changeAnimation(DOWN_RETURN,false);
         }
 
-        if (collisionSystem->isColliding(Player::collider, glm::vec2(0, -2))) {
+        if (!collisionSystem->isColliding(Player::collider, glm::vec2(0, -2))) {
             posPlayer.y -= 2;
             collider->changePositionRelative(glm::vec2(0, -2));
         }

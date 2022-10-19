@@ -48,7 +48,7 @@ void ForceDevice::init(const glm::ivec2 &tileMapPos) {
         sprite->addKeyframe(ForceMK3, glm::vec2(subX * 2, subY*offset));
         sprite->addKeyframe(ForceMK3, glm::vec2(subX * 3, subY*offset));
 
-    sprite->changeAnimation(forceLevel);
+    sprite->changeAnimation(forceLevel, false);
 
     collider->addCollider(glm::vec4(0, 4, 16, 32-4));
     collider->changePositionAbsolute(glm::vec2(posForce.x, posForce.y));
@@ -144,5 +144,5 @@ Collision* ForceDevice::getCollider() {
 }
 
 void ForceDevice::setForceLevel(int level) {
-    sprite->changeAnimation(level);
+    sprite->changeAnimation(level,false);
 }
