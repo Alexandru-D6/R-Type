@@ -36,15 +36,6 @@ private:
     TileMap *map;
     Player *player;
 
-    PowerUp *power1;
-    PowerUp *power2;
-    PowerUp *power3;
-    PowerUp *power4;
-    PowerUp *power5;
-    PowerUp *power6;
-    PowerUp *power7;
-    PowerUp *power8;
-
     ShaderProgram texProgram;
     float currentTime;
     glm::mat4 projection;
