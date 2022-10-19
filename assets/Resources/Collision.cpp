@@ -27,7 +27,7 @@ void Collision::setProjection(glm::mat4 *project) {
     trianglesRenderer = TrianglesRenderer::createTriangleRender(project);
 }
 
-void Collision::addCollider(const glm::ivec4 &boxCollider) {
+void Collision::addCollider(const glm::vec4 &boxCollider) {
     collisions[collidersSize] = boxCollider;
     collidersSize++;
 
@@ -44,7 +44,7 @@ void Collision::addCollider(const glm::ivec4 &boxCollider) {
     trianglesRenderer->addTriangle(triangle);
 }
 
-void Collision::removeCollider(const glm::ivec4 &boxCollider) {
+void Collision::removeCollider(const glm::vec4 &boxCollider) {
     // Unused
 }
 

@@ -28,8 +28,8 @@ public:
 
     void setProjection(glm::mat4 *project);
 
-    void addCollider(const glm::ivec4 &boxCollider);
-    void removeCollider(const glm::ivec4 &boxCollider);
+    void addCollider(const glm::vec4 &boxCollider);
+    void removeCollider(const glm::vec4 &boxCollider);
 
     void changePositionAbsolute(const glm::vec2 &pos);
     void changePositionRelative(const glm::vec2 &pos);
@@ -44,7 +44,7 @@ public:
     Collision::CollisionGroups collisionGroup;
 
     int collidersSize;
-    glm::ivec4 *collisions;
+    glm::vec4 *collisions;
 
     glm::vec2 position;
 

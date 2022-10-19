@@ -86,5 +86,5 @@ void Boss::setTileMap(TileMap *tileMap) {
 void Boss::setPosition(const glm::vec2 &pos) {
     posBoss = pos;
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posBoss.x), float(tileMapDispl.y + posBoss.y)));
-    collider->changePositionAbsolute(glm::ivec2(tileMapDispl.x + posBoss.x, tileMapDispl.y + posBoss.y));
+    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posBoss.x, tileMapDispl.y + posBoss.y));
 }
