@@ -1,6 +1,8 @@
 #ifndef _COLLISIONSYSTEM_INCLUDE
 #define _COLLISIONSYSTEM_INCLUDE
 
+#include <Set>
+
 #include "Collision.h"
 
 // Class Tilemap is capable of loading a tile map from a text file in a very
@@ -21,6 +23,7 @@ public:
     void removeColliderFromGroup(Collision* a);
 
     bool isColliding(const Collision* a, const glm::vec2 &offset);
+    set<Collision::CollisionGroups> collidedWith(const Collision* a);
 
 private:
 

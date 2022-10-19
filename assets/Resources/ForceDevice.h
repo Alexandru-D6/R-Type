@@ -2,6 +2,7 @@
 #define _FORCE_DEVICE_INCLUDE
 
 #include <vector>
+#include <set>
 
 #include "Sprite.h"
 #include "TileMap.h"
@@ -35,6 +36,9 @@ private:
 
     glm::vec2 getOffsetofColliders(bool left);
 
+    void collisionDetectionRoutine();
+    void attachToASide();
+
 private:
 
     int forceLevel;
@@ -53,8 +57,9 @@ private:
     bool latchKeys[256];
 
     bool isAtached = true;
+    bool isLeft = false;
     float shipOffset = 32.0f; // TODO: hacerlo de alguna manera dinamica
-    float leftLimit = 50;
+    float leftLimit = 30;
     float rightLimit = 400;
     glm::vec2 targetPosition;
 

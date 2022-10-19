@@ -17,6 +17,7 @@ public:
 
     enum CollisionGroups {
         Player,
+        Force,
         Map,
         Enemy,
         PlayerProjectiles,
