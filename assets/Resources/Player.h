@@ -5,6 +5,7 @@
 #include "TileMap.h"
 #include "Collision.h"
 #include "CollisionSystem.h"
+#include "ForceDevice.h"
 
 #include "GeneralDefines.h"
 
@@ -42,6 +43,7 @@ private:
     Collision *collider;
     CollisionSystem *collisionSystem;
 
+    ForceDevice *forceDevice;
 };
 
 #endif // _PLAYER_INCLUDE
