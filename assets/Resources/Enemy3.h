@@ -14,7 +14,7 @@ class Enemy3 {
 
 public:
 
-	enum Enemy3Anims {STAND_RIGHT, STAND_UP, STAND_DOWN, MOVE_UP, MOVE_DOWN, DOWN_RETURN, UP_RETURN };
+	enum Enemy3Anims {POS_0, POS_1, POS_2, POS_3, POS_4};
 
 public:
 
@@ -27,8 +27,7 @@ public:
     void setPosition(const glm::vec2 &pos);
 
 private:
-
-    bool bJumping;
+    bool landed;
     glm::ivec2 tileMapDispl;
     glm::vec2 posEnemy3;
     int jumpAngle, startY;

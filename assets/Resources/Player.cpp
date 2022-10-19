@@ -77,11 +77,11 @@ void Player::update(int deltaTime)
 
         //posPlayer.x -= 2;
         //collider.changePositionRelative(glm::vec2(-2, 0));
-        map->moveMap(1);
+        map->moveMap(3);
         if(collisionSystem->isColliding(Player::collider)) {
             //posPlayer.x += 2;
             //collider.changePositionRelative(glm::vec2(2, 0));
-            map->moveMap(-1);
+            map->moveMap(-3);
             sprite->changeAnimation(STAND_RIGHT, false);
         }
 	}

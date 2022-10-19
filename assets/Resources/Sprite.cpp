@@ -55,6 +55,10 @@ void Sprite::render() {
     shaderProgram.setUniform4f("color", 1.0f, 1.0f, 1.0f, 1.0f);
 
     glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
+	modelview = glm::translate(modelview, glm::vec3(16.f, 16.f, 0.f));
+	modelview = glm::rotate(modelview, 3.1415f*1.0f, glm::vec3(0.0f, 1.0f, 0.0f));
+	modelview = glm::translate(modelview, glm::vec3(-16.f, -16.f, 0.f));
+
     shaderProgram.setUniformMatrix4f("modelview", modelview);
     shaderProgram.setUniform2f("texCoordDispl", texCoordDispl.x, texCoordDispl.y);
     glEnable(GL_TEXTURE_2D);
@@ -100,11 +104,11 @@ void Sprite::changeAnimation(int animId, bool special) {
         currentAnimation = animId;
         currentKeyframe = 0;
         timeAnimation = 0.f;
-        if(!special)texCoordDispl = animations[animId].keyframeDispl[0];
-		else {
+        /*if(!special)*/texCoordDispl = animations[animId].keyframeDispl[0];
+		/*else {
 			currentKeyframe = animations[animId].keyframeDispl.size() - 1 - pastKeyframe;
 			texCoordDispl = animations[animId].keyframeDispl[currentKeyframe];
-		}
+		}*/
 		
     }
 }

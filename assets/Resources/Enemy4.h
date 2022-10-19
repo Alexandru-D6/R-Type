@@ -14,7 +14,7 @@ class Enemy4 {
 
 public:
 
-	enum Enemy4Anims {STAND_RIGHT, STAND_UP, STAND_DOWN, MOVE_UP, MOVE_DOWN, DOWN_RETURN, UP_RETURN };
+	enum Enemy4Anims {STAND_RIGHT};
 
 public:
 
@@ -29,9 +29,10 @@ public:
 private:
 
     bool bJumping;
+	bool landed;
     glm::ivec2 tileMapDispl;
     glm::vec2 posEnemy4;
-    int jumpAngle, startY;
+    float jumpAngle, startY;
     Texture spritesheet;
     Sprite *sprite;
     TileMap *map;

@@ -14,7 +14,7 @@ class Enemy2 {
 
 public:
 
-	enum Enemy2Anims {STAND_RIGHT, STAND_UP, STAND_DOWN, MOVE_UP, MOVE_DOWN, DOWN_RETURN, UP_RETURN };
+	enum Enemy2Anims {MOVE_LEFT};
 
 public:
 
@@ -29,7 +29,7 @@ public:
 private:
 
     bool bJumping;
-    glm::ivec2 tileMapDispl
+	glm::ivec2 tileMapDispl;
     glm::vec2 posEnemy2;
     int jumpAngle, startY;
     Texture spritesheet;
