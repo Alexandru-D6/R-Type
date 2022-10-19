@@ -5,7 +5,6 @@
 #include "TileMap.h"
 #include "Collision.h"
 #include "CollisionSystem.h"
-#include "ForceDevice.h"
 
 #include "GeneralDefines.h"
 
@@ -37,8 +36,6 @@ private:
     Texture spritesheet;
     Sprite *sprite;
     TileMap *map;
-
-    ForceDevice *forceDevice;
 
     glm::mat4 *projection;
 
