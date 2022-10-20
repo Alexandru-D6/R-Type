@@ -29,6 +29,7 @@ public:
     void setPosition(const glm::vec2 &pos);
 
     Collision* getCollider();
+	bool isAttached() { return isAtached; };
 
     void setForceLevel(int level);
 

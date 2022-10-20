@@ -20,7 +20,7 @@ void ForceDevice::init(Collision *sCollider) {
     spritesheet.setMinFilter(GL_NEAREST);
     spritesheet.setMagFilter(GL_NEAREST);
 
-    sprite = Sprite::createSprite(glm::ivec2(32, 32), glm::vec2(1.0f/10.0f, 1.0f/16.0f), &spritesheet, projection);
+    sprite = Sprite::createSprite(glm::ivec2(20, 20), glm::vec2(1.0f/10.0f, 1.0f/16.0f), &spritesheet, projection);
     sprite->setNumberAnimations(3);
 
         int offset = 1;
@@ -50,7 +50,7 @@ void ForceDevice::init(Collision *sCollider) {
 
     sprite->changeAnimation(forceLevel, false);
 
-    collider->addCollider(glm::vec4(0, 4, 16, 32-4));
+    collider->addCollider(glm::vec4(0, 4, 10, 20-4));
     collider->changePositionAbsolute(glm::vec2(posForce.x, posForce.y));
 
     if (isAtached) targetPosition = posForce;
@@ -168,14 +168,14 @@ glm::vec2 ForceDevice::getOffsetofColliders(bool left) {
 
     //  horizontal
     if (left) offset -= glm::vec2((forceBoundingBox.z - forceBoundingBox.x) + forceBoundingBox.x, 0.0f);
-    // TODO: remove "+ 4.0f" when collision matrix is done
-    else offset += glm::vec2((shipBoundingBox.z - shipBoundingBox.x) + shipBoundingBox.x + 4.0f, 0.0f);
+    else offset += glm::vec2((shipBoundingBox.z - shipBoundingBox.x) + shipBoundingBox.x, 0.0f);
 
     // vertical
     float shipCenterY = ((shipBoundingBox.w + shipBoundingBox.y) / 2.0f) + shipBoundingBox.y;
     float forceCenterY = ((forceBoundingBox.w + forceBoundingBox.y) / 2.0f) + forceBoundingBox.y;
+	float sign = (forceCenterY > shipCenterY) ? -1 : 1;
 
-    offset += glm::vec2(0.0f, (shipCenterY - forceCenterY));
+    offset += glm::vec2(0.0f, sign * abs(shipCenterY - forceCenterY)/2.0f);
 
     return offset;
 }
