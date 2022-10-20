@@ -11,6 +11,10 @@ GameScene::GameScene() {
     map = NULL;
     player = NULL;
 
+	enemy1 = NULL;
+	enemy2 = NULL;
+	enemy3 = NULL;
+	enemy4 = NULL;
 }
 
 GameScene::~GameScene() {
@@ -19,6 +23,14 @@ GameScene::~GameScene() {
     if(player != NULL)
         delete player;
 
+	if (enemy1 != NULL)
+		delete enemy1;
+	if (enemy2 != NULL)
+		delete enemy2;
+	if (enemy3 != NULL)
+		delete enemy3;
+	if (enemy4 != NULL)
+		delete enemy4;
 }
 
 
@@ -34,12 +46,35 @@ void GameScene::init() {
     player->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize(), INIT_PLAYER_Y_TILES * map->getTileSize()));
     player->setTileMap(map);
 
+	enemy1 = new Enemy1(&projection);
+	enemy1->init(glm::ivec2(SCREEN_X, SCREEN_Y));
+	enemy1->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+120, INIT_PLAYER_Y_TILES * map->getTileSize()-10));
+	enemy1->setTileMap(map);
+
+	enemy2 = new Enemy2(&projection);
+	enemy2->init(glm::ivec2(SCREEN_X, SCREEN_Y));
+	enemy2->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 90, INIT_PLAYER_Y_TILES * map->getTileSize() + 10));
+	enemy2->setTileMap(map);
+
+	enemy3 = new Enemy3(&projection);
+	enemy3->init(glm::ivec2(SCREEN_X, SCREEN_Y));
+	enemy3->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 90, INIT_PLAYER_Y_TILES * map->getTileSize() + 20));
+	enemy3->setTileMap(map);
+
+	enemy4 = new Enemy4(&projection);
+	enemy4->init(glm::ivec2(SCREEN_X, SCREEN_Y));
+	enemy4->setPosition(glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 90, INIT_PLAYER_Y_TILES * map->getTileSize() + 20));
+	enemy4->setTileMap(map);
 }
 
 void GameScene::update(int deltaTime) {
     currentTime += deltaTime;
     player->update(deltaTime);
-;
+	
+	enemy1->update(deltaTime);
+	enemy2->update(deltaTime);
+	enemy3->update(deltaTime);
+	enemy4->update(deltaTime);
 }
 
 void GameScene::render() {
@@ -47,6 +82,10 @@ void GameScene::render() {
 
     player->render();
 
+	enemy1->render();
+	enemy2->render();
+	enemy3->render();
+	enemy4->render();
 }
 
 void GameScene::initShaders() {
