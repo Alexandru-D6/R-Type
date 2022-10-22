@@ -8,10 +8,7 @@
 #include "TileMap.h"
 #include "Player.h"
 
-#include "Enemy1.h"
-#include "Enemy2.h"
-#include "Enemy3.h"
-#include "Enemy4.h"
+#include "ProjectileFactory.h"
 
 // Scene contains all the entities of our game.
 // It is responsible for updating and render them.
@@ -40,10 +37,7 @@ private:
     TileMap *map;
     Player *player;
 
-	Enemy1 *enemy1;
-	Enemy2 *enemy2;
-	Enemy3 *enemy3;
-	Enemy4 *enemy4;
+    Projectile *projectile;
 
     ShaderProgram texProgram;
     float currentTime;
