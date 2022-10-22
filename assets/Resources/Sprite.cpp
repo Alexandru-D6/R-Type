@@ -10,9 +10,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
     initShaders();
     projection = project;
 	quadsize = quadSize;
-	angleX = 0;
-	angleY = 0;
-	angleZ = 0;
+	angleX = angleY = angleZ = 0;
     float vertices[24] = {	0.f, 0.f, 0.f, 0.f,
                             quadSize.x, 0.f, sizeInSpritesheet.x, 0.f,
                             quadSize.x, quadSize.y, sizeInSpritesheet.x, sizeInSpritesheet.y,
