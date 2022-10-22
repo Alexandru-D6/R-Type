@@ -44,6 +44,7 @@ public:
     int animation() const;
 
     void setPosition(const glm::vec2 &pos);
+	glm::vec2 getQuadsize() const;
 
 private:
 

@@ -27,6 +27,7 @@ public:
     void TrianglesRenderer::moveHitBoxesAbsolute(const glm::vec2 &pos);
 	void TrianglesRenderer::setRotation(const glm::vec3 &rotation);
     int TrianglesRenderer::setColor(glm::vec3 color);
+	void TrianglesRenderer::setBox(const glm::vec2 &size);
 
     void TrianglesRenderer::send();
     int TrianglesRenderer::render();
@@ -46,7 +47,7 @@ private:
     glm::vec2 position;
 
 	float angleX, angleY, angleZ;
-	glm::vec4 box;
+	glm::vec2 box;
 };
 
 #endif // _TRIANGLESRENDERER_INCLUDE

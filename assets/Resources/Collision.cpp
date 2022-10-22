@@ -76,6 +76,10 @@ void Collision::setRotation(const glm::vec3 &rotation) {
 	trianglesRenderer->setRotation(rotation);
 }
 
+void Collision::setBox(const glm::vec2 &size) {
+	trianglesRenderer->setBox(size);
+}
+
 #ifdef SHOW_HIT_BOXES
 void Collision::showHitBox() {
     trianglesRenderer->send();

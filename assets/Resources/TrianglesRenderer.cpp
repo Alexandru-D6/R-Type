@@ -7,7 +7,7 @@ TrianglesRenderer::TrianglesRenderer() {
     position = glm::vec2(0);
     nTriangles = 0;
 	angleX = angleY = angleZ = 0;
-	box = glm::vec4(9999.f, 9999.f, -9999.f, -9999.f);
+	box = glm::vec2(0.f, 0.f);
 }
 
 TrianglesRenderer::~TrianglesRenderer() {
@@ -60,14 +60,6 @@ void TrianglesRenderer::addTriangle(const glm::mat3x2 &vert) {
     for (int i = 0; i < vert.length(); ++i) {
         for (int j = 0; j < vert[0].length(); ++j) {
             vertices.push_back(vert[i][j]);
-			if (j == 0) {
-				if(vert[i][j] < box[0]) box[0] = vert[i][j];
-				else if(vert[i][j] > box[2]) box[2] = vert[i][j];
-			}
-			else if (j == 1) {
-				if (vert[i][j] < box[1]) box[1] = vert[i][j];
-				else if (vert[i][j] > box[3]) box[3] = vert[i][j];
-			}
         }
     }
 }
@@ -91,6 +83,11 @@ int TrianglesRenderer::setColor(glm::vec3 color) {
     return 1;
 }
 
+void TrianglesRenderer::setBox(const glm::vec2 &size) {
+	box[0] = size[0];
+	box[1] = size[1];
+}
+
 void TrianglesRenderer::send() {
     glGenVertexArrays(1, &VAO);
     glBindVertexArray(VAO);
@@ -108,11 +105,11 @@ int TrianglesRenderer::render() {
 
     glm::mat4 modelview = glm::translate(glm::mat4(1.0f), glm::vec3(position.x, position.y, 0.f));
 
-	modelview = glm::translate(modelview, glm::vec3(((box[0]+box[2]) / 2.f), (box[1] + box[3] / 2.f), 0.f));
+	modelview = glm::translate(modelview, glm::vec3(((box[0]) / 2.f), ((box[1]) / 2.f), 0.f));
 	modelview = glm::rotate(modelview, angleZ, glm::vec3(0.f, 0.f, 1.f));
 	modelview = glm::rotate(modelview, angleY, glm::vec3(0.f, 1.f, 0.f));
 	modelview = glm::rotate(modelview, angleX, glm::vec3(1.f, 0.f, 0.f));
-	modelview = glm::translate(modelview, glm::vec3((-(box[0] + box[2]) / 2.f), -((box[1] + box[3]) / 2.f), 0.f));
+	modelview = glm::translate(modelview, glm::vec3((-(box[0]) / 2.f), -((box[1]) / 2.f), 0.f));
     shaderProgram.setUniformMatrix4f("modelview", modelview);
 
     // setting uniforms of fragment

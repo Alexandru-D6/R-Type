@@ -126,6 +126,10 @@ void Sprite::setPosition(const glm::vec2 &pos) {
     position = pos;
 }
 
+glm::vec2 Sprite::getQuadsize() const{
+	return quadsize;
+}
+
 void Sprite::initShaders() {
     Shader vShader, fShader;
 
