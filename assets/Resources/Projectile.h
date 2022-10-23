@@ -13,7 +13,7 @@ class Projectile {
 
 public:
 
-	enum ProjectileType {};
+	enum ProjectileType {normalPlayer};
 
 public:
 

@@ -32,13 +32,16 @@ void ProjectileFactory::setProjection(glm::mat4 *project) {
     projection = project;
 }
 
-void ProjectileFactory::spawnProjectile(const glm::vec2 &pos) {
+void ProjectileFactory::spawnProjectile(const glm::vec2 &pos, const glm::vec2 &vel, bool bounce, Projectile::ProjectileType type) {
     Projectile *projectile = new ProjectileNormal(projection, last_id);
     projectiles.insert({last_id, projectile });
     ++last_id;
 
     projectile->init();
     projectile->setPosition(pos);
+    projectile->setVelocity(vel);
+    projectile->setBounciness(bounce);
+    projectile->setType(type);
 }
 
 void ProjectileFactory::destroyProjectile(const int &id) {

@@ -27,12 +27,14 @@ void CollisionSystem::removeColliderFromGroup(Collision* a) {
     }
 }
 
+bool CollisionSystem::isValidCollision(const Collision* a, const Collision* b) {
+    return collisionMatrix[a->collisionGroup][b->collisionGroup];
+}
+
 bool CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
     for (int i = 0; i < groups.size(); ++i) {
-        if (i != int(a->collisionGroup) 
-			&& !(i == int(Collision::Player) && int(a->collisionGroup) == int(Collision::Force))
-			&& !(i == int(Collision::Force) && int(a->collisionGroup) == int(Collision::Player))) {
-            for (int j = 0; j < groups[i].size(); ++j) {
+        for (int j = 0; j < groups[i].size(); ++j) {
+            if (isValidCollision(a, groups[i][j])) {
                 if (searchForCollision(a, groups[i][j], offset)) return true;
             }
         }

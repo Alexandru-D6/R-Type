@@ -40,14 +40,15 @@ void ProjectileNormal::init() {
 }
 
 void ProjectileNormal::update(int deltaTime) {
-    if (posProjectile.x >= 600.0f) {
+    if (posProjectile.x >= 500.0f) {
         ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
         return;
     }
 
-    posProjectile += glm::vec2(3.0f, 0.0f);
-
+    posProjectile += projVelocity;
+    collider->changePositionRelative(projVelocity);
     sprite->setPosition(posProjectile);
+
     sprite->update(deltaTime);
 }
 
@@ -66,15 +67,15 @@ void ProjectileNormal::setPosition(const glm::vec2 &pos) {
 }
 
 void ProjectileNormal::setVelocity(const glm::vec2 &vel) {
-    throw exception("Not Implemented Method");
+    projVelocity = vel;
 }
 
 void ProjectileNormal::setType(const ProjectileType type) {
-    throw exception("Not Implemented Method");
+    projType = type;
 }
 
 void ProjectileNormal::setBounciness(const bool bounce) {
-    throw exception("Not Implemented Method");
+    projBounce = bounce;
 }
 
 void ProjectileNormal::collisionRoutine(set<Collision::CollisionGroups> collisions) {

@@ -14,10 +14,6 @@ class ProjectileNormal : public Projectile {
 
 public:
 
-	enum ProjectileType {};
-
-public:
-
     ProjectileNormal(glm::mat4 *project, int id);
     void init();
     void update(int deltaTime);
@@ -44,6 +40,11 @@ private:
 
     Collision *collider;
     CollisionSystem *collisionSystem;
+
+    glm::vec2 projVelocity;
+    Projectile::ProjectileType projType;
+    bool projBounce;
+
 };
 
 #endif // _PROJECTILE_NORMAL_INCLUDE

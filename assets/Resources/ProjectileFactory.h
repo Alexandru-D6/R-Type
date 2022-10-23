@@ -32,7 +32,7 @@ public:
 
     void setProjection(glm::mat4 *project);
 
-    void spawnProjectile(const glm::vec2 &pos);
+    void spawnProjectile(const glm::vec2 &pos, const glm::vec2 &vel, bool bounce, Projectile::ProjectileType type);
     void destroyProjectile(const int &id);
 
 private:
