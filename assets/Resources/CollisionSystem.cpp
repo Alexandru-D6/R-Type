@@ -31,28 +31,22 @@ bool CollisionSystem::isValidCollision(const Collision* a, const Collision* b) {
     return collisionMatrix[a->collisionGroup][b->collisionGroup];
 }
 
-bool CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
+bool CollisionSystem::isTriggerCollision(const Collision* a, const Collision* b) {
+    return triggersMatrix[a->collisionGroup][b->collisionGroup];
+}
+
+CollisionSystem::CollisionInfo CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
     for (int i = 0; i < groups.size(); ++i) {
         for (int j = 0; j < groups[i].size(); ++j) {
-            if (isValidCollision(a, groups[i][j])) {
-                if (searchForCollision(a, groups[i][j], offset)) return true;
+            if (isValidCollision(a, groups[i][j]) || isTriggerCollision(a, groups[i][j])) {
+                if (searchForCollision(a, groups[i][j], offset)) {
+                    return CollisionInfo{ isValidCollision(a, groups[i][j]), groups[i][j], isTriggerCollision(a, groups[i][j]) };
+                }
             }
         }
     }
 
-    return false;
-}
-
-set<Collision::CollisionGroups> CollisionSystem::collidedWith(const Collision* a) {
-    set<Collision::CollisionGroups> collidedGroups;
-
-    for (int i = 0; i < groups.size(); ++i) {
-        for (int j = 0; j < groups[i].size(); ++j) {
-            if (searchForCollision(a, groups[i][j], glm::vec2(0, 0))) collidedGroups.insert(static_cast<Collision::CollisionGroups>(i));
-        }
-    }
-
-    return collidedGroups;
+    return CollisionInfo{ false, NULL, false};
 }
 
 bool CollisionSystem::searchForCollision(const Collision* a, const Collision* b, const glm::vec2 &offset) {

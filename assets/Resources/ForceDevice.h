@@ -37,7 +37,6 @@ private:
 
     glm::vec2 getOffsetofColliders(bool left);
 
-    void collisionDetectionRoutine();
     void attachToASide();
 
 private:

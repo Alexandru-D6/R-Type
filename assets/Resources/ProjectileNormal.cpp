@@ -45,8 +45,17 @@ void ProjectileNormal::update(int deltaTime) {
         return;
     }
 
-    posProjectile += projVelocity;
-    collider->changePositionRelative(projVelocity);
+    CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
+
+    if (info.colliding) {
+        if (info.collider->collisionGroup == Collision::Map) {
+            ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
+        }
+    }
+    else {
+        posProjectile += projVelocity;
+        collider->changePositionRelative(projVelocity);
+    }
     sprite->setPosition(posProjectile);
 
     sprite->update(deltaTime);

@@ -77,19 +77,25 @@ void Player::update(int deltaTime)
     inputController();
 
     if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
-        if(collisionSystem->isColliding(Player::collider, glm::ivec2(-3, 0)) || (forceDevice->isAttached() && collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(-3, 0)))) {
-            sprite->changeAnimation(STAND_RIGHT, false);
-        }else {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(-3, 0));
+        CollisionSystem::CollisionInfo info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(-3, 0));
+
+        if ((!info.colliding && !forceDevice->isAttached()) || (!info.colliding && forceDevice->isAttached() && !info2.colliding)) {
             posPlayer.x -= 3;
             collider->changePositionRelative(glm::vec2(-3, 0));
+        }else {
+            sprite->changeAnimation(STAND_RIGHT, false);
         }
 	}
     else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
-        if(collisionSystem->isColliding(Player::collider, glm::ivec2(3, 0)) || (forceDevice->isAttached() && collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(3, 0)))) {
-            sprite->changeAnimation(STAND_RIGHT, false);
-        }else {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(3, 0));
+        CollisionSystem::CollisionInfo info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(3, 0));
+
+        if ((!info.colliding && !forceDevice->isAttached()) || (!info.colliding && forceDevice->isAttached() && !info2.colliding)) {
             posPlayer.x += 3;
             collider->changePositionRelative(glm::vec2(3, 0));
+        }else {
+            sprite->changeAnimation(STAND_RIGHT, false);
         }
     }
 
@@ -104,7 +110,10 @@ void Player::update(int deltaTime)
             sprite->changeAnimation(UP_RETURN, false);
         }
 
-        if (!(collisionSystem->isColliding(Player::collider, glm::vec2(0, 2)) || (forceDevice->isAttached() && collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, 2))))) {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(0, 2));
+        CollisionSystem::CollisionInfo info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, 2));
+
+        if ((!info.colliding && !forceDevice->isAttached()) || (!info.colliding && forceDevice->isAttached() && !info2.colliding)) {
             posPlayer.y += 2;
             collider->changePositionRelative(glm::vec2(0, 2));
         }
@@ -119,7 +128,10 @@ void Player::update(int deltaTime)
             sprite->changeAnimation(DOWN_RETURN, false);
         }
 
-        if (!(collisionSystem->isColliding(Player::collider, glm::vec2(0, -2)) || (forceDevice->isAttached() && collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, -2))))) {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(0, -2));
+        CollisionSystem::CollisionInfo info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(0, -2));
+
+        if ((!info.colliding && !forceDevice->isAttached()) || (!info.colliding && forceDevice->isAttached() && !info2.colliding)) {
             posPlayer.y -= 2;
             collider->changePositionRelative(glm::vec2(0, -2));
         }

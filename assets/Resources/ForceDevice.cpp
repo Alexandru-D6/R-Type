@@ -69,8 +69,6 @@ void ForceDevice::init(Collision *sCollider) {
 }
 
 void ForceDevice::update(int deltaTime) {
-    
-    collisionDetectionRoutine();
 
     if (Game::instance().getKey('h') && !latchKeys['h']) {
         latchKeys['h'] = true;
@@ -109,24 +107,31 @@ void ForceDevice::update(int deltaTime) {
 
     if (abs(targetPosition.x - posForce.x) >= horizontalVelocity ) {
         int sign = (targetPosition.x >= posForce.x) ? ((targetPosition.x - posForce.x > 0.0f) ? 1 : -1) : ((posForce.x - targetPosition.x > 0.0f) ? -1 : 1);
-        if (!collisionSystem->isColliding(collider, glm::ivec2(sign * horizontalVelocity, 0))) {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::ivec2(sign * horizontalVelocity, 0));
+
+        if (!info.colliding) {
             posForce.x += sign * horizontalVelocity;
             collider->changePositionRelative(glm::ivec2(sign * horizontalVelocity, 0));
-        }
+        } 
     }
 
     if (abs(targetPosition.y - posForce.y) >= verticalVelocity) {
         int sign = (targetPosition.y >= posForce.y) ? ((targetPosition.y - posForce.y > 0.0f) ? 1 : -1) : ((posForce.y - targetPosition.y > 0.0f) ? -1 : 1);
-        if (!collisionSystem->isColliding(collider, glm::ivec2(0, sign * verticalVelocity))) {
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::ivec2(0, sign * verticalVelocity));
+
+        if (!info.colliding) {
             posForce.y += sign * verticalVelocity;
             collider->changePositionRelative(glm::ivec2(0, sign * verticalVelocity));
-        }
+        } 
     }
 
-    if (isAtached && abs(targetPosition.y - posForce.y) <= 10.0f && abs(targetPosition.x - posForce.x) <= 10.0f) {
+    CollisionSystem::CollisionInfo infoAttach = collisionSystem->isColliding(collider, glm::ivec2(0, 0));
+    if (infoAttach.triggered && infoAttach.collider->collisionGroup == Collision::Player) attachToASide();
+
+    /*if (isAtached && abs(targetPosition.y - posForce.y) <= 10.0f && abs(targetPosition.x - posForce.x) <= 10.0f) {
         posForce = targetPosition;
         collider->changePositionAbsolute(posForce);
-    }
+    }*/
 
     sprite->setPosition(glm::vec2(posForce.x, posForce.y));
     sprite->update(deltaTime);
@@ -178,18 +183,6 @@ glm::vec2 ForceDevice::getOffsetofColliders(bool left) {
     offset += glm::vec2(0.0f, sign * abs(shipCenterY - forceCenterY)/2.0f);
 
     return offset;
-}
-
-void ForceDevice::collisionDetectionRoutine() {
-    set<Collision::CollisionGroups> collisions = collisionSystem->collidedWith(collider);
-
-    for (auto col : collisions) {
-        switch (col) {
-            case Collision::Player:
-                attachToASide();
-                break;
-        }
-    }
 }
 
 void ForceDevice::attachToASide() {
