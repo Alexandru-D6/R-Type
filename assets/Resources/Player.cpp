@@ -74,6 +74,8 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 void Player::update(int deltaTime)
 {
     sprite->update(deltaTime);
+    inputController();
+
     if(Game::instance().getSpecialKey(GLUT_KEY_LEFT)) {
         if(collisionSystem->isColliding(Player::collider, glm::ivec2(-3, 0)) || (forceDevice->isAttached() && collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(-3, 0)))) {
             sprite->changeAnimation(STAND_RIGHT, false);
@@ -144,6 +146,20 @@ void Player::update(int deltaTime)
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + posPlayer.x), float(tileMapDispl.y + posPlayer.y)));
     forceDevice->update(deltaTime);
+}
+
+void Player::inputController() {
+    if (Game::instance().getKey('x') && !latchKeys['x']) {
+        latchKeys['x'] = true;
+
+        ProjectileFactory::getInstance()->spawnProjectile(posPlayer + glm::vec2(32.0f, 6.0f));
+    }
+    else if (Game::instance().getKey('c') && !latchKeys['c']) {
+        latchKeys['c'] = true;
+    }
+
+    if (!Game::instance().getKey('x') && latchKeys['x']) latchKeys['x'] = false;
+    else if (!Game::instance().getKey('c') && latchKeys['c']) latchKeys['c'] = false;
 }
 
 void Player::render() {

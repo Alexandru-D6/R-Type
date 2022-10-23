@@ -37,11 +37,7 @@ void GameScene::init() {
     player->setTileMap(map);
 
     ProjectileFactory::getInstance()->setProjection(&projection);
-
-
-    for (int i = 0; i < 200; ++i) {
-        ProjectileFactory::getInstance()->spawnProjectile(glm::vec2(0.0,10.0f+(6.0*i)));
-    }
+    ProjectileFactory::getInstance()->init();
 }
 
 void GameScene::update(int deltaTime) {

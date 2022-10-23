@@ -17,17 +17,21 @@ public:
 
 public:
 
-    Projectile(glm::mat4 *project, int id);
-    void init();
-    void update(int deltaTime);
-    void render();
+    Projectile();
 
-    void setPosition(const glm::vec2 &pos);
-    void setVelocity(const glm::vec2 &vel);
-    void setType(const ProjectileType type);
-    void setBounciness(const bool bounce);
+    virtual void init();
+    virtual void update(int deltaTime);
+    virtual void render();
 
-    void collisionRoutine(set<Collision::CollisionGroups> collisions);
+    virtual void setPosition(const glm::vec2 &pos);
+    virtual void setVelocity(const glm::vec2 &vel);
+    virtual void setType(const ProjectileType type);
+    virtual void setBounciness(const bool bounce);
+
+    virtual int getId();
+
+    virtual void collisionRoutine(set<Collision::CollisionGroups> collisions);
+    virtual void deleteRoutine();
 
 private:
 

@@ -14,6 +14,7 @@ ProjectileFactory::~ProjectileFactory() {
 }
 
 void ProjectileFactory::init() {
+    last_id = 0;
     /*spritesheet.loadFromFile("images/player/force-pit-beam.png", TEXTURE_PIXEL_FORMAT_RGBA);
 
     spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
@@ -32,18 +33,36 @@ void ProjectileFactory::setProjection(glm::mat4 *project) {
 }
 
 void ProjectileFactory::spawnProjectile(const glm::vec2 &pos) {
-    Projectile *projectile = new Projectile(projection, last_id);
-    projectiles[last_id] = projectile;
+    Projectile *projectile = new ProjectileNormal(projection, last_id);
+    projectiles.insert({last_id, projectile });
     ++last_id;
 
     projectile->init();
     projectile->setPosition(pos);
 }
 
-void ProjectileFactory::update(int deltaTime) {
-    for (auto it = projectiles.begin(); it != projectiles.end(); it++) {
-        it->second->update(deltaTime);
+void ProjectileFactory::destroyProjectile(const int &id) {
+    pendingToBeDestroyed.insert(id);
+}
+
+void ProjectileFactory::lateDestroyProjectile() {
+    for (auto it = pendingToBeDestroyed.begin(); it != pendingToBeDestroyed.end(); ++it) {
+        projectiles[*it]->deleteRoutine();
+        delete projectiles[*it];
+        projectiles.erase(*it);
     }
+    pendingToBeDestroyed.clear();
+}
+
+void ProjectileFactory::update(int deltaTime) {
+    map<int, Projectile*>::iterator it = projectiles.begin();
+
+    while (it != projectiles.end()) {
+        it->second->update(deltaTime);
+        if(it != projectiles.end()) ++it;
+    }
+
+    lateDestroyProjectile();
 }
 
 void ProjectileFactory::render() {

@@ -2,8 +2,10 @@
 #define _PROJECTILE_FACTORY_INCLUDE
 
 #include <map>
+#include <set>
 
 #include "Projectile.h"
+#include "ProjectileNormal.h"
 
 class ProjectileFactory {
 
@@ -20,6 +22,8 @@ private:
     ProjectileFactory();
     ~ProjectileFactory();
 
+    void lateDestroyProjectile();
+
 public:
 
     void init();
@@ -29,13 +33,16 @@ public:
     void setProjection(glm::mat4 *project);
 
     void spawnProjectile(const glm::vec2 &pos);
+    void destroyProjectile(const int &id);
 
 private:
 
     glm::mat4 *projection;
 
     map<int, Projectile *> projectiles;
-    int last_id;
+    int last_id = 0;
+
+    set<int> pendingToBeDestroyed;
 };
 
 #endif // _PROJECTILE_FACTORY_INCLUDE

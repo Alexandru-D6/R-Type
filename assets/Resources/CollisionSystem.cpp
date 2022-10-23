@@ -18,12 +18,13 @@ void CollisionSystem::addColliderIntoGroup(Collision* a) {
 }
 
 void CollisionSystem::removeColliderFromGroup(Collision* a) {
-    // Unused
-    /*int group = int(a->collisionGroup);
-    for (int i = 0; i < groups[group].size(); ++i) {
-        //Do this with iterator
-        //if (groups[group][i] == a) groups.erase(i);
-    }*/
+    int group = int(a->collisionGroup);
+    for (auto it = groups[group].begin(); it != groups[group].end(); ++it) {
+        if (*it == a) {
+            groups[group].erase(it);
+            return;
+        }
+    }
 }
 
 bool CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
