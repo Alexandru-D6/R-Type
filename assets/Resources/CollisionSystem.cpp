@@ -38,15 +38,35 @@ bool CollisionSystem::isTriggerCollision(const Collision* a, const Collision* b)
 CollisionSystem::CollisionInfo CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
     for (int i = 0; i < groups.size(); ++i) {
         for (int j = 0; j < groups[i].size(); ++j) {
-            if (isValidCollision(a, groups[i][j]) || isTriggerCollision(a, groups[i][j])) {
+            if (isValidCollision(a, groups[i][j])) {
                 if (searchForCollision(a, groups[i][j], offset)) {
-                    return CollisionInfo{ isValidCollision(a, groups[i][j]), groups[i][j], isTriggerCollision(a, groups[i][j]) };
+                    return CollisionInfo{ 
+                                isValidCollision(a, groups[i][j]), 
+                                groups[i][j], 
+                                false };
                 }
             }
         }
     }
 
     return CollisionInfo{ false, NULL, false};
+}
+
+CollisionSystem::CollisionInfo CollisionSystem::isTriggering(const Collision* a, const glm::vec2 &offset) {
+    for (int i = 0; i < groups.size(); ++i) {
+        for (int j = 0; j < groups[i].size(); ++j) {
+            if (isTriggerCollision(a, groups[i][j])) {
+                if (searchForCollision(a, groups[i][j], offset)) {
+                    return CollisionInfo{ 
+                                false, 
+                                groups[i][j], 
+                                isTriggerCollision(a, groups[i][j]) };
+                }
+            }
+        }
+    }
+
+    return CollisionInfo{ false, NULL, false };
 }
 
 bool CollisionSystem::searchForCollision(const Collision* a, const Collision* b, const glm::vec2 &offset) {

@@ -29,6 +29,7 @@ public:
     void removeColliderFromGroup(Collision* a);
 
     CollisionInfo isColliding(const Collision* a, const glm::vec2 &offset);
+    CollisionInfo isTriggering(const Collision* a, const glm::vec2 &offset);
 
 private:
 

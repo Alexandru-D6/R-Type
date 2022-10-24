@@ -125,13 +125,13 @@ void ForceDevice::update(int deltaTime) {
         } 
     }
 
-    CollisionSystem::CollisionInfo infoAttach = collisionSystem->isColliding(collider, glm::ivec2(0, 0));
+    CollisionSystem::CollisionInfo infoAttach = collisionSystem->isTriggering(collider, glm::ivec2(0, 0));
     if (infoAttach.triggered && infoAttach.collider->collisionGroup == Collision::Player) attachToASide();
 
-    /*if (isAtached && abs(targetPosition.y - posForce.y) <= 10.0f && abs(targetPosition.x - posForce.x) <= 10.0f) {
+    if (isAtached && abs(targetPosition.y - posForce.y) <= 10.0f && abs(targetPosition.x - posForce.x) <= 10.0f) {
         posForce = targetPosition;
         collider->changePositionAbsolute(posForce);
-    }*/
+    }
 
     sprite->setPosition(glm::vec2(posForce.x, posForce.y));
     sprite->update(deltaTime);
