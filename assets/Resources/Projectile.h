@@ -13,13 +13,15 @@ class Projectile {
 
 public:
 
-	enum ProjectileType {normalPlayer};
+	enum ProjectileType {   BombProjectile, ForceProjectile, R9mk0, R9mk1, R9mk2, R9mk3, EnemyProjectile, 
+                            Fireball
+    };
 
 public:
 
     Projectile();
 
-    virtual void init();
+    virtual void init(Texture *spritesheet, int type);
     virtual void update(int deltaTime);
     virtual void render();
 
@@ -28,12 +30,12 @@ public:
     virtual void setType(const ProjectileType type);
     virtual void setBounciness(const bool bounce);
 
-    virtual int getId();
+    virtual int getId() { return idProjectile; };
 
-    virtual void collisionRoutine(set<Collision::CollisionGroups> collisions);
+    virtual void collisionRoutine();
     virtual void deleteRoutine();
 
-private:
+protected:
 
     int idProjectile;
     glm::vec2 posProjectile;
@@ -44,6 +46,11 @@ private:
 
     Collision *collider;
     CollisionSystem *collisionSystem;
+    int collisionWait = 3;
+
+    glm::vec2 projVelocity;
+    Projectile::ProjectileType projType;
+    bool projBounce;
 };
 
 #endif // _PROJECTILE_INCLUDE

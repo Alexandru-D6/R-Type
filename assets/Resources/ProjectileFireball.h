@@ -1,5 +1,5 @@
-#ifndef _PROJECTILE_NORMAL_INCLUDE
-#define _PROJECTILE_NORMAL_INCLUDE
+#ifndef _PROJECTILE_FIREBALL_INCLUDE
+#define _PROJECTILE_FIREBALL_INCLUDE
 
 #include "Projectile.h"
 #include "Sprite.h"
@@ -10,11 +10,11 @@
 
 #include "GeneralDefines.h"
 
-class ProjectileNormal : public Projectile {
+class ProjectileFireball : public Projectile {
 
 public:
 
-    ProjectileNormal(glm::mat4 *project, int id);
+    ProjectileFireball(glm::mat4 *project, int id);
     void init(Texture *spritesheet, int type);
     void update(int deltaTime);
     void render();
@@ -23,6 +23,8 @@ public:
 
     void collisionRoutine();
 
+    void followMapShape();
+
 };
 
-#endif // _PROJECTILE_NORMAL_INCLUDE
+#endif // _PROJECTILE_FIREBALL_INCLUDE

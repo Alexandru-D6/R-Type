@@ -166,7 +166,7 @@ void Player::inputController() {
     if (Game::instance().getKey('x') && !latchKeys['x']) {
         latchKeys['x'] = true;
 
-        ProjectileFactory::getInstance()->spawnProjectile(posPlayer + glm::vec2(32.0f, 6.0f), glm::vec2(3.0f,0.0f), false, Projectile::normalPlayer);
+        ProjectileFactory::getInstance()->spawnProjectile(posPlayer + glm::vec2(32.0f, 6.0f), glm::vec2(3.0f,0.0f), false, Projectile::R9mk0);
     }
     else if (Game::instance().getKey('c') && !latchKeys['c']) {
         latchKeys['c'] = true;

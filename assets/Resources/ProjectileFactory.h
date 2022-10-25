@@ -6,6 +6,7 @@
 
 #include "Projectile.h"
 #include "ProjectileNormal.h"
+#include "ProjectileFireball.h"
 
 class ProjectileFactory {
 
@@ -38,6 +39,7 @@ public:
 private:
 
     glm::mat4 *projection;
+    Texture spritesheet1;
 
     map<int, Projectile *> projectiles;
     int last_id = 0;

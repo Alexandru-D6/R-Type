@@ -5,7 +5,7 @@
 Projectile::Projectile() {
 }
 
-void Projectile::init() {
+void Projectile::init(Texture *spritesheet, int type) {
     throw exception("Not Implemented Method");
 }
 
@@ -18,29 +18,28 @@ void Projectile::render() {
 }
 
 void Projectile::setPosition(const glm::vec2 &pos) {
-    throw exception("Not Implemented Method");
+    posProjectile = pos;
+    sprite->setPosition(posProjectile);
+    collider->changePositionAbsolute(posProjectile);
 }
 
 void Projectile::setVelocity(const glm::vec2 &vel) {
-    throw exception("Not Implemented Method");
+    projVelocity = vel;
 }
 
 void Projectile::setType(const ProjectileType type) {
-    throw exception("Not Implemented Method");
+    projType = type;
 }
 
 void Projectile::setBounciness(const bool bounce) {
-    throw exception("Not Implemented Method");
+    projBounce = bounce;
 }
 
-int Projectile::getId() {
-    throw exception("Not Implemented Method");
-}
-
-void Projectile::collisionRoutine(set<Collision::CollisionGroups> collisions) {
+void Projectile::collisionRoutine() {
     throw exception("Not Implemented Method");
 }
 
 void Projectile::deleteRoutine() {
-    throw exception("Not Implemented Method");
+    collisionSystem->removeColliderFromGroup(collider);
+    delete collider;
 }

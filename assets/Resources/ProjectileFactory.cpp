@@ -15,17 +15,12 @@ ProjectileFactory::~ProjectileFactory() {
 
 void ProjectileFactory::init() {
     last_id = 0;
-    /*spritesheet.loadFromFile("images/player/force-pit-beam.png", TEXTURE_PIXEL_FORMAT_RGBA);
-
-    spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
-    spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
-    spritesheet.setMinFilter(GL_NEAREST);
-    spritesheet.setMagFilter(GL_NEAREST);
-
-    float xt = 1.0 / 20.0;
-    float ys = 1.0 / 64.0;
-    sprite = Sprite::createSprite(glm::ivec2(12, 6), glm::vec2(xt, ys), &spritesheet, projection);
-    sprite->setNumberAnimations(1);*/
+    
+    spritesheet1.loadFromFile("images/projectiles/projectiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    spritesheet1.setWrapS(GL_CLAMP_TO_EDGE);
+    spritesheet1.setWrapT(GL_CLAMP_TO_EDGE);
+    spritesheet1.setMinFilter(GL_NEAREST);
+    spritesheet1.setMagFilter(GL_NEAREST);
 }
 
 void ProjectileFactory::setProjection(glm::mat4 *project) {
@@ -33,15 +28,32 @@ void ProjectileFactory::setProjection(glm::mat4 *project) {
 }
 
 void ProjectileFactory::spawnProjectile(const glm::vec2 &pos, const glm::vec2 &vel, bool bounce, Projectile::ProjectileType type) {
-    Projectile *projectile = new ProjectileNormal(projection, last_id);
-    projectiles.insert({last_id, projectile });
-    ++last_id;
+    Projectile *projectile;
+    switch (type) {
+        case Projectile::BombProjectile:
+        case Projectile::ForceProjectile:
+        case Projectile::R9mk0:
+        case Projectile::R9mk1:
+        case Projectile::R9mk2:
+        case Projectile::R9mk3:
+        case Projectile::EnemyProjectile:
+            projectile = new ProjectileNormal(projection, last_id);
+            projectile->init(&spritesheet1, type);
+            projectile->setPosition(pos);
+            projectile->setVelocity(vel);
+            projectile->setBounciness(bounce);
+            break;
+        case Projectile::Fireball:
+            projectile = new ProjectileFireball(projection, last_id);
+            projectile->init(&spritesheet1, type);
+            projectile->setPosition(pos);
+            projectile->setVelocity(vel);
+            projectile->setBounciness(bounce);
+            break;
+    }
 
-    projectile->init();
-    projectile->setPosition(pos);
-    projectile->setVelocity(vel);
-    projectile->setBounciness(bounce);
-    projectile->setType(type);
+    projectiles.insert({ last_id, projectile });
+    ++last_id;
 }
 
 void ProjectileFactory::destroyProjectile(const int &id) {
