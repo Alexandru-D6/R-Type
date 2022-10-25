@@ -20,6 +20,8 @@ void ProjectileFireball::init(Texture *spritesheet, int type) {
     projectileConfigurator((ProjectileType)type, spriteCuts);
     sprite->changeAnimation(0, false);
 
+    lastMovement = Down;
+
 #ifdef SHOW_HIT_BOXES
     collider->showHitBox();
 #endif // SHOW_HIT_BOXES
@@ -35,7 +37,7 @@ void ProjectileFireball::update(int deltaTime) {
 
     collisionRoutine();
 
-    followMapShape();
+    if (!followMapShape()) return;
 
     sprite->setPosition(posProjectile);
 
@@ -82,30 +84,64 @@ void ProjectileFireball::collisionRoutine() {
     }*/
 }
 
-void ProjectileFireball::followMapShape() {
-    CollisionSystem::CollisionInfo info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f,2.0f));
+bool ProjectileFireball::followMapShape() {
+    bool movementFound = false;
+    int curMovement = lastMovement;
+    CollisionSystem::CollisionInfo info;
 
-    if (!info.colliding) {
-        posProjectile += glm::vec2(0.0f, 2.0f);
-        collider->changePositionRelative(glm::vec2(0.0f, 2.0f));
-    }
-    else {
-        info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(2.0f, 0.0f));
+    while (!movementFound) {
 
-        if (!info.colliding) {
-            posProjectile += glm::vec2(2.0f, 0.0f);
-            collider->changePositionRelative(glm::vec2(2.0f, 0.0f));
+        switch ((Movements)curMovement) {
+            case Down:
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, projVelocity.y));
+
+                if (!info.colliding) {
+                    posProjectile += glm::vec2(0.0f, projVelocity.y);
+                    collider->changePositionRelative(glm::vec2(0.0f, projVelocity.y));
+                    movementFound = true;
+                    lastMovement = curMovement;
+                }
+                break;
+            case Right:
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(projVelocity.x, 0.0f));
+
+                if (!info.colliding) {
+                    posProjectile += glm::vec2(projVelocity.x, 0.0f);
+                    collider->changePositionRelative(glm::vec2(projVelocity.x, 0.0f));
+                    movementFound = true;
+                    lastMovement = curMovement-1;
+                }
+                break;
+            case Up:
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, -projVelocity.y));
+
+                if (!info.colliding) {
+                    posProjectile += glm::vec2(0.0f, -projVelocity.y);
+                    collider->changePositionRelative(glm::vec2(0.0f, -projVelocity.y));
+                    movementFound = true;
+                    lastMovement = curMovement-1;
+                }
+                break;
+            case Left:
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(-projVelocity.x, 0.0f));
+
+                if (!info.colliding) {
+                    posProjectile += glm::vec2(-projVelocity.x, 0.0f);
+                    collider->changePositionRelative(glm::vec2(-projVelocity.x, 0.0f));
+                    movementFound = true;
+                    lastMovement = curMovement-1;
+                }
+                break;
         }
-        else {
-            info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, -2.0f));
 
-            if (!info.colliding) {
-                posProjectile += glm::vec2(0.0f, -2.0f);
-                collider->changePositionRelative(glm::vec2(0.0f, -2.0f));
-            }
-            else {
-                ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
-            }
+        curMovement++;
+        if (curMovement == 4) curMovement = 0;
+
+        // If it returns to the same movement means that it tried all the posibilities
+        if (!movementFound && curMovement == lastMovement) {
+            ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
+            return false;
         }
     }
+    return true;
 }
