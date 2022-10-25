@@ -10,7 +10,6 @@ GameScene *GameScene::getGame() {
 GameScene::GameScene() {
     map = NULL;
     player = NULL;
-    projectile = NULL;
 }
 
 GameScene::~GameScene() {
