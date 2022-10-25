@@ -18,9 +18,6 @@ GameScene::~GameScene() {
         delete map;
     if(player != NULL)
         delete player;
-
-    if (projectile != NULL)
-        delete projectile;
 }
 
 
