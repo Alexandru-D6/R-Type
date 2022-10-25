@@ -13,16 +13,10 @@ class Character {
 
 public:
 
-	enum CharacterAnims { STAND_RIGHT};
+	enum CharacterAnims {STAND_RIGHT};
 
-protected:
-	Character(glm::mat4 *project);
-	~Character();
-
-public:
-
+	Character(glm::mat4 *project, int id, Collision::CollisionGroups type);
 	
-	virtual void init(const glm::ivec2 &tileMapPos);
 	virtual void update(int deltaTime);
 	void render();
 
@@ -30,12 +24,18 @@ public:
 	void setPosition(const glm::vec2 &pos);
 	glm::vec2 getPosition() { return pos; };
 
-private:
+protected:
+
+	virtual void init(const glm::ivec2 &tileMapPos);
 
 	bool bJumping;
+	int id;
+	bool landed;
+	int jumpDelay;
 	glm::ivec2 tileMapDispl;
 	glm::vec2 pos;
-	float jumpAngle, startY;
+	float jumpAngle;
+	float startY;
 	Texture spritesheet;
 	Sprite *sprite;
 	TileMap *map;
