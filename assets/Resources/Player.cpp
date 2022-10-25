@@ -58,7 +58,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
     sprite->changeAnimation(0, false);
     tileMapDispl = tileMapPos;
 
-    collider->addCollider(glm::ivec4(3, 3, 20, 14));
+    collider->addCollider(glm::ivec4(3, 3, 30, 14));
     collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + posPlayer.x, tileMapDispl.y + posPlayer.y));
 
 #ifdef SHOW_HIT_BOXES
