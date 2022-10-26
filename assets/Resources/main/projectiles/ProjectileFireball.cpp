@@ -20,7 +20,7 @@ void ProjectileFireball::init(Texture *spritesheet, int type) {
     projectileConfigurator((ProjectileType)type, spriteCuts);
     sprite->changeAnimation(0, false);
 
-    lastMovement = Down;
+    lastMovement = projVelocity.y > 0.0f ? Down : Up;
 
 #ifdef SHOW_HIT_BOXES
     collider->showHitBox();
@@ -89,17 +89,22 @@ bool ProjectileFireball::followMapShape() {
     int curMovement = lastMovement;
     CollisionSystem::CollisionInfo info;
 
+    int sign = projVelocity.y < 0.0f ? -1 : 1;
+
     while (!movementFound) {
 
+        int updateMovement = 0;
         switch ((Movements)curMovement) {
             case Down:
-                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, projVelocity.y));
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, float(sign) * projVelocity.y));
 
                 if (!info.colliding) {
-                    posProjectile += glm::vec2(0.0f, projVelocity.y);
-                    collider->changePositionRelative(glm::vec2(0.0f, projVelocity.y));
+                    posProjectile += glm::vec2(0.0f, float(sign) * projVelocity.y);
+                    collider->changePositionRelative(glm::vec2(0.0f, float(sign) * projVelocity.y));
                     movementFound = true;
-                    lastMovement = curMovement;
+
+                    updateMovement = (sign == 1) ? 0 : +1;
+                    lastMovement = curMovement + updateMovement;
                 }
                 break;
             case Right:
@@ -109,17 +114,21 @@ bool ProjectileFireball::followMapShape() {
                     posProjectile += glm::vec2(projVelocity.x, 0.0f);
                     collider->changePositionRelative(glm::vec2(projVelocity.x, 0.0f));
                     movementFound = true;
-                    lastMovement = curMovement-1;
+
+                    updateMovement = (sign == 1) ? -1 : +1;
+                    lastMovement = curMovement + updateMovement;
                 }
                 break;
             case Up:
-                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, -projVelocity.y));
+                info = CollisionSystem::getInstance()->isColliding(collider, glm::vec2(0.0f, float(sign) * -projVelocity.y));
 
                 if (!info.colliding) {
-                    posProjectile += glm::vec2(0.0f, -projVelocity.y);
-                    collider->changePositionRelative(glm::vec2(0.0f, -projVelocity.y));
+                    posProjectile += glm::vec2(0.0f, float(sign) * -projVelocity.y);
+                    collider->changePositionRelative(glm::vec2(0.0f, float(sign) * -projVelocity.y));
                     movementFound = true;
-                    lastMovement = curMovement-1;
+
+                    updateMovement = (sign == 1) ? -1 : 0;
+                    lastMovement = curMovement + updateMovement;
                 }
                 break;
             case Left:
@@ -129,13 +138,16 @@ bool ProjectileFireball::followMapShape() {
                     posProjectile += glm::vec2(-projVelocity.x, 0.0f);
                     collider->changePositionRelative(glm::vec2(-projVelocity.x, 0.0f));
                     movementFound = true;
-                    lastMovement = curMovement-1;
+
+                    updateMovement = (sign == 1) ? -1 : +1;
+                    lastMovement = curMovement + updateMovement;
                 }
                 break;
         }
 
-        curMovement++;
-        if (curMovement == 4) curMovement = 0;
+        curMovement += (sign == 1) ? +1 : -1;
+        if (curMovement == 4 && sign == 1) curMovement = 0;
+        else if (curMovement == -1 && sign == -1) curMovement = 3;
 
         // If it returns to the same movement means that it tried all the posibilities
         if (!movementFound && curMovement == lastMovement) {

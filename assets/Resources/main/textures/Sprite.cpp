@@ -29,6 +29,7 @@ Sprite::Sprite(const glm::vec2 &quadSize, const glm::vec2 &sizeInSpritesheet, Te
     currentAnimation = -1;
     position = glm::vec2(0.f);
 	finishedAnimation = true;
+    halfFinishedAnimation = true;
 }
 
 void Sprite::update(int deltaTime) {
@@ -41,11 +42,9 @@ void Sprite::update(int deltaTime) {
             currentKeyframe = (currentKeyframe + 1) % animations[currentAnimation].keyframeDispl.size();
         }
 		texCoordDispl = animations[currentAnimation].keyframeDispl[currentKeyframe];
-		if (currentKeyframe != animations[currentAnimation].keyframeDispl.size() - 1) {
-			finishedAnimation = false;
-		}
-		else 
-			finishedAnimation = true;
+
+        finishedAnimation = (currentKeyframe == animations[currentAnimation].keyframeDispl.size() - 1);
+        halfFinishedAnimation = (currentKeyframe == (int)(animations[currentAnimation].keyframeDispl.size() / 2) + 1);
 		
     }
 }
@@ -92,8 +91,13 @@ void  Sprite::setRotation(const glm::vec3 &rot) {
 	angleY = rot[1] * PI /180.f;
 	angleZ = rot[2] * PI /180.f;
 }
+
 bool Sprite::isFinidhedAnimation() {
 	return finishedAnimation;
+}
+
+bool Sprite::isHalfFinidhedAnimation() {
+    return halfFinishedAnimation;
 }
 
 void Sprite::setAnimationSpeed(int animId, int keyframesPerSec) {
@@ -109,6 +113,7 @@ void Sprite::addKeyframe(int animId, const glm::vec2 &displacement) {
 void Sprite::changeAnimation(int animId, bool special) {
     if(animId < int(animations.size())) {
 		finishedAnimation = false;
+        halfFinishedAnimation = false;
 		int pastKeyframe = currentKeyframe;
         currentAnimation = animId;
         currentKeyframe = 0;
