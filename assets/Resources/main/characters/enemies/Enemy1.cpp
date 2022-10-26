@@ -62,15 +62,24 @@ void Enemy1::update(int deltaTime)
 
 	if (sprite->animation() != LANDING_LEFT || (sprite->animation() == LANDING_LEFT && sprite->isFinidhedAnimation())) {
 		
-
-		CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(-0.5, 0));
-
+		CollisionSystem::CollisionInfo info;
+		if (!rot)info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(-0.5, 0));
+		else info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0.5, 0));
 		if(info.colliding) {
-			if(sprite->animation() == MOVE_LEFT)sprite->changeAnimation(STAND_LEFT, false);
+			//if(sprite->animation() == MOVE_LEFT)sprite->changeAnimation(STAND_LEFT, false);
+			rot = !rot;
+			//rotate(0.f,180.f,0.f);
 		} else {
 			if (landed && sprite->animation() != MOVE_LEFT && sprite->animation() != FLY_LEFT && sprite->animation() != JUMP_LEFT) sprite->changeAnimation(MOVE_LEFT, false);
-			pos.x -= 0.5;
-			collider->changePositionRelative(glm::vec2(-0.5, 0));
+			if (!rot) {
+				pos.x -= 0.5;
+				collider->changePositionRelative(glm::vec2(-0.5, 0));
+			}
+			else{
+				pos.x += 0.5;
+				collider->changePositionRelative(glm::vec2(+0.5, 0));
+			}
+				
 		}
 	}
 

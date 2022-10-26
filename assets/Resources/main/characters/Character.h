@@ -33,7 +33,8 @@ protected:
 	bool rot;
 	int id;
 	bool landed;
-	
+	bool rot;
+	int jumpDelay;
 	glm::ivec2 tileMapDispl;
 	glm::vec2 pos;
 	float jumpAngle;
