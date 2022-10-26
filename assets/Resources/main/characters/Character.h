@@ -21,17 +21,19 @@ public:
 	void render();
 
 	void setTileMap(TileMap *tileMap);
-	void setPosition(const glm::vec2 &pos);
+	virtual void setPosition(const glm::vec2 &pos);
 	glm::vec2 getPosition() { return pos; };
 
 protected:
 
 	virtual void init(const glm::ivec2 &tileMapPos);
+	void rotate(const float &angleX, const float &angleY, const float &angleZ);
 
 	bool bJumping;
+	bool rot;
 	int id;
 	bool landed;
-	int jumpDelay;
+	
 	glm::ivec2 tileMapDispl;
 	glm::vec2 pos;
 	float jumpAngle;
