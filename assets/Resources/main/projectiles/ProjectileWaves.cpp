@@ -79,7 +79,6 @@ void ProjectileWaves::update(int deltaTime) {
 
     auxSprite1->update(deltaTime);
     auxSprite2->update(deltaTime);
-    auxSprite3->update(deltaTime);
 }
 
 void ProjectileWaves::render() {
@@ -87,7 +86,6 @@ void ProjectileWaves::render() {
 
     auxSprite1->render();
     auxSprite2->render();
-    auxSprite3->render();
 
 #ifdef SHOW_HIT_BOXES
     collider->render();
@@ -121,16 +119,6 @@ void ProjectileWaves::projectileConfigurator(ProjectileType type, const glm::vec
         for (int i = 0; i < 9; ++i) {
             if (j == 4 && i == 8) break;
             auxSprite2->addKeyframe(SpawningSections, glm::vec2(xy.x * float(i), xy.y * float(j)));
-        }
-    }
-
-    auxSprite3->setAnimationSpeed(0, 1);
-    auxSprite3->addKeyframe(0, glm::vec2(xy.x * 8.0, xy.y * 1.0));
-    auxSprite3->setAnimationSpeed(SpawningSections, 32);
-    for (int j = 2.0; j < 5; ++j) {
-        for (int i = 0; i < 9; ++i) {
-            if (j == 4 && i == 8) break;
-            auxSprite3->addKeyframe(SpawningSections, glm::vec2(xy.x * float(i), xy.y * float(j)));
         }
     }
 
