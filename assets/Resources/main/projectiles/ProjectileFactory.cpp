@@ -16,7 +16,7 @@ ProjectileFactory::~ProjectileFactory() {
 void ProjectileFactory::init() {
     last_id = 0;
     
-    spritesheet1.loadFromFile("images/projectiles/projectiles.png", TEXTURE_PIXEL_FORMAT_RGBA);
+    spritesheet1.loadFromFile("images/projectiles/waves.png", TEXTURE_PIXEL_FORMAT_RGBA);
     spritesheet1.setWrapS(GL_CLAMP_TO_EDGE);
     spritesheet1.setWrapT(GL_CLAMP_TO_EDGE);
     spritesheet1.setMinFilter(GL_NEAREST);
@@ -45,6 +45,13 @@ void ProjectileFactory::spawnProjectile(const glm::vec2 &pos, const glm::vec2 &v
             break;
         case Projectile::Fireball:
             projectile = new ProjectileFireball(projection, last_id);
+            projectile->init(&spritesheet1, type);
+            projectile->setPosition(pos);
+            projectile->setVelocity(vel);
+            projectile->setBounciness(bounce);
+            break;
+        case Projectile::Lasers:
+            projectile = new ProjectileWaves(projection, last_id);
             projectile->init(&spritesheet1, type);
             projectile->setPosition(pos);
             projectile->setVelocity(vel);

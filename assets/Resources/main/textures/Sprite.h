@@ -38,6 +38,7 @@ public:
 	void setFinishedAnimation(bool finish);
 	void setRotation(const glm::vec3 &rot);
 	bool isFinidhedAnimation();
+    bool isHalfFinidhedAnimation();
     void setAnimationSpeed(int animId, int keyframesPerSec);
     void addKeyframe(int animId, const glm::vec2 &frame);
     void changeAnimation(int animId, bool special);
@@ -62,7 +63,7 @@ private:
     glm::vec2 texCoordDispl;
     vector<AnimKeyframes> animations;
 
-    bool finishedAnimation;
+    bool finishedAnimation, halfFinishedAnimation;
 	float angleX;
 	float angleY;
 	float angleZ;
