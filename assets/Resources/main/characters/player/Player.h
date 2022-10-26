@@ -17,6 +17,7 @@ public:
 	void setPosition(const glm::vec2 &pos);
     glm::vec2 getPosition() { return pos; };
     void inputController();
+	void render();
 
 private:
 

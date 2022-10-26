@@ -18,7 +18,7 @@ public:
 	Character(glm::mat4 *project, int id, Collision::CollisionGroups type);
 	
 	virtual void update(int deltaTime);
-	void render();
+	virtual void render();
 
 	void setTileMap(TileMap *tileMap);
 	virtual void setPosition(const glm::vec2 &pos);

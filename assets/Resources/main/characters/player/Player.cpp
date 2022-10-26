@@ -178,3 +178,8 @@ void Player::setPosition(const glm::vec2 &pos) {
     forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 32.0f), float(tileMapDispl.y + pos.y)));
 }
 
+void Player::render() {
+	Character::render();
+	forceDevice->render();
+
+}
