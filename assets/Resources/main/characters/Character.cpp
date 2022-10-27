@@ -9,7 +9,7 @@ Character::Character(glm::mat4 *project, int id, Collision::CollisionGroups type
 	jumpAngle = 0;
 	landed = false;
 	rot = false;
-	collider = new Collision(projection, type);
+	collider = new Collision(id,projection, type);
 	collisionSystem = CollisionSystem::getInstance();
 	collisionSystem->addColliderIntoGroup(collider);	
 }	
@@ -20,7 +20,10 @@ void Character::init(const glm::ivec2 &tileMapPos) {
 
 void Character::update(int deltaTime)
 {
-	
+	if (pos.x <= -50.0f || pos.x >= 500.0f || pos.y >= 300.0f || pos.y < 0.0f) {
+		ProjectileFactory::getInstance()->destroyProjectile(id);
+		return;
+	}
 }
 
 void Character::render() {

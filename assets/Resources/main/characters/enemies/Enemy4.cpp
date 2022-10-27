@@ -71,5 +71,6 @@ void Enemy4::update(int deltaTime)
 	}
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
+	Character::update(deltaTime);
 }
 

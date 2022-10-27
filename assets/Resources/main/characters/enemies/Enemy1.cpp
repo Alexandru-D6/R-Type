@@ -128,4 +128,5 @@ void Enemy1::update(int deltaTime)
 	if (sprite->animation() == JUMP_LEFT && sprite->isFinidhedAnimation()) sprite->changeAnimation(FLY_LEFT, false);
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
+	Character::update(deltaTime);
 }
