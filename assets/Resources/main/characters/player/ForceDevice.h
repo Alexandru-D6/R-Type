@@ -43,6 +43,7 @@ private:
     void attachToASide();
 
     void rotateForce(const glm::vec3 &rotation);
+    void spawnProjectiles();
 
 private:
 
@@ -65,7 +66,7 @@ private:
     bool isLeft = false;
     float shipOffset = 32.0f; // TODO: hacerlo de alguna manera dinamica
     float leftLimit = 30;
-    float rightLimit = 400;
+    float rightLimit = 250;
     glm::vec2 targetPosition;
 
     glm::vec2 forceVelocity = glm::vec2(3.0f,1.0f);
