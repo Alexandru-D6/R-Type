@@ -35,9 +35,14 @@ public:
 
 private:
 
-    glm::vec2 getOffsetofColliders(bool left);
+    void inputController();
 
+    void collisionRoutine();
+
+    glm::vec2 getOffsetofColliders(bool left);
     void attachToASide();
+
+    void rotateForce(const glm::vec3 &rotation);
 
 private:
 
@@ -63,8 +68,7 @@ private:
     float rightLimit = 400;
     glm::vec2 targetPosition;
 
-    float horizontalVelocity = 3.0;
-    float verticalVelocity = 1.0;
+    glm::vec2 forceVelocity = glm::vec2(3.0f,1.0f);
 
 };
 
