@@ -6,7 +6,7 @@ Enemy2::Enemy2(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos) :Charac
 }
 
 void Enemy2::init(const glm::ivec2 &tileMapPos) {
-	
+	bJumping = false;
 	spritesheet.loadFromFile("images/Enemies/basic-enemies.png", TEXTURE_PIXEL_FORMAT_RGBA);
 	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
 	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
@@ -32,7 +32,7 @@ void Enemy2::init(const glm::ivec2 &tileMapPos) {
 #ifdef SHOW_HIT_BOXES
 	collider->showHitBox();
 #endif // SHOW_HIT_BOXES
-
+	startY = pos.y;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 }
 
@@ -50,37 +50,22 @@ void Enemy2::update(int deltaTime)
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 
 
-
-		jumpAngle += JUMP_ANGLE_STEP+4;
-		if (jumpAngle >= 180) {
-			bJumping = true;
-			startY = pos.y;
+	
+		jumpAngle += JUMP_ANGLE_STEP+1;
+		if (jumpAngle >= 360) {
 			jumpAngle = 0;
 		}
 		else {
-			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
+			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::vec2(0, (startY - 50.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
 
 			if (info.colliding) {
+				if(jumpAngle < 180)jumpAngle = 180-jumpAngle;
+				if (jumpAngle > 180)jumpAngle = 360-(jumpAngle-180);
 			}
+
 			else {
-				collider->changePositionRelative(glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
-				pos.y = startY - 96.0f * sin(3.14159f * jumpAngle / 180.f);
+				collider->changePositionRelative(glm::vec2(0, (startY - 50.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
+				pos.y = startY - 50.0f * sin(3.14159f * jumpAngle / 180.f);
 			}
 		}
-	
-	/*else {
-		CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::vec2(0, FALL_STEP));
-
-		if (info.colliding) {
-			bJumping = true;
-			jumpAngle = 0;
-			startY = pos.y;
-		}
-		else {
-			landed = false;
-			pos.y += FALL_STEP;
-			collider->changePositionRelative(glm::vec2(0, FALL_STEP));
-		}
-	}*/
-
 }
