@@ -126,6 +126,8 @@ void ForceDevice::inputController() {
     }
     else if (Game::instance().getKey('x') && !latchKeys['x']) {
         latchKeys['x'] = true;
+
+        spawnProjectiles();
     }
 
     // Release State
@@ -203,4 +205,40 @@ void ForceDevice::attachToASide() {
 void ForceDevice::rotateForce(const glm::vec3 &rotation) {
     sprite->setRotation(rotation);
     collider->setRotation(rotation);
+}
+
+void ForceDevice::spawnProjectiles() {
+    glm::vec4 boundingBox = collider->getBoundingBox();
+    glm::vec2 spawnOffset = glm::vec2((((boundingBox.z - boundingBox.x) * 0.2f),(boundingBox.w - boundingBox.y)/2.0f));
+
+    float sign = isLeft ? -1.0f : 1.0f;
+
+    switch (forceLevel) {
+    case ForceMK1:
+        if (!isAtached) ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 0.0f), true, Projectile::ForceProjectile);
+        break;
+    case ForceMK2:
+        if (!isAtached) {
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, -5.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 0.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 5.0f), true, Projectile::ForceProjectile);
+        }
+        else {
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, -5.0f), true, Projectile::Fireball);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 5.0f), true, Projectile::Fireball);
+        }
+        break;
+    case ForceMK3:
+        if (!isAtached) {
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 0.0f, -5.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, -5.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 0.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 5.0f), true, Projectile::ForceProjectile);
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 0.0f, 5.0f), true, Projectile::ForceProjectile);
+        }
+        else {
+            ProjectileFactory::getInstance()->spawnProjectile(posForce + spawnOffset, glm::vec2(sign * 5.0f, 0.0f), true, Projectile::BombProjectile);
+        }
+        break;
+    }
 }
