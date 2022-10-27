@@ -92,7 +92,7 @@ void ProjectileNormal::projectileConfigurator(ProjectileType type, const glm::ve
 void ProjectileNormal::collisionRoutine() {
     collisionWait--;
     if (collisionWait == 0) {
-        collisionWait = 3;
+        collisionWait = 6;
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
 
         if (info.colliding) {
