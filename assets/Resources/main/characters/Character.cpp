@@ -15,13 +15,13 @@ Character::Character(glm::mat4 *project, int id, Collision::CollisionGroups type
 }	
 
 void Character::init(const glm::ivec2 &tileMapPos) {
-
+	throw exception("Not Implemented Method");
 }
 
 void Character::update(int deltaTime)
 {
 	if (pos.x <= -50.0f || pos.x >= 500.0f || pos.y >= 300.0f || pos.y < 0.0f) {
-		ProjectileFactory::getInstance()->destroyProjectile(id);
+		CharacterFactory::getInstance()->destroyCharacter(id);
 		return;
 	}
 }
@@ -51,4 +51,9 @@ void Character::rotate(const float &angleX, const float &angleY, const float &an
 	sprite->setRotation(glm::vec3(angleX, angleY, angleZ));
 	collider->setBox(sprite->getQuadsize());
 	collider->setRotation(glm::vec3(angleX, angleY, angleZ));
+}
+
+void Character::deleteRoutine() {
+	collisionSystem->removeColliderFromGroup(collider);
+	delete collider;
 }

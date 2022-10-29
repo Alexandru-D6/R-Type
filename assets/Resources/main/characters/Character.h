@@ -26,6 +26,7 @@ public:
 	void setTileMap(TileMap *tileMap);
 	virtual void setPosition(const glm::vec2 &pos);
 	glm::vec2 getPosition() { return pos; };
+	void deleteRoutine();
 
 protected:
 
