@@ -15,7 +15,6 @@ public:
 
 private:
 	enum Enemy2Anims { MOVE_LEFT };
-	int shootDelay;
 
 	void init(const glm::ivec2 &tileMapPos);
 	void shoot();

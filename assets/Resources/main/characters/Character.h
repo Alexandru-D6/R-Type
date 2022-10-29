@@ -6,7 +6,10 @@
 #include "collisions\Collision.h"
 #include "collisions\CollisionSystem.h"
 
+
+
 #include "GeneralDefines.h"
+
 
 
 class Character {
@@ -40,7 +43,8 @@ protected:
 	float startY;
 	Texture spritesheet;
 	Sprite *sprite;
-	TileMap *map;
+	TileMap *tmap;
+	int shootDelay;
 
 	glm::mat4 *projection;
 

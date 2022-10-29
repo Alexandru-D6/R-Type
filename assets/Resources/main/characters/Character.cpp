@@ -36,7 +36,7 @@ void Character::render() {
 }
 
 void Character::setTileMap(TileMap *tileMap) {
-	map = tileMap;
+	tmap = tileMap;
 }
 
 void Character::setPosition(const glm::vec2 &pos) {
