@@ -2,6 +2,7 @@
 #define _BOSS_INCLUDE
 
 #include "characters\Character.h"
+#include "Worm.h"
 
 class Boss : public Character {
 

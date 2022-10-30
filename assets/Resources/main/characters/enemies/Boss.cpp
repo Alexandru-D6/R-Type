@@ -7,11 +7,15 @@ Boss::Boss(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos):Character(p
 void Boss::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
     spritesheet.loadFromFile("images/enemies/Boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
+	spritesheet.setWrapS(GL_CLAMP_TO_EDGE);
+	spritesheet.setWrapT(GL_CLAMP_TO_EDGE);
+	spritesheet.setMinFilter(GL_NEAREST);
+	spritesheet.setMagFilter(GL_NEAREST);
+    sprite = Sprite::createSprite(glm::ivec2(256, 128), glm::vec2(1/2.0, 1/2.0), &spritesheet, projection);
     sprite->setNumberAnimations(1);
 
         sprite->setAnimationSpeed(STAND_RIGHT, 8);
-        sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*8.0, 0.f));
+        sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*0.0, 0.f));
 
 		sprite->setAnimationSpeed(STAND_UP, 8);
 		sprite->addKeyframe(STAND_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
@@ -60,7 +64,7 @@ void Boss::init(const glm::ivec2 &tileMapPos) {
 
 void Boss::update(int deltaTime)
 {
-    sprite->update(deltaTime);
+  /*  sprite->update(deltaTime);
     pos.x += 2;
-    sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
+    sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)))^*/
 }
