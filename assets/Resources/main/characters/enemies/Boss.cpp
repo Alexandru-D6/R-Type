@@ -8,7 +8,7 @@ void Boss::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
     spritesheet.loadFromFile("images/enemies/Boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
     sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
-    sprite->setNumberAnimations(7);
+    sprite->setNumberAnimations(1);
 
         sprite->setAnimationSpeed(STAND_RIGHT, 8);
         sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*8.0, 0.f));

@@ -8,6 +8,7 @@
 #include "enemies\Enemy2.h"
 #include "enemies\Enemy3.h"
 #include "enemies\Enemy4.h"
+#include "enemies\Boss.h"
 #include "player\Player.h"
 
 class CharacterFactory {
