@@ -64,7 +64,5 @@ void Boss::init(const glm::ivec2 &tileMapPos) {
 
 void Boss::update(int deltaTime)
 {
-  /*  sprite->update(deltaTime);
-    pos.x += 2;
-    sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)))^*/
+  
 }

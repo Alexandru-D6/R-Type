@@ -52,6 +52,10 @@ void CharacterFactory::spawnCharacter(int type, const glm::vec2 &pos) {
 			character = new Boss(projection, last_id, tileMapPos);
 			character->setPosition(pos);
 			break;
+		case cWorm:
+			character = new Worm(projection, last_id, tileMapPos);
+			character->setPosition(pos);
+			break;
 		default:
 			character = new Enemy1(projection, last_id, tileMapPos);
 			character->setPosition(pos);
