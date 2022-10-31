@@ -47,5 +47,6 @@ void Projectile::collisionRoutine() {
 void Projectile::deleteRoutine() {
     collisionSystem->removeColliderFromGroup(collider);
 	sprite->free();
-    delete collider;
+	delete sprite;
+	delete collider;
 }

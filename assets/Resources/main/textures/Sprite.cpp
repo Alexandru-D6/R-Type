@@ -77,6 +77,8 @@ void Sprite::render() {
 
 void Sprite::free() {
     glDeleteBuffers(1, &vbo);
+	glDeleteVertexArrays(1, &vao);
+	shaderProgram.free();
 }
 
 void Sprite::setNumberAnimations(int nAnimations) {

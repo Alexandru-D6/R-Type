@@ -60,7 +60,10 @@ public:
 private:
 
 	int id;
+
+#ifdef SHOW_HIT_BOXES
     TrianglesRenderer* trianglesRenderer;
+#endif // SHOW_HIT_BOXES
 
 };
 

@@ -37,7 +37,7 @@ void ProjectileFactory::spawnProjectile(const glm::vec2 &pos, const glm::vec2 &v
         case Projectile::R9mk2:
         case Projectile::R9mk3:
         case Projectile::EnemyProjectile:
-            projectile = new ProjectileNormal(projection, last_id);
+            projectile = new ProjectileNormal(projection, last_id, type);
             projectile->init(&spritesheet1, type);
             projectile->setPosition(pos);
             projectile->setVelocity(vel);
