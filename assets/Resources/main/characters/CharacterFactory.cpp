@@ -34,6 +34,36 @@ void CharacterFactory::setProjection(glm::mat4 *project) {
 	projection = project;
 }
 
+void CharacterFactory::setSpawnFiles(string file) {
+	ifstream fin;
+	string line;
+	stringstream sstream;
+	int nrEntities;
+
+	fin.open(file.c_str());
+	if (!fin.is_open()) return;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> nrEntities;
+
+	for (int i = 0; i < nrEntities; ++i) {
+		pair<CharacterAvailable, glm::vec2> enemy;
+		glm::vec2 coord;
+		int type;
+
+		getline(fin, line);
+		sstream.str(line);
+		sstream >> type >> coord.x >> coord.y;
+
+		enemy.first = (CharacterAvailable)type;
+		enemy.second = coord;
+
+		enemies.push_back(enemy);
+	}
+
+	fin.close();
+}
+
 void CharacterFactory::spawnCharacter(int type, const glm::vec2 &pos) {
 
 	Character *character = nullptr;
@@ -76,6 +106,8 @@ void CharacterFactory::update(int deltaTime) {
 	for (auto it = characters.begin(); it != characters.end(); it++) {
 		it->second->update(deltaTime);
 	}
+
+	spawnRoutine();
 	lateDestroyCharacter();
 }
 
@@ -92,4 +124,19 @@ void CharacterFactory::setTileMapPos(const glm::vec2 &pos){
 
 void CharacterFactory::setMap(TileMap *map) {
 	mapa = map;
+}
+
+void CharacterFactory::spawnRoutine() {
+	float x1 = (float)mapa->getPosition() + COORD_VIEW_LIMIT_X;
+	float x2 = x1 + 50.0f;
+
+	vector<pair<CharacterAvailable, glm::vec2>>::iterator it = enemies.begin();
+	while (it != enemies.end()) {
+		if (it->second.x >= x1 && it->second.x <= x2) {
+			spawnCharacter(it->first, it->second);
+
+			// TODO: maybe add it purge to avoid revise all the previous generated enemies
+		}
+		++it;
+	}
 }

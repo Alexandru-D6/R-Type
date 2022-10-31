@@ -84,12 +84,12 @@ if sys.argv[1] == "2" or sys.argv[1] == "3":
 
 if sys.argv[1] == "4":
 	colors = [
-		[255,   0,   0, "Enemy1"], #red
-		[255, 128,   0, "Enemy2"], #orange
-		[255, 255,   0, "Enemy3"], #yellow
-		[  0,   0, 255, "Enemy4"], #blue
-		[128, 255, 255, "RandomObject"], #cyan
-		[128,   0, 255, "Boss"], #purple
+		[255,   0,   0, 1], #red		- Enemy1
+		[255, 128,   0, 2], #orange		- Enemy2
+		[255, 255,   0, 3], #yellow		- Enemy3
+		[  0,   0, 255, 4], #blue		- Enemy4
+		[128,   0, 255, 5], #purple		- Boss
+		[128, 255, 255, 6], #cyan		- RandomObject
 	] 
 
 	rectangles = []

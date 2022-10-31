@@ -1,9 +1,0 @@
-8
-Enemy4 55.5 194
-Enemy4 61.5 63
-Enemy4 125.5 115
-Enemy4 184.5 125
-Enemy3 219.0 157
-Enemy4 220.5 125
-Enemy4 270.5 100
-Enemy3 294.5 180

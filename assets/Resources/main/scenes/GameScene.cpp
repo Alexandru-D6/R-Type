@@ -42,6 +42,7 @@ void GameScene::init() {
 
 void GameScene::update(int deltaTime) {
     currentTime += deltaTime;
+	map->moveMap(-0.25);
 
     cFactory->update(deltaTime);
     ProjectileFactory::getInstance()->update(deltaTime);
