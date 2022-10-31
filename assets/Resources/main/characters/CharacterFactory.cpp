@@ -47,13 +47,14 @@ void CharacterFactory::setSpawnFiles(string file) {
 	sstream >> nrEntities;
 
 	for (int i = 0; i < nrEntities; ++i) {
+		stringstream sstream1;
 		pair<CharacterAvailable, glm::vec2> enemy;
 		glm::vec2 coord;
 		int type;
 
 		getline(fin, line);
-		sstream.str(line);
-		sstream >> type >> coord.x >> coord.y;
+		sstream1.str(line);
+		sstream1 >> type >> coord.x >> coord.y;
 
 		enemy.first = (CharacterAvailable)type;
 		enemy.second = coord;
@@ -127,16 +128,23 @@ void CharacterFactory::setMap(TileMap *map) {
 }
 
 void CharacterFactory::spawnRoutine() {
-	float x1 = (float)mapa->getPosition() + COORD_VIEW_LIMIT_X;
-	float x2 = x1 + 50.0f;
+	float x1 = COORD_VIEW_LIMIT_X;
+	float x2 = x1 + 25.0f;
+	float mapOffset = mapa->getPosition();
 
 	vector<pair<CharacterAvailable, glm::vec2>>::iterator it = enemies.begin();
 	while (it != enemies.end()) {
-		if (it->second.x >= x1 && it->second.x <= x2) {
-			spawnCharacter(it->first, it->second);
+		glm::vec2 tempPos = it->second;
+		tempPos.x += mapOffset;
 
-			// TODO: maybe add it purge to avoid revise all the previous generated enemies
+		if (tempPos.x >= x1 && tempPos.x <= x2) {
+			spawnCharacter(2, tempPos);
+
+			enemies.erase(it);
+			it = enemies.begin();
 		}
-		++it;
+		if (it != enemies.end() && it->second.x > x2) return;
+
+		if (it != enemies.end()) ++it;
 	}
 }

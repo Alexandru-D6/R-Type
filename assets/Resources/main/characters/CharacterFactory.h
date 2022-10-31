@@ -48,7 +48,7 @@ private:
 	TileMap *mapa;
 
 	map<int, Character *> characters;
-	int last_id;
+	int last_id = 10;
 
 	set<int> pendingToBeDestroyed;
 
