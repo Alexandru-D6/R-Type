@@ -11,7 +11,6 @@ Character::Character(glm::mat4 *project, int id, Collision::CollisionGroups type
 	rot = false;
 	collider = new Collision(id,projection, type);
 	collisionSystem = CollisionSystem::getInstance();
-	collisionSystem->addColliderIntoGroup(collider);	
 }	
 
 void Character::init(const glm::ivec2 &tileMapPos) {
