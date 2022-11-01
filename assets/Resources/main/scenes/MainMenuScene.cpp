@@ -71,7 +71,7 @@ void MainMenuScene::update(int deltaTime) {
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT) && !latchKeys[GLUT_KEY_RIGHT]) {
 			latchKeys[GLUT_KEY_RIGHT] = true;
 
-			AudioManager::getInstance()->playSoundEffect(0);
+			//AudioManager::getInstance()->playSoundEffect(0);
 		}
 
         if (!Game::instance().getSpecialKey(GLUT_KEY_DOWN) && latchKeys[GLUT_KEY_DOWN]) latchKeys[GLUT_KEY_DOWN] = false;

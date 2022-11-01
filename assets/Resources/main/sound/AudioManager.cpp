@@ -63,6 +63,8 @@ int AudioManager::addSoundEffect(const char* soundFile) {
 	return mSoundEffectBank.size() - 1;
 }
 
-void AudioManager::playSoundEffect(int sound) {
-	Mix_PlayChannel(-1, mSoundEffectBank[sound], 0);
+void AudioManager::playSoundEffect(int sound, int volume = 128) {
+	int channel = Mix_PlayChannel(-1, mSoundEffectBank[sound], 0);
+
+	Mix_Volume(channel, volume);
 }

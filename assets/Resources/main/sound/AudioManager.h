@@ -22,7 +22,7 @@ private :
 
 public:
 
-	enum soundNames {RunningInThe90s, };
+	enum soundNames {RunningInThe90s, LaserGun };
 
 	static AudioManager *getInstance();
 
@@ -36,7 +36,7 @@ public:
 	void init(string file);
 
 	int addSoundEffect(const char* soundFile);
-	void playSoundEffect(int sound);
+	void playSoundEffect(int sound, int volume);
 
 private:
 
