@@ -19,10 +19,11 @@ public:
         bool triggered;
     };
 
-	void setTileMap(TileMap *map) { tileMap = map; };
+	void setTileMapPos(float pos) { tileMapPos = pos; spatialHashmap->setTileMapPos(pos); };
 
     void addColliderIntoGroup(Collision* a);
     void removeColliderFromGroup(Collision* a);
+	void updateCollider(Collision* a, const glm::vec2 &newPos);
 
     CollisionInfo isColliding(Collision* a, const glm::vec2 &offset);
     CollisionInfo isTriggering(Collision* a, const glm::vec2 &offset);
@@ -70,9 +71,9 @@ private:
 
 private:
 
-    vector<vector<Collision*>> groups = vector<vector<Collision*>>(10, vector<Collision*>(0));
+    //vector<vector<Collision*>> groups = vector<vector<Collision*>>(10, vector<Collision*>(0));
 	SpatialHashmap *spatialHashmap;
-	TileMap *tileMap;
+	float tileMapPos = 0;
 
 };
 

@@ -30,6 +30,10 @@ void CollisionSystem::removeColliderFromGroup(Collision* a) {
     }*/
 }
 
+void CollisionSystem::updateCollider(Collision* a, const glm::vec2 &newPos) {
+	spatialHashmap->updateObject(a, newPos);
+}
+
 bool CollisionSystem::isValidCollision(const Collision* a, const Collision* b) {
     return collisionMatrix[a->collisionGroup][b->collisionGroup];
 }
@@ -43,6 +47,9 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const 
 
 	glm::vec2 pos = glm::vec2((box.x+box.z)/2.0f, (box.y+box.w)/2.0f);
 	float radius = glm::distance(pos, glm::vec2(box.x,box.y));
+
+	pos.x += a->position.x;
+	pos.y += a->position.y;
 
 	int coll = a->collisionGroup;
 	set<int> collidersGroup;
@@ -89,8 +96,8 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 	int coll = a->collisionGroup;
 	set<int> collidersGroup;
 
-	for (int i = 0; i < collisionMatrix[coll].size(); ++i) {
-		if (collisionMatrix[coll][i]) collidersGroup.insert(i);
+	for (int i = 0; i < triggersMatrix[coll].size(); ++i) {
+		if (triggersMatrix[coll][i]) collidersGroup.insert(i);
 	}
 
 	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
