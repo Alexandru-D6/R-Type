@@ -218,9 +218,6 @@
     <ClCompile Include="main\projectiles\ProjectileWaves.cpp">
       <Filter>Archivos de código fuente\Projectiles</Filter>
     </ClCompile>
-    <ClCompile Include="main\sound\AudioDevice.cpp">
-      <Filter>Archivos de código fuente\Sound</Filter>
-    </ClCompile>
     <ClCompile Include="main\sound\AudioManager.cpp">
       <Filter>Archivos de código fuente\Sound</Filter>
     </ClCompile>
@@ -330,12 +327,6 @@
     </ClInclude>
     <ClInclude Include="main\projectiles\ProjectileWaves.h">
       <Filter>Archivos de encabezado\Projectiles</Filter>
-    </ClInclude>
-    <ClInclude Include="main\sound\AudioDevice.h">
-      <Filter>Archivos de encabezado\Sound</Filter>
-    </ClInclude>
-    <ClInclude Include="main\sound\RingBuffer.h">
-      <Filter>Archivos de encabezado\Sound</Filter>
     </ClInclude>
     <ClInclude Include="main\sound\AudioManager.h">
       <Filter>Archivos de encabezado\Sound</Filter>

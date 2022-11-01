@@ -35,7 +35,7 @@ void MainMenuScene::init() {
     buttons[selectedButton].setState(UI_Button::Selected);
     enableControls = true;
 
-	AudioManager::getInstance()->init();
+	AudioManager::getInstance()->init("sounds/sounds.txt");
 }
 
 void MainMenuScene::update(int deltaTime) {

@@ -1,5 +1,4 @@
 #include "AudioManager.h"
-#include "SDL.h"
 
 AudioManager* AudioManager::instance_ = nullptr;
 
@@ -27,10 +26,30 @@ AudioManager::AudioManager() {
 AudioManager::~AudioManager() {
 }
 
-void AudioManager::init() {
+void AudioManager::init(string file) {
+	ifstream fin;
+	string line;
+	stringstream sstream;
+	int nrSounds;
 
-	//auto memory = nqr::ReadFile("sounds/Running-in-the-90s.mp3");
-	//loader->Load(fileData.get(), "mp3", memory.buffer);
+	fin.open(file.c_str());
+	if (!fin.is_open()) return;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> nrSounds;
+
+	for (int i = 0; i < nrSounds; ++i) {
+		stringstream sstream1;
+		string sound;
+
+		getline(fin, line);
+		sstream1.str(line);
+		sstream1 >> sound;
+
+		addSoundEffect(sound.c_str());
+	}
+
+	fin.close();
 
 }
 
@@ -40,6 +59,8 @@ int AudioManager::addSoundEffect(const char* soundFile) {
 	if (tmpChunk != nullptr) {
 		mSoundEffectBank.push_back(tmpChunk);
 	}
+
+	return mSoundEffectBank.size() - 1;
 }
 
 void AudioManager::playSoundEffect(int sound) {
