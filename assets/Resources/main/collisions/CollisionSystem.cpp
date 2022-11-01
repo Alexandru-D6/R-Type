@@ -8,23 +8,26 @@ CollisionSystem *CollisionSystem::getInstance() {
 }
 
 CollisionSystem::CollisionSystem() {
+	spatialHashmap = new SpatialHashmap(32);
 }
 
 CollisionSystem::~CollisionSystem() {
 }
 
 void CollisionSystem::addColliderIntoGroup(Collision* a) {
-    groups[int(a->collisionGroup)].push_back(a);
+	spatialHashmap->insertObject(a);
+    //groups[int(a->collisionGroup)].push_back(a);
 }
 
 void CollisionSystem::removeColliderFromGroup(Collision* a) {
-    int group = int(a->collisionGroup);
+	spatialHashmap->removeObject(a);
+    /*int group = int(a->collisionGroup);
     for (auto it = groups[group].begin(); it != groups[group].end(); ++it) {
         if (*it == a) {
             groups[group].erase(it);
             return;
         }
-    }
+    }*/
 }
 
 bool CollisionSystem::isValidCollision(const Collision* a, const Collision* b) {
@@ -35,8 +38,33 @@ bool CollisionSystem::isTriggerCollision(const Collision* a, const Collision* b)
     return triggersMatrix[a->collisionGroup][b->collisionGroup];
 }
 
-CollisionSystem::CollisionInfo CollisionSystem::isColliding(const Collision* a, const glm::vec2 &offset) {
-    for (int i = 0; i < (int)groups.size(); ++i) {
+CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const glm::vec2 &offset) {
+	glm::vec4 box = a->getBoundingBox();
+
+	glm::vec2 pos = glm::vec2((box.x+box.z)/2.0f, (box.y+box.w)/2.0f);
+	float radius = glm::distance(pos, glm::vec2(box.x,box.y));
+
+	int coll = a->collisionGroup;
+	set<int> collidersGroup;
+
+	for (int i = 0; i < collisionMatrix[coll].size(); ++i) {
+		if (collisionMatrix[coll][i]) collidersGroup.insert(i);
+	}
+
+	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
+	set<Collision*>::iterator it = objects.begin();
+
+	while (it != objects.end()) {
+		if (searchForCollision(a, *it, offset)) {
+			return CollisionInfo{
+				true,
+				*it,
+				false };
+		}
+		++it;
+	}
+
+    /*for (int i = 0; i < (int)groups.size(); ++i) {
         for (int j = 0; j < (int)groups[i].size(); ++j) {
             if (isValidCollision(a, groups[i][j])) {
                 if (searchForCollision(a, groups[i][j], offset)) {
@@ -48,12 +76,37 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(const Collision* a, 
             }
         }
     }
-
+	*/
     return CollisionInfo{ false, NULL, false};
 }
 
-CollisionSystem::CollisionInfo CollisionSystem::isTriggering(const Collision* a, const glm::vec2 &offset) {
-    for (int i = 0; i < (int)groups.size(); ++i) {
+CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const glm::vec2 &offset) {
+	glm::vec4 box = a->getBoundingBox();
+
+	glm::vec2 pos = glm::vec2((box.x + box.z) / 2.0f, (box.y + box.w) / 2.0f);
+	float radius = glm::distance(pos, glm::vec2(box.x, box.y));
+
+	int coll = a->collisionGroup;
+	set<int> collidersGroup;
+
+	for (int i = 0; i < collisionMatrix[coll].size(); ++i) {
+		if (collisionMatrix[coll][i]) collidersGroup.insert(i);
+	}
+
+	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
+	set<Collision*>::iterator it = objects.begin();
+
+	while (it != objects.end()) {
+		if (searchForCollision(a, *it, offset)) {
+			return CollisionInfo{
+				true,
+				*it,
+				false };
+		}
+		++it;
+	}
+	
+	/*for (int i = 0; i < (int)groups.size(); ++i) {
         for (int j = 0; j < (int)groups[i].size(); ++j) {
             if (isTriggerCollision(a, groups[i][j])) {
                 if (searchForCollision(a, groups[i][j], offset)) {
@@ -65,7 +118,7 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(const Collision* a,
             }
         }
     }
-
+	*/
     return CollisionInfo{ false, NULL, false };
 }
 
