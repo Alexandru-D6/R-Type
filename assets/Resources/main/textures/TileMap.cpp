@@ -19,6 +19,7 @@ TileMap::~TileMap() {
 
 void TileMap::moveMap(float increment) {
     position += increment;
+	collisionSystem->setTileMapPos(abs(position));
     collision->changePositionRelative(glm::vec2(increment, 0));
     render();
 }
@@ -190,7 +191,6 @@ bool TileMap::getCollisions(const string &collisionFile) {
     collision = new Collision(-1,projection, Collision::Map);
 
     collisionSystem = CollisionSystem::getInstance();
-    collisionSystem->addColliderIntoGroup(collision);
 
     getline(fin, line);
     sstream.str(line);
@@ -205,6 +205,8 @@ bool TileMap::getCollisions(const string &collisionFile) {
         aa >> x >> y >> z >> w;
         collision->addCollider(glm::ivec4(x, y, z, w));
     }
+
+	collisionSystem->addColliderIntoGroup(collision);
 
 #ifdef SHOW_HIT_BOXES
     collision->showHitBox();

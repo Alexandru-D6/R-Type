@@ -5,7 +5,6 @@
 #include <Map>
 
 #include "Collision.h"
-#include "textures\TileMap.h"
 
 class SpatialHashmap {
 public:
@@ -17,7 +16,7 @@ public:
 	SpatialHashmap(int size = 32);
 	~SpatialHashmap();
 
-	void setTileMap(TileMap *map) { tileMap = map; };
+	void setTileMapPos(float pos) { tileMapPos = pos; };
 
 	void insertObject(Collision* a);
 	void insertObject(Collision* a, const glm::vec2 &pos);
@@ -31,7 +30,7 @@ private:
 	map<pair<int, int>, map<int, set<Collision*>>> Hashmap;
 
 	int hashSize;
-	TileMap *tileMap;
+	float tileMapPos = 0;
 };
 
 #endif // _SPATIAL_HASHMAP_INCLUDE
