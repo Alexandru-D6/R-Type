@@ -10,6 +10,7 @@ public:
 	Part(glm::mat4 *project, int id, int idBody, const glm::ivec2 &tileMapPos);
 
 	void update(int deltaTime);
+	
 
 private:
 
