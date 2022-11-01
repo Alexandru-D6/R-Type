@@ -1,14 +1,8 @@
-#ifndef _COLLISIONSYSTEM_INCLUDE
-#define _COLLISIONSYSTEM_INCLUDE
+#ifndef _COLLISION_SYSTEM_INCLUDE
+#define _COLLISION_SYSTEM_INCLUDE
 
-#include <Set>
+#include "SpatialHashmap.h"
 
-#include "Collision.h"
-
-// Class Tilemap is capable of loading a tile map from a text file in a very
-// simple format (see level01.txt for an example). With this information
-// it builds a single VBO that contains all tiles. As a result the render
-// method draws the whole map independently of what is visible.
 class CollisionSystem {
 
 public:
@@ -25,11 +19,13 @@ public:
         bool triggered;
     };
 
+	void setTileMap(TileMap *map) { tileMap = map; };
+
     void addColliderIntoGroup(Collision* a);
     void removeColliderFromGroup(Collision* a);
 
-    CollisionInfo isColliding(const Collision* a, const glm::vec2 &offset);
-    CollisionInfo isTriggering(const Collision* a, const glm::vec2 &offset);
+    CollisionInfo isColliding(Collision* a, const glm::vec2 &offset);
+    CollisionInfo isTriggering(Collision* a, const glm::vec2 &offset);
 
 private:
 
@@ -75,7 +71,9 @@ private:
 private:
 
     vector<vector<Collision*>> groups = vector<vector<Collision*>>(10, vector<Collision*>(0));
+	SpatialHashmap *spatialHashmap;
+	TileMap *tileMap;
 
 };
 
-#endif // _COLLISION_INCLUDE
+#endif // _COLLISION_SYSTEM_INCLUDE
