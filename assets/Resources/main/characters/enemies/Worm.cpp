@@ -39,7 +39,7 @@ void Worm::init(const glm::ivec2 &tileMapPos) {
 
 void Worm::update(int deltaTime)
 {
-	float mov = -5.f;
+	float mov = -1.f;
 	CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Worm::collider, glm::vec2(mov, 0));
 
 	if (!info.colliding) {
