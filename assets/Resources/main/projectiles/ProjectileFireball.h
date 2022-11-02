@@ -12,6 +12,10 @@
 
 class ProjectileFireball : public Projectile {
 
+private:
+
+    enum Movements { Down, Right, Up, Left};
+
 public:
 
     ProjectileFireball(glm::mat4 *project, int id);
@@ -23,7 +27,11 @@ public:
 
     void collisionRoutine();
 
-    void followMapShape();
+    bool followMapShape();
+
+private:
+
+    int lastMovement;
 
 };
 

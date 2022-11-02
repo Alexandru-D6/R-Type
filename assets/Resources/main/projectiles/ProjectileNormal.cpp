@@ -1,11 +1,11 @@
 #include "ProjectileNormal.h"
 #include "GeneralDefines.h"
 
-ProjectileNormal::ProjectileNormal(glm::mat4 *project, int id) {
+ProjectileNormal::ProjectileNormal(glm::mat4 *project, int id, int type) {
     projection = project;
     idProjectile = id;
     // TODO: the collision type must be set depending of the class that called this method
-    collider = new Collision(project, Collision::PlayerProjectiles);
+    collider = new Collision(id, project, (ProjectileType)type == ProjectileType::EnemyProjectile ? Collision::EnemyProjectiles : Collision::PlayerProjectiles);
 
     collisionSystem = CollisionSystem::getInstance();
     collisionSystem->addColliderIntoGroup(collider);
@@ -28,15 +28,10 @@ void ProjectileNormal::init(Texture *spritesheet, int type) {
 }
 
 void ProjectileNormal::update(int deltaTime) {
-    if (posProjectile.x >= 500.0f || posProjectile.y >= 300.0f || posProjectile.y < 0.0f) {
-        ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
-        return;
-    }
-
-    collisionRoutine();
-
     posProjectile += projVelocity;
     collider->changePositionRelative(projVelocity);
+
+	collisionRoutine();
 
     sprite->setPosition(posProjectile);
 
@@ -92,7 +87,7 @@ void ProjectileNormal::projectileConfigurator(ProjectileType type, const glm::ve
 void ProjectileNormal::collisionRoutine() {
     collisionWait--;
     if (collisionWait <= 0) {
-        collisionWait = 3;
+        collisionWait = 5;
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
 
         if (info.colliding) {
@@ -101,4 +96,9 @@ void ProjectileNormal::collisionRoutine() {
             }
         }
     }
+
+	if (posProjectile.x >= 500.0f || posProjectile.y >= 300.0f || posProjectile.y < 0.0f) {
+		ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
+		return;
+	}
 }

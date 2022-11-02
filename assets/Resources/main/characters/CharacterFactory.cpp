@@ -14,12 +14,55 @@ CharacterFactory::CharacterFactory() {
 CharacterFactory::~CharacterFactory() {
 }
 
+void CharacterFactory::destroyCharacter(const int &id) {
+	pendingToBeDestroyed.insert(id);
+}
+void CharacterFactory::lateDestroyCharacter() {
+	for (auto it = pendingToBeDestroyed.begin(); it != pendingToBeDestroyed.end(); ++it) {
+		characters[*it]->deleteRoutine();
+		delete characters[*it];
+		characters.erase(*it);
+	}
+	pendingToBeDestroyed.clear();
+}
+
 void CharacterFactory::init() {
 
 }
 
 void CharacterFactory::setProjection(glm::mat4 *project) {
 	projection = project;
+}
+
+void CharacterFactory::setSpawnFiles(string file) {
+	ifstream fin;
+	string line;
+	stringstream sstream;
+	int nrEntities;
+
+	fin.open(file.c_str());
+	if (!fin.is_open()) return;
+	getline(fin, line);
+	sstream.str(line);
+	sstream >> nrEntities;
+
+	for (int i = 0; i < nrEntities; ++i) {
+		stringstream sstream1;
+		pair<CharacterAvailable, glm::vec2> enemy;
+		glm::vec2 coord;
+		int type;
+
+		getline(fin, line);
+		sstream1.str(line);
+		sstream1 >> type >> coord.x >> coord.y;
+
+		enemy.first = (CharacterAvailable)type;
+		enemy.second = coord;
+
+		enemies.push_back(enemy);
+	}
+
+	fin.close();
 }
 
 void CharacterFactory::spawnCharacter(int type, const glm::vec2 &pos) {
@@ -72,6 +115,9 @@ void CharacterFactory::update(int deltaTime) {
 	for (auto it = characters.begin(); it != characters.end(); it++) {
 		it->second->update(deltaTime);
 	}
+
+	spawnRoutine();
+	lateDestroyCharacter();
 }
 
 void CharacterFactory::render() {
@@ -87,4 +133,26 @@ void CharacterFactory::setTileMapPos(const glm::vec2 &pos){
 
 void CharacterFactory::setMap(TileMap *map) {
 	mapa = map;
+}
+
+void CharacterFactory::spawnRoutine() {
+	float x1 = COORD_VIEW_LIMIT_X;
+	float x2 = x1 + 25.0f;
+	float mapOffset = mapa->getPosition();
+
+	vector<pair<CharacterAvailable, glm::vec2>>::iterator it = enemies.begin();
+	while (it != enemies.end()) {
+		glm::vec2 tempPos = it->second;
+		tempPos.x += mapOffset;
+
+		if (tempPos.x >= x1 && tempPos.x <= x2) {
+			spawnCharacter(2, tempPos);
+
+			enemies.erase(it);
+			it = enemies.begin();
+		}
+		if (it != enemies.end() && it->second.x > x2) return;
+
+		if (it != enemies.end()) ++it;
+	}
 }
