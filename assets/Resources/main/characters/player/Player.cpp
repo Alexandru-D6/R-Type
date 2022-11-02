@@ -82,7 +82,7 @@ void Player::update(int deltaTime)
         else {
             pos.x -= 3;
 			collisionSystem->updateCollider(collider, pos);
-            collider->changePositionRelative(glm::vec2(-3, 0));
+            collider->changePositionAbsolute(pos);
         }
 	}
     else if(Game::instance().getSpecialKey(GLUT_KEY_RIGHT)) {
@@ -95,7 +95,7 @@ void Player::update(int deltaTime)
         else {
             pos.x += 3;
 			collisionSystem->updateCollider(collider, pos);
-            collider->changePositionRelative(glm::vec2(3, 0));
+			collider->changePositionAbsolute(pos);
         }
     }
 
@@ -116,7 +116,7 @@ void Player::update(int deltaTime)
         if (!(info.colliding || (forceDevice->isAttached() && info2.colliding))) {
             pos.y += 2;
 			collisionSystem->updateCollider(collider, pos);
-            collider->changePositionRelative(glm::vec2(0, 2));
+			collider->changePositionAbsolute(pos);
         }
     } else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
         if (sprite->animation() == STAND_RIGHT) {
@@ -135,7 +135,7 @@ void Player::update(int deltaTime)
         if (!(info.colliding || (forceDevice->isAttached() && info2.colliding))) {
             pos.y -= 2;
 			collisionSystem->updateCollider(collider, pos);
-            collider->changePositionRelative(glm::vec2(0, -2));
+			collider->changePositionAbsolute(pos);
         }
     }
 
