@@ -7,97 +7,98 @@ SpatialHashmap::SpatialHashmap(int size) {
 SpatialHashmap::~SpatialHashmap() {} 
 
 void SpatialHashmap::insertObject(Collision* a) {
-	for (int i = 0; i < a->collidersSize; ++i) {
-		glm::vec4 boundingBox = a->collisions[i];
+    glm::ivec4 cells = a->colliderBox;
 
-		boundingBox.x += a->position.x + tileMapPos;
-		boundingBox.y += a->position.y;
-		boundingBox.z += a->position.x + tileMapPos;
-		boundingBox.w += a->position.y;
+    cells.x += a->position.x + tileMapPos;
+    cells.y += a->position.y;
+    cells.z += a->position.x + tileMapPos;
+    cells.w += a->position.y;
 
-		int i1 = boundingBox.x / hashSize;
-		int i2 = boundingBox.z / hashSize;
-		int j1 = boundingBox.y / hashSize;
-		int j2 = boundingBox.w / hashSize;
+    cells.x /= hashSize;
+    cells.z /= hashSize;
+    cells.y /= hashSize;
+    cells.w /= hashSize;
 
-		for (int i = i1; i <= i2; ++i) {
-			for (int j = j1; j <= j2; ++j) {
-				pair<int, int> index = make_pair(i, j);
-				Hashmap[index][a->collisionGroup].insert(a);
-			}
+    a->cells = cells;
+
+	for (int i = cells.x; i <= cells.z; ++i) {
+		for (int j = cells.y; j <= cells.w; ++j) {
+			pair<int, int> index = make_pair(i, j);
+			Hashmap[index][a->collisionGroup].insert(a);
 		}
 	}
 }
 
 void SpatialHashmap::insertObject(Collision* a, const glm::vec2 &pos) {
-	for (int i = 0; i < a->collidersSize; ++i) {
-		glm::vec4 boundingBox = a->collisions[i];
+	glm::ivec4 cells = a->colliderBox;
 
-		boundingBox.x += pos.x + tileMapPos;
-		boundingBox.y += pos.y;
-		boundingBox.z += pos.x + tileMapPos;
-		boundingBox.w += pos.y;
+    cells.x += pos.x + tileMapPos;
+    cells.y += pos.y;
+    cells.z += pos.x + tileMapPos;
+    cells.w += pos.y;
 
-		int i1 = boundingBox.x / hashSize;
-		int i2 = boundingBox.z / hashSize;
-		int j1 = boundingBox.y / hashSize;
-		int j2 = boundingBox.w / hashSize;
+    cells.x /= hashSize;
+    cells.z /= hashSize;
+    cells.y /= hashSize;
+    cells.w /= hashSize;
 
-		for (int i = i1; i <= i2; ++i) {
-			for (int j = j1; j <= j2; ++j) {
-				pair<int, int> index = make_pair(i, j);
-				Hashmap[index][a->collisionGroup].insert(a);
-			}
+    a->cells = cells;
+
+	for (int i = cells.x; i <= cells.z; ++i) {
+		for (int j = cells.y; j <= cells.w; ++j) {
+			pair<int, int> index = make_pair(i, j);
+			Hashmap[index][a->collisionGroup].insert(a);
 		}
 	}
 }
 
 void SpatialHashmap::removeObject(Collision* a) {
-	for (int i = 0; i < a->collidersSize; ++i) {
-		glm::vec4 boundingBox = a->collisions[i];
-
-		boundingBox.x += a->position.x + tileMapPos;
-		boundingBox.y += a->position.y;
-		boundingBox.z += a->position.x + tileMapPos;
-		boundingBox.w += a->position.y;
-
-		int i1 = boundingBox.x / hashSize;
-		int i2 = boundingBox.z / hashSize;
-		int j1 = boundingBox.y / hashSize;
-		int j2 = boundingBox.w / hashSize;
-
-		for (int i = i1; i <= i2; ++i) {
-			for (int j = j1; j <= j2; ++j) {
-				pair<int, int> index = make_pair(i, j);
-				Hashmap[index][a->collisionGroup].erase(a);
-			}
+	for (int i = a->cells.x; i <= a->cells.z; ++i) {
+		for (int j = a->cells.y; j <= a->cells.w; ++j) {
+			pair<int, int> index = make_pair(i, j);
+			Hashmap[index][a->collisionGroup].erase(a);
 		}
 	}
 }
 
 void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
-	// TODO: improve algorithm
-	if (a->position != newPos) {
-		removeObject(a);
-		insertObject(a, newPos);
-	}
+    glm::ivec4 boundingBox2 = a->colliderBox;
+
+    boundingBox2.x += newPos.x + tileMapPos;
+    boundingBox2.y += newPos.y;
+    boundingBox2.z += newPos.x + tileMapPos;
+    boundingBox2.w += newPos.y;
+
+    boundingBox2.x /= hashSize;
+    boundingBox2.z /= hashSize;
+    boundingBox2.y /= hashSize;
+    boundingBox2.w /= hashSize;
+
+    if (a->cells.x == boundingBox2.x && 
+        a->cells.y == boundingBox2.y &&
+        a->cells.z == boundingBox2.z &&
+        a->cells.w == boundingBox2.w
+        ) return;
+
+	removeObject(a);
+	insertObject(a, newPos);
 }
 
 set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, const set<int> &groups) {
-	glm::vec4 boundingBox = glm::vec4(pos.x-radius, pos.y-radius, pos.x+radius, pos.y+radius);
+	glm::vec4 cells = glm::vec4(pos.x-radius, pos.y-radius, pos.x+radius, pos.y+radius);
 
-	boundingBox.x += tileMapPos;
-	boundingBox.z += tileMapPos;
+    cells.x += tileMapPos;
+    cells.z += tileMapPos;
 
-	int i1 = boundingBox.x / hashSize;
-	int i2 = boundingBox.z / hashSize;
-	int j1 = boundingBox.y / hashSize;
-	int j2 = boundingBox.w / hashSize;
+    cells.x /= hashSize;
+    cells.z /= hashSize;
+    cells.y /= hashSize;
+    cells.w /= hashSize;
 
 	set<Collision*> result;
 
-	for (int i = i1; i <= i2; ++i) {
-		for (int j = j1; j <= j2; ++j) {
+	for (int i = cells.x; i <= cells.z; ++i) {
+		for (int j = cells.y; j <= cells.w; ++j) {
 			pair<int, int> index = make_pair(i, j);
 
 			map<int, set<Collision*>> tmp = Hashmap[index];

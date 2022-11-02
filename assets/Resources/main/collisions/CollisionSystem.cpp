@@ -63,10 +63,7 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const 
 
 	while (it != objects.end()) {
 		if (searchForCollision(a, *it, offset)) {
-			return CollisionInfo{
-				true,
-				*it,
-				false };
+			return CollisionInfo{ true, *it, false };
 		}
 		++it;
 	}
@@ -105,10 +102,7 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 
 	while (it != objects.end()) {
 		if (searchForCollision(a, *it, offset)) {
-			return CollisionInfo{
-				true,
-				*it,
-				false };
+			return CollisionInfo{ true, *it, false };
 		}
 		++it;
 	}
@@ -130,22 +124,16 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 }
 
 bool CollisionSystem::searchForCollision(const Collision* a, const Collision* b, const glm::vec2 &offset) {
-    for (int i = 0; i < a->collidersSize; ++i) {
-        for (int j = 0; j < b->collidersSize; ++j) {
-            glm::vec4 colliderA = a->collisions[i];
-            glm::vec4 colliderB = b->collisions[j];
-            glm::vec2 posA = a->position + offset;
+    glm::vec2 posA = a->position + offset;
 
-            if ((posA.x + colliderA.x) >= 500.0f) {
-                return false;
-            } else if ((b->position.x + colliderB.x) >= 500.0f) {
-                return false;
-            }
+    if ((posA.x + a->colliderBox.x) >= 500.0f) {
+        return false;
+    } else if ((b->position.x + b->colliderBox.x) >= 500.0f) {
+        return false;
+    }
 
-            if (overlapHorizontal(colliderA, colliderB, posA, b->position)) {
-                return true;
-            }
-        }
+    if (overlapHorizontal(a->colliderBox, b->colliderBox, posA, b->position)) {
+        return true;
     }
 
     return false;
