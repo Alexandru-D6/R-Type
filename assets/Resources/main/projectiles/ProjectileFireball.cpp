@@ -8,7 +8,6 @@ ProjectileFireball::ProjectileFireball(glm::mat4 *project, int id) {
     collider = new Collision(id, project, Collision::PlayerProjectiles);
 
     collisionSystem = CollisionSystem::getInstance();
-    collisionSystem->addColliderIntoGroup(collider);
 }
 
 void ProjectileFireball::init(Texture *spritesheet, int type) {
@@ -66,6 +65,9 @@ void ProjectileFireball::projectileConfigurator(ProjectileType type, const glm::
         collider->addCollider(glm::ivec4(0, 0, 12, 13));
         break;
     }
+
+    collisionSystem->addColliderIntoGroup(collider);
+    collisionSystem->updateCollider(collider, glm::vec2(0.0f, 0.0f));
 }
 
 void ProjectileFireball::collisionRoutine() {
@@ -100,7 +102,8 @@ bool ProjectileFireball::followMapShape() {
 
                 if (!info.colliding) {
                     posProjectile += glm::vec2(0.0f, float(sign) * projVelocity.y);
-                    collider->changePositionRelative(glm::vec2(0.0f, float(sign) * projVelocity.y));
+                    collisionSystem->updateCollider(collider, posProjectile);
+                    collider->changePositionAbsolute(posProjectile);
                     movementFound = true;
 
                     updateMovement = (sign == 1) ? 0 : +1;
@@ -112,7 +115,8 @@ bool ProjectileFireball::followMapShape() {
 
                 if (!info.colliding) {
                     posProjectile += glm::vec2(projVelocity.x, 0.0f);
-                    collider->changePositionRelative(glm::vec2(projVelocity.x, 0.0f));
+                    collisionSystem->updateCollider(collider, posProjectile);
+                    collider->changePositionAbsolute(posProjectile);
                     movementFound = true;
 
                     updateMovement = (sign == 1) ? -1 : +1;
@@ -124,7 +128,8 @@ bool ProjectileFireball::followMapShape() {
 
                 if (!info.colliding) {
                     posProjectile += glm::vec2(0.0f, float(sign) * -projVelocity.y);
-                    collider->changePositionRelative(glm::vec2(0.0f, float(sign) * -projVelocity.y));
+                    collisionSystem->updateCollider(collider, posProjectile);
+                    collider->changePositionAbsolute(posProjectile);
                     movementFound = true;
 
                     updateMovement = (sign == 1) ? -1 : 0;
@@ -136,7 +141,8 @@ bool ProjectileFireball::followMapShape() {
 
                 if (!info.colliding) {
                     posProjectile += glm::vec2(-projVelocity.x, 0.0f);
-                    collider->changePositionRelative(glm::vec2(-projVelocity.x, 0.0f));
+                    collisionSystem->updateCollider(collider, posProjectile);
+                    collider->changePositionAbsolute(posProjectile);
                     movementFound = true;
 
                     updateMovement = (sign == 1) ? -1 : +1;

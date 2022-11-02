@@ -42,6 +42,7 @@ void Character::setPosition(const glm::vec2 &pos) {
 	this->pos = pos;
 	startY = pos.y;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
+    collisionSystem->updateCollider(collider, this->pos);
 	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 }
 

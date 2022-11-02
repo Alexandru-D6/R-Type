@@ -52,8 +52,8 @@ public:
 
     Collision::CollisionGroups collisionGroup;
 
-    int collidersSize;
-    vector<glm::vec4> collisions;
+    glm::vec4 colliderBox;
+    glm::ivec4 cells;
 
     glm::vec2 position;
 

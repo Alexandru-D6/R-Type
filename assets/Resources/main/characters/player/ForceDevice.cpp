@@ -8,7 +8,6 @@ ForceDevice::ForceDevice(glm::mat4 *project) {
     collider = new Collision(1,project, Collision::Force);
 
     collisionSystem = CollisionSystem::getInstance();
-    collisionSystem->addColliderIntoGroup(collider);
 
     forceLevel = 0;
 }
@@ -51,7 +50,9 @@ void ForceDevice::init(Collision *sCollider) {
     sprite->changeAnimation(forceLevel, false);
 
     collider->addCollider(glm::vec4(0, 4, 10, 20-4));
-    collider->changePositionAbsolute(glm::vec2(posForce.x, posForce.y));
+    collisionSystem->addColliderIntoGroup(collider);
+    collisionSystem->updateCollider(collider, posForce);
+    collider->changePositionAbsolute(posForce);
 
     sprite->setBox(glm::vec2(collider->getBoundingBox().z, collider->getBoundingBox().w));
     collider->setBox(glm::vec2(collider->getBoundingBox().z, collider->getBoundingBox().w));
@@ -86,6 +87,7 @@ void ForceDevice::render() {
 void ForceDevice::setPosition(const glm::vec2 &pos) {
     posForce = pos;
     sprite->setPosition(posForce);
+    collisionSystem->updateCollider(collider, posForce);
     collider->changePositionAbsolute(posForce);
 }
 
@@ -197,6 +199,7 @@ void ForceDevice::attachToASide() {
 
     targetPosition = shipCollider->position + getOffsetofColliders(isLeft);
     posForce = targetPosition;
+    collisionSystem->updateCollider(collider, targetPosition);
     collider->changePositionAbsolute(targetPosition);
     sprite->setPosition(targetPosition);
     

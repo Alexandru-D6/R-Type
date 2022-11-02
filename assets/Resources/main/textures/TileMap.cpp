@@ -20,7 +20,8 @@ TileMap::~TileMap() {
 void TileMap::moveMap(float increment) {
     position += increment;
 	collisionSystem->setTileMapPos(abs(position));
-    collision->changePositionRelative(glm::vec2(increment, 0));
+
+    for (auto collider : colliders) collider->changePositionRelative(glm::vec2(increment, 0));
     render();
 }
 
@@ -43,7 +44,7 @@ void TileMap::render() {
 
 #ifdef SHOW_HIT_BOXES
     //TODO: find a way to indicate if the collision boxes are loaded
-    collision->render();
+    for (auto collider : colliders) collider->render();
 #endif // SHOW_HIT_BOXES
 }
 
@@ -168,11 +169,12 @@ bool TileMap::loadStaticImage(ifstream &fin, const glm::vec2 &minCoords) {
 
     fin.close();
 
-    collision = new Collision(0,projection, Collision::Uknown);
-    collision->addCollider(glm::ivec4(-1,0,-2,1));
+    colliders.clear();
+    colliders.push_back(new Collision(-1, projection, Collision::Uknown));
+    colliders[0]->addCollider(glm::ivec4(-1,0,-2,1));
 
 #ifdef SHOW_HIT_BOXES
-    collision->showHitBox();
+    for (auto collider : colliders) collider->showHitBox();
 #endif // SHOW_HIT_BOXES
 
     return true;
@@ -188,9 +190,9 @@ bool TileMap::getCollisions(const string &collisionFile) {
 
     // Get number of collision boxes
     int collidersSize;
-    collision = new Collision(-1,projection, Collision::Map);
 
     collisionSystem = CollisionSystem::getInstance();
+    colliders.clear();
 
     getline(fin, line);
     sstream.str(line);
@@ -203,13 +205,14 @@ bool TileMap::getCollisions(const string &collisionFile) {
         getline(fin, line);
         aa.str(line);
         aa >> x >> y >> z >> w;
-        collision->addCollider(glm::ivec4(x, y, z, w));
+
+        colliders.push_back(new Collision(-1, projection, Collision::Map));
+        colliders[i]->addCollider(glm::ivec4(x, y, z, w));
+        collisionSystem->addColliderIntoGroup(colliders[i]);
     }
 
-	collisionSystem->addColliderIntoGroup(collision);
-
 #ifdef SHOW_HIT_BOXES
-    collision->showHitBox();
+    for (auto collider : colliders) collider->showHitBox();
 #endif // SHOW_HIT_BOXES
 
     fin.close();
