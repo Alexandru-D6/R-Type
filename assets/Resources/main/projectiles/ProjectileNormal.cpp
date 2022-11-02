@@ -88,9 +88,9 @@ void ProjectileNormal::projectileConfigurator(ProjectileType type, const glm::ve
 }
 
 void ProjectileNormal::collisionRoutine() {
-    /*collisionWait--;
+    collisionWait--;
     if (collisionWait <= 0) {
-        collisionWait = 5;
+        collisionWait = 0;
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
 
         if (info.colliding) {
@@ -98,7 +98,7 @@ void ProjectileNormal::collisionRoutine() {
                 ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
             }
         }
-    }*/
+    }
 
 	if (posProjectile.x >= 500.0f || posProjectile.y >= 300.0f || posProjectile.y < 0.0f) {
 		ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
