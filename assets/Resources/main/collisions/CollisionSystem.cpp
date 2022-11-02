@@ -8,7 +8,7 @@ CollisionSystem *CollisionSystem::getInstance() {
 }
 
 CollisionSystem::CollisionSystem() {
-	spatialHashmap = new SpatialHashmap(64);
+	spatialHashmap = new SpatialHashmap(32);
 }
 
 CollisionSystem::~CollisionSystem() {
@@ -43,6 +43,7 @@ bool CollisionSystem::isTriggerCollision(const Collision* a, const Collision* b)
 }
 
 CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const glm::vec2 &offset) {
+    //return CollisionInfo{ false, NULL, false };
 	glm::vec4 box = a->getBoundingBox();
 
 	glm::vec2 pos = glm::vec2((box.x+box.z)/2.0f, (box.y+box.w)/2.0f);
@@ -52,10 +53,10 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const 
 	pos.y += a->position.y;
 
 	int coll = a->collisionGroup;
-	set<int> collidersGroup;
+    bool collidersGroup[10] = {false, false, false, false, false, false, false, false, false, false};
 
-	for (int i = 0; i < collisionMatrix[coll].size(); ++i) {
-		if (collisionMatrix[coll][i]) collidersGroup.insert(i);
+	for (int i = 0; i < 10/*Collision Matrix Size*/; ++i) {
+		if (collisionMatrix[coll][i]) collidersGroup[i] = true;
 	}
 
 	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
@@ -91,10 +92,11 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 	float radius = glm::distance(pos, glm::vec2(box.x, box.y));
 
 	int coll = a->collisionGroup;
-	set<int> collidersGroup;
 
-	for (int i = 0; i < triggersMatrix[coll].size(); ++i) {
-		if (triggersMatrix[coll][i]) collidersGroup.insert(i);
+    bool collidersGroup[10] = { false, false, false, false, false, false, false, false, false, false };
+
+	for (int i = 0; i < 10/*Collision Matrix Size*/; ++i) {
+		if (triggersMatrix[coll][i]) collidersGroup[i] = true;
 	}
 
 	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);

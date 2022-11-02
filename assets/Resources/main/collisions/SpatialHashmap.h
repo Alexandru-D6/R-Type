@@ -3,6 +3,7 @@
 
 #include <Set>
 #include <Map>
+#include <sstream>
 
 #include "Collision.h"
 
@@ -13,7 +14,7 @@ public:
 	*
 	* Size should be power of 2
 	**/
-	SpatialHashmap(int size = 32);
+	SpatialHashmap(int size = 64);
 	~SpatialHashmap();
 
 	void setTileMapPos(float pos) { tileMapPos = pos; };
@@ -23,11 +24,12 @@ public:
 	void removeObject(Collision* a);
 	void updateObject(Collision* a, const glm::vec2 &newPos);
 
-	set<Collision*> getNearByObjects(const glm::vec2 &pos, const int &radius, const set<int> &groups);
+	set<Collision*> getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups);
 
 private:
 
-	map<pair<int, int>, map<int, set<Collision*>>> Hashmap;
+    set<Collision*> Hashmap[3000][20][10] = {};
+	//map<string, map<int, set<Collision*>>> Hashmap;
 
 	int hashSize;
 	float tileMapPos = 0;

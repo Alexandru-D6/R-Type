@@ -23,8 +23,7 @@ void SpatialHashmap::insertObject(Collision* a) {
 
 	for (int i = cells.x; i <= cells.z; ++i) {
 		for (int j = cells.y; j <= cells.w; ++j) {
-			pair<int, int> index = make_pair(i, j);
-			Hashmap[index][a->collisionGroup].insert(a);
+			Hashmap[i][j][(int)a->collisionGroup].insert(a);
 		}
 	}
 }
@@ -46,8 +45,7 @@ void SpatialHashmap::insertObject(Collision* a, const glm::vec2 &pos) {
 
 	for (int i = cells.x; i <= cells.z; ++i) {
 		for (int j = cells.y; j <= cells.w; ++j) {
-			pair<int, int> index = make_pair(i, j);
-			Hashmap[index][a->collisionGroup].insert(a);
+			Hashmap[i][j][(int)a->collisionGroup].insert(a);
 		}
 	}
 }
@@ -55,13 +53,22 @@ void SpatialHashmap::insertObject(Collision* a, const glm::vec2 &pos) {
 void SpatialHashmap::removeObject(Collision* a) {
 	for (int i = a->cells.x; i <= a->cells.z; ++i) {
 		for (int j = a->cells.y; j <= a->cells.w; ++j) {
-			pair<int, int> index = make_pair(i, j);
-			Hashmap[index][a->collisionGroup].erase(a);
+            stringstream stream;
+            string index;
+
+            stream << i << '.' << j;
+            stream >> index;
+
+			Hashmap[i][j][a->collisionGroup].erase(a);
+
+            a->cells.z = -1;
+            a->cells.w = -1;
 		}
 	}
 }
 
 void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
+    //return;
     glm::ivec4 boundingBox2 = a->colliderBox;
 
     boundingBox2.x += newPos.x + tileMapPos;
@@ -84,7 +91,9 @@ void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
 	insertObject(a, newPos);
 }
 
-set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, const set<int> &groups) {
+set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups) {
+    set<Collision*> result;
+    //return result;
 	glm::vec4 cells = glm::vec4(pos.x-radius, pos.y-radius, pos.x+radius, pos.y+radius);
 
     cells.x += tileMapPos;
@@ -95,21 +104,13 @@ set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int
     cells.y /= hashSize;
     cells.w /= hashSize;
 
-	set<Collision*> result;
-
 	for (int i = cells.x; i <= cells.z; ++i) {
 		for (int j = cells.y; j <= cells.w; ++j) {
-			pair<int, int> index = make_pair(i, j);
-
-			map<int, set<Collision*>> tmp = Hashmap[index];
-			map<int, set<Collision*>>::iterator it = tmp.begin();
-
-			while (it != tmp.end()) {
-				if (groups.find(it->first) != groups.end()) {
-					result.insert(it->second.begin(), it->second.end());
-				}
-				++it;
-			}
+            for (int t = 0; t < 10; ++t) {
+                if (groups[t]) {
+                    result.insert(Hashmap[i][j][t].begin(), Hashmap[i][j][t].end());
+                }
+            }
 		}
 	}
 
