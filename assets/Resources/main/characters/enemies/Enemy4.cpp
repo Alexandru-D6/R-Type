@@ -65,6 +65,8 @@ void Enemy4::update(int deltaTime)
             }
 		}
 	} else {
+		jumpAngle = 0;
+		startY = pos.y;
 		shoot();
 		jumpAngle2 += 2.f*PI/180.f;
 		if (jumpAngle2 >= 180) {
