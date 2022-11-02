@@ -53,6 +53,7 @@ public:
 
     glm::vec4 colliderBox;
     glm::ivec4 cells;
+    bool isSelected = false;
 
     glm::vec2 position;
 

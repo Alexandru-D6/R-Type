@@ -23,7 +23,7 @@ public:
 	void removeObject(Collision* a);
 	void updateObject(Collision* a, const glm::vec2 &newPos);
 
-	set<Collision*> getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups);
+	vector<Collision*> getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups);
 
 private:
 

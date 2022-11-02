@@ -86,8 +86,8 @@ void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
 	insertObject(a, newPos);
 }
 
-set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups) {
-    set<Collision*> result;
+vector<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups) {
+    vector<Collision*> result;
     //return result;
 	glm::vec4 cells = glm::vec4(pos.x-radius, pos.y-radius, pos.x+radius, pos.y+radius);
 
@@ -103,11 +103,21 @@ set<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int
 		for (int j = (int)cells.y; j <= (int)cells.w; ++j) {
             for (int t = 0; t < 10; ++t) {
                 if (groups[t]) {
-                    result.insert(Hashmap[i][j][t].begin(), Hashmap[i][j][t].end());
+                    set<Collision*>::iterator it = Hashmap[i][j][t].begin();
+
+                    while (it != Hashmap[i][j][t].end()) {
+                        if (!(*it)->isSelected) {
+                            result.push_back(*it);
+                            (*it)->isSelected = true;
+                        }
+
+                        ++it;
+                    }
                 }
             }
 		}
 	}
 
+    for (int i = 0; i < (int)result.size(); ++i) result[i]->isSelected = false;
 	return result;
 }
