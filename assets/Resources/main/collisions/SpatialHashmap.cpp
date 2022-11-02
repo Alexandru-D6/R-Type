@@ -63,7 +63,6 @@ void SpatialHashmap::removeObject(Collision* a) {
 }
 
 void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
-    //return;
     glm::ivec4 boundingBox2 = a->colliderBox;
 
     boundingBox2.x += (int)(newPos.x + tileMapPos);
@@ -88,7 +87,7 @@ void SpatialHashmap::updateObject(Collision* a, const glm::vec2 &newPos) {
 
 vector<Collision*> SpatialHashmap::getNearByObjects(const glm::vec2 &pos, const int &radius, bool *groups) {
     vector<Collision*> result;
-    //return result;
+
 	glm::vec4 cells = glm::vec4(pos.x-radius, pos.y-radius, pos.x+radius, pos.y+radius);
 
     cells.x += tileMapPos;
