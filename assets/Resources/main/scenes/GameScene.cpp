@@ -42,6 +42,7 @@ void GameScene::init() {
 	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cEnemy4, glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+80, INIT_PLAYER_Y_TILES * map->getTileSize()));
 
 
+
 }
 
 void GameScene::update(int deltaTime) {
