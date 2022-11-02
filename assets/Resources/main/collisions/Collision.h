@@ -1,7 +1,6 @@
 #ifndef _COLLISION_INCLUDE
 #define _COLLISION_INCLUDE
 
-#include <math.h>
 #include <vector>
 
 #include "debug\TrianglesRenderer.h"

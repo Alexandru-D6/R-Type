@@ -16,18 +16,10 @@ CollisionSystem::~CollisionSystem() {
 
 void CollisionSystem::addColliderIntoGroup(Collision* a) {
 	spatialHashmap->insertObject(a);
-    //groups[int(a->collisionGroup)].push_back(a);
 }
 
 void CollisionSystem::removeColliderFromGroup(Collision* a) {
 	spatialHashmap->removeObject(a);
-    /*int group = int(a->collisionGroup);
-    for (auto it = groups[group].begin(); it != groups[group].end(); ++it) {
-        if (*it == a) {
-            groups[group].erase(it);
-            return;
-        }
-    }*/
 }
 
 void CollisionSystem::updateCollider(Collision* a, const glm::vec2 &newPos) {
@@ -43,11 +35,10 @@ bool CollisionSystem::isTriggerCollision(const Collision* a, const Collision* b)
 }
 
 CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const glm::vec2 &offset) {
-    //return CollisionInfo{ false, NULL, false };
 	glm::vec4 box = a->getBoundingBox();
 
 	glm::vec2 pos = glm::vec2((box.x+box.z)/2.0f, (box.y+box.w)/2.0f);
-	float radius = glm::distance(pos, glm::vec2(box.x,box.y));
+	int radius = (int)glm::distance(pos, glm::vec2(box.x,box.y)) + 1;
 
 	pos.x += a->position.x;
 	pos.y += a->position.y;
@@ -69,19 +60,6 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const 
 		++it;
 	}
 
-    /*for (int i = 0; i < (int)groups.size(); ++i) {
-        for (int j = 0; j < (int)groups[i].size(); ++j) {
-            if (isValidCollision(a, groups[i][j])) {
-                if (searchForCollision(a, groups[i][j], offset)) {
-                    return CollisionInfo{ 
-                                isValidCollision(a, groups[i][j]), 
-                                groups[i][j], 
-                                false };
-                }
-            }
-        }
-    }
-	*/
     return CollisionInfo{ false, NULL, false};
 }
 
@@ -89,7 +67,7 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 	glm::vec4 box = a->getBoundingBox();
 
 	glm::vec2 pos = glm::vec2((box.x + box.z) / 2.0f, (box.y + box.w) / 2.0f);
-	float radius = glm::distance(pos, glm::vec2(box.x, box.y));
+	int radius = (int)glm::distance(pos, glm::vec2(box.x, box.y)) + 1;
 
 	int coll = a->collisionGroup;
 
@@ -109,19 +87,6 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 		++it;
 	}
 	
-	/*for (int i = 0; i < (int)groups.size(); ++i) {
-        for (int j = 0; j < (int)groups[i].size(); ++j) {
-            if (isTriggerCollision(a, groups[i][j])) {
-                if (searchForCollision(a, groups[i][j], offset)) {
-                    return CollisionInfo{ 
-                                false, 
-                                groups[i][j], 
-                                isTriggerCollision(a, groups[i][j]) };
-                }
-            }
-        }
-    }
-	*/
     return CollisionInfo{ false, NULL, false };
 }
 

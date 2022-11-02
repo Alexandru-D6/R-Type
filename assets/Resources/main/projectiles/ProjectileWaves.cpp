@@ -107,7 +107,7 @@ void ProjectileWaves::projectileConfigurator(ProjectileType type, const glm::vec
     auxSprite1->setAnimationSpeed(0, 1);
     auxSprite1->addKeyframe(0, glm::vec2(xy.x * 8.0, xy.y * 1.0));
     auxSprite1->setAnimationSpeed(SpawningSections, 32);
-    for (int j = 2.0; j < 5; ++j) {
+    for (int j = 2; j < 5; ++j) {
         for (int i = 0; i < 9; ++i) {
             if (j == 4 && i == 8) break;
             auxSprite1->addKeyframe(SpawningSections, glm::vec2(xy.x * float(i), xy.y * float(j)));
@@ -117,7 +117,7 @@ void ProjectileWaves::projectileConfigurator(ProjectileType type, const glm::vec
     auxSprite2->setAnimationSpeed(0, 1);
     auxSprite2->addKeyframe(0, glm::vec2(xy.x * 8.0, xy.y * 1.0));
     auxSprite2->setAnimationSpeed(SpawningSections, 32);
-    for (int j = 2.0; j < 5; ++j) {
+    for (int j = 2; j < 5; ++j) {
         for (int i = 0; i < 9; ++i) {
             if (j == 4 && i == 8) break;
             auxSprite2->addKeyframe(SpawningSections, glm::vec2(xy.x * float(i), xy.y * float(j)));

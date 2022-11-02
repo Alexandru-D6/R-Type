@@ -29,11 +29,6 @@ void ProjectileFireball::init(Texture *spritesheet, int type) {
 }
 
 void ProjectileFireball::update(int deltaTime) {
-    if (posProjectile.x >= 500.0f || posProjectile.y >= 256.0f || posProjectile.y < 0.0f || posProjectile.x < -50.0f) {
-        ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
-        return;
-    }
-
     collisionRoutine();
 
     if (!followMapShape()) return;
@@ -71,19 +66,10 @@ void ProjectileFireball::projectileConfigurator(ProjectileType type, const glm::
 }
 
 void ProjectileFireball::collisionRoutine() {
-    // RECORDER: it only destroy it self with gets out the scene
-    /*
-    collisionWait--;
-    if (collisionWait == 0) {
-        collisionWait = 3;
-        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
-
-        if (info.colliding) {
-            if (info.collider->collisionGroup == Collision::Map) {
-                ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
-            }
-        }
-    }*/
+    if (posProjectile.x >= 500.0f || posProjectile.y >= 256.0f || posProjectile.y < 0.0f || posProjectile.x < -50.0f) {
+        ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
+        return;
+    }
 }
 
 bool ProjectileFireball::followMapShape() {

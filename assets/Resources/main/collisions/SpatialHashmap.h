@@ -3,7 +3,6 @@
 
 #include <Set>
 #include <Map>
-#include <sstream>
 
 #include "Collision.h"
 
@@ -28,8 +27,7 @@ public:
 
 private:
 
-    set<Collision*> Hashmap[3000][20][10] = {};
-	//map<string, map<int, set<Collision*>>> Hashmap;
+    set<Collision*> Hashmap[1300][25][10] = {};
 
 	int hashSize;
 	float tileMapPos = 0;
