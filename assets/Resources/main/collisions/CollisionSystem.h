@@ -30,7 +30,7 @@ public:
 
 private:
 
-    const vector<vector<bool>> collisionMatrix = {
+    const bool collisionMatrix[10][10] = {
         /*                          Player Force  Map    Enemy  PlProj EnProj Uknown ---    ---    ---                             */
         /* Player               */ {  0   , false, true , true , false, true , false, false, false, false }, /* Player             */
         /* Force                */ { false,  0   , true , true , false, true , false, false, false, false }, /* Force              */
@@ -45,19 +45,19 @@ private:
         /*                          Player Force  Map    Enemy  PlProj EnProj Uknown ---    ---    ---                             */
     };
 
-    const vector<vector<bool>> triggersMatrix = {
+    const bool triggersMatrix[10][10] = {
         /*                          Player Force  Map    Enemy  PlProj EnProj Uknown ---    ---    ---                             */
-        /* Player               */{  0   , true , true , true , false, true , false, false, false, false }, /* Player             */
-        /* Force                */{ true ,  0   , true , true , false, true , false, false, false, false }, /* Force              */
-        /* Map                  */{ true , true ,  0   , true , true , true , false, false, false, false }, /* Map                */
-        /* Enemy                */{ true , true , true ,  0   , true , false, false, false, false, false }, /* Enemy              */
-        /* PlayerProjectiles    */{ false, false, true , true ,  0   , true , false, false, false, false }, /* PlayerProjectiles  */
-        /* EnemyProjectiles     */{ true , true , true , false, true ,  0   , false, false, false, false }, /* EnemyProjectiles   */
+        /* Player               */{  0   , true , false, false, false, false, false, false, false, false }, /* Player             */
+        /* Force                */{ true ,  0   , false, false, false, false, false, false, false, false }, /* Force              */
+        /* Map                  */{ false, false,  0   , false, false, false, false, false, false, false }, /* Map                */
+        /* Enemy                */{ false, false, false,  0   , false, false, false, false, false, false }, /* Enemy              */
+        /* PlayerProjectiles    */{ false, false, false, false,  0   , false, false, false, false, false }, /* PlayerProjectiles  */
+        /* EnemyProjectiles     */{ false, false, false, false, false,  0   , false, false, false, false }, /* EnemyProjectiles   */
         /* Uknown               */{ false, false, false, false, false, false,  0   , false, false, false }, /* Uknown             */
         /* ---                  */{ false, false, false, false, false, false, false,  0   , false, false }, /* ---                */
         /* ---                  */{ false, false, false, false, false, false, false, false,  0   , false }, /* ---                */
-        /* ---                  */{ false, false, false, false, false, false, false, false, false,  0 }, /* ---                */
-                                                                                                         /*                          Player Force  Map    Enemy  PlProj EnProj Uknown ---    ---    ---                             */
+        /* ---                  */{ false, false, false, false, false, false, false, false, false,  0    }, /* ---                */
+        /*                          Player Force  Map    Enemy  PlProj EnProj Uknown ---    ---    ---                             */
     };
 
     CollisionSystem();
