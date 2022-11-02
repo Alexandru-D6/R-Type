@@ -22,10 +22,13 @@ Texture TextureManager::getSpriteSheet(Textures type) {
 		switch (type)
 		{
 		case TextureManager::Map:
-			
+			image = "images/background/testing-long-map.png";
+			break;
+		case TextureManager::Stars:
+
 			break;
 		case TextureManager::Planets:
-
+			image = "images/background/planets.png";
 			break;
 		case TextureManager::Player:
 			image = "images/player/player.png";
@@ -35,6 +38,9 @@ Texture TextureManager::getSpriteSheet(Textures type) {
 			break;
 		case TextureManager::Projectiles:
 			image = "images/projectiles/projectiles.png";
+			break;
+		case TextureManager::Waves:
+			image = "images/projectiles/waves.png";
 			break;
 		case TextureManager::Enemies:
 			image = "images/Enemies/basic-enemies.png";

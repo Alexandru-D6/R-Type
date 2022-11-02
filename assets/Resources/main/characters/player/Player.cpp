@@ -9,7 +9,7 @@ Player::Player(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos) :Charac
 void Player::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
 	rot = false;
-	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Enemies);
+	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Player);
 
     sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
     sprite->setNumberAnimations(7);

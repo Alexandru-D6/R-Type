@@ -6,8 +6,8 @@ Boss::Boss(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos):Character(p
 
 void Boss::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
-    spritesheet.loadFromFile("images/enemies/Boss.png", TEXTURE_PIXEL_FORMAT_RGBA);
-    sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
+	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Boss);
+	sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
     sprite->setNumberAnimations(7);
 
         sprite->setAnimationSpeed(STAND_RIGHT, 8);
