@@ -8,7 +8,7 @@ CollisionSystem *CollisionSystem::getInstance() {
 }
 
 CollisionSystem::CollisionSystem() {
-	spatialHashmap = new SpatialHashmap(32);
+	spatialHashmap = new SpatialHashmap(64);
 }
 
 CollisionSystem::~CollisionSystem() {
