@@ -50,15 +50,13 @@ CollisionSystem::CollisionInfo CollisionSystem::isColliding(Collision* a, const 
 		if (collisionMatrix[coll][i]) collidersGroup[i] = true;
 	}
 
-	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
-	set<Collision*>::iterator it = objects.begin();
+	vector<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
 
-	while (it != objects.end()) {
-		if (searchForCollision(a, *it, offset)) {
-			return CollisionInfo{ true, *it, false };
-		}
-		++it;
-	}
+    for (int i = 0; i < (int)objects.size(); ++i) {
+        if (searchForCollision(a, objects[i], offset)) {
+            return CollisionInfo{ true, objects[i], false };
+        }
+    }
 
     return CollisionInfo{ false, NULL, false};
 }
@@ -77,15 +75,13 @@ CollisionSystem::CollisionInfo CollisionSystem::isTriggering(Collision* a, const
 		if (triggersMatrix[coll][i]) collidersGroup[i] = true;
 	}
 
-	set<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
-	set<Collision*>::iterator it = objects.begin();
+    vector<Collision*> objects = spatialHashmap->getNearByObjects(pos, radius, collidersGroup);
 
-	while (it != objects.end()) {
-		if (searchForCollision(a, *it, offset)) {
-			return CollisionInfo{ true, *it, false };
-		}
-		++it;
-	}
+    for (int i = 0; i < (int)objects.size(); ++i) {
+        if (searchForCollision(a, objects[i], offset)) {
+            return CollisionInfo{ false, objects[i], true };
+        }
+    }
 	
     return CollisionInfo{ false, NULL, false };
 }
