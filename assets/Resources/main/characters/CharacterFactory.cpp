@@ -15,15 +15,15 @@ CharacterFactory::~CharacterFactory() {
 }
 
 void CharacterFactory::destroyCharacter(const int &id) {
-	pendingToBeDestroyed.insert(id);
+	pendingToBeKilled.insert(id);
 }
 void CharacterFactory::lateDestroyCharacter() {
-	for (auto it = pendingToBeDestroyed.begin(); it != pendingToBeDestroyed.end(); ++it) {
+	for (auto it = pendingToBeKilled.begin(); it != pendingToBeKilled.end(); ++it) {
 		characters[*it]->deleteRoutine();
 		delete characters[*it];
 		characters.erase(*it);
 	}
-	pendingToBeDestroyed.clear();
+	pendingToBeKilled.clear();
 }
 
 void CharacterFactory::init() {

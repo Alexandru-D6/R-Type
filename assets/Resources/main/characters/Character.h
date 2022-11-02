@@ -46,6 +46,7 @@ protected:
 	Sprite *sprite;
 	TileMap *tmap;
 	int shootDelay;
+	int live = 1;
 
 	glm::mat4 *projection;
 

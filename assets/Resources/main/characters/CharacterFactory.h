@@ -52,7 +52,7 @@ private:
 	map<int, Character *> characters;
 	int last_id = 10;
 
-	set<int> pendingToBeDestroyed;
+	set<int> pendingToBeKilled;
 
 	vector<pair<CharacterAvailable, glm::vec2>> enemies;
 
