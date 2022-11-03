@@ -189,9 +189,8 @@ void Player::render() {
 	forceDevice->render();
 }
 
-void Player::damage() {
+void Player::damage(int dmg) {
 	if (!godmode) {
-		live -= 1;
-		if (live <= 0)CharacterFactory::getInstance()->killPlayer();
+		Character::damage(dmg);
 	}
 }

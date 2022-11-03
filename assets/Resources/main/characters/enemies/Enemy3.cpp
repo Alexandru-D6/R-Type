@@ -63,7 +63,7 @@ void Enemy3::update(int deltaTime) {
 				if (info.collider->collisionGroup != Collision::CollisionGroups::Map) {
 					live -= 1;
 					if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damagePlayer();
+					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 				}
 			}
 			landed = true;
@@ -73,34 +73,37 @@ void Enemy3::update(int deltaTime) {
             collider->changePositionRelative(glm::vec2(0, FALL_STEP));
         }
 	}
-	glm::vec2 playerpos = CharacterFactory::getInstance()->player->getPosition();
+	glm::vec2 playerpos;
+	bool existsPlayer = CharacterFactory::getInstance()->getPlayerPos(playerpos);
 
-	glm::vec2 dir = (playerpos + glm::vec2(16.f, 7.f)) - (pos + glm::vec2(6.0f, 9.0f));
+	if (existsPlayer) {
+		glm::vec2 dir = (playerpos + glm::vec2(16.f, 7.f)) - (pos + glm::vec2(6.0f, 9.0f));
 
-	float angle =-1*atan2(dir.y, dir.x);
+		float angle = -1 * atan2(dir.y, dir.x);
 
-	if (72.f * PI / 180.f < angle && 108.f * PI / 180.f > angle) {
-		sprite->changeAnimation(POS_4, false);
-	}
-	else if (54.f * PI / 180.f < angle && 126.f * PI / 180.f > angle) {
-		sprite->changeAnimation(POS_3, false);
-	}
-	else if (36.f * PI / 180.f < angle && 144.f * PI / 180.f > angle) {
-		sprite->changeAnimation(POS_2, false);
-	}
-	else if (18.f * PI / 180.f < angle && 162.f * PI / 180.f > angle) {
-		sprite->changeAnimation(POS_1, false);
-	}
-	else {
-		sprite->changeAnimation(POS_0, false);
-	}
-	if (angle > 90.f*PI / 180.f && angle < 270.f*PI / 180.f && rot) {
-		rot = false;
-		rotate(0.f,0.f,0.f);
-	}
-	else if((angle < 90.f*PI / 180.f && angle > 0.f*PI / 180.f) || angle > 270.f*PI / 180.f && !rot){
-		rot = true;
-		rotate(0.f, 180.f, 0.f);
+		if (72.f * PI / 180.f < angle && 108.f * PI / 180.f > angle) {
+			sprite->changeAnimation(POS_4, false);
+		}
+		else if (54.f * PI / 180.f < angle && 126.f * PI / 180.f > angle) {
+			sprite->changeAnimation(POS_3, false);
+		}
+		else if (36.f * PI / 180.f < angle && 144.f * PI / 180.f > angle) {
+			sprite->changeAnimation(POS_2, false);
+		}
+		else if (18.f * PI / 180.f < angle && 162.f * PI / 180.f > angle) {
+			sprite->changeAnimation(POS_1, false);
+		}
+		else {
+			sprite->changeAnimation(POS_0, false);
+		}
+		if (angle > 90.f*PI / 180.f && angle < 270.f*PI / 180.f && rot) {
+			rot = false;
+			rotate(0.f, 0.f, 0.f);
+		}
+		else if ((angle < 90.f*PI / 180.f && angle > 0.f*PI / 180.f) || angle > 270.f*PI / 180.f && !rot) {
+			rot = true;
+			rotate(0.f, 180.f, 0.f);
+		}
 	}
 
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
@@ -110,9 +113,16 @@ void Enemy3::update(int deltaTime) {
 
 void Enemy3::shoot() {
 	if (shootDelay == 0) {
+		shootDelay = 60;
+
 		int aux = 0;
 		if (rot)aux = -5;
-		glm::vec2 playerpos = CharacterFactory::getInstance()->player->getPosition();
+
+		glm::vec2 playerpos;
+		bool existsPlayer = CharacterFactory::getInstance()->getPlayerPos(playerpos);
+
+		if (!existsPlayer) return;
+
 		glm::vec2 dir = (playerpos + glm::vec2(16.f, 7.f)) - (pos + poscanon[aux*sprite->animation()]);
 
 		float angle = atan2(dir.y, dir.x);
@@ -122,7 +132,6 @@ void Enemy3::shoot() {
 		dir *= velocity;
 
 		ProjectileFactory::getInstance()->spawnProjectile(pos + poscanon[aux+sprite->animation()], dir, false, Projectile::EnemyProjectile);
-		shootDelay = 60;
 	}
 	else shootDelay -= 1;
 }

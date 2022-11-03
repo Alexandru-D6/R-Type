@@ -73,7 +73,7 @@ void Enemy1::update(int deltaTime)
 			else { 
 				live -= 1; 
 				if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damagePlayer();
+				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
 		}
 		else {
@@ -110,7 +110,7 @@ void Enemy1::update(int deltaTime)
 				else {
 					live -= 1;
 					if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damagePlayer();
+					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 				}
             } else {
                 collider->changePositionRelative(glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
@@ -133,7 +133,7 @@ void Enemy1::update(int deltaTime)
 			else {
 				live -= 1;
 				if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damagePlayer();
+				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
 			
         } else {
