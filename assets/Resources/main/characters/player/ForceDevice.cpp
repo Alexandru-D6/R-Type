@@ -144,6 +144,14 @@ void ForceDevice::collisionRoutine() {
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::ivec2(sign * forceVelocity.x, 0));
 
         if (!info.colliding) setPosition(posForce + glm::vec2(sign * forceVelocity.x,0.0f));
+		else {
+			if (info.collider->collisionGroup == Collision::Enemy) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 100);
+			}
+			else if (info.collider->collisionGroup == Collision::EnemyProjectiles) {
+				ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
+			}
+		}
     }
 
     if (abs(targetPosition.y - posForce.y) >= forceVelocity.y) {
@@ -151,6 +159,14 @@ void ForceDevice::collisionRoutine() {
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::ivec2(0, sign * forceVelocity.y));
 
         if (!info.colliding) setPosition(posForce + glm::vec2(0.0f,sign * forceVelocity.y));
+		else {
+			if (info.collider->collisionGroup == Collision::Enemy) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 100);
+			}
+			else if (info.collider->collisionGroup == Collision::EnemyProjectiles) {
+				ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
+			}
+		}
     }
 
     CollisionSystem::CollisionInfo infoAttach = collisionSystem->isTriggering(collider, glm::ivec2(0, 0));
