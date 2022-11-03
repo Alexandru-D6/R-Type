@@ -44,13 +44,10 @@ void Enemy2::update(int deltaTime)
 	shoot();
 	CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy2::collider, glm::vec2(-0.5, 0));
 	if (info.colliding) {
-		if (info.collider->collisionGroup != Collision::CollisionGroups::Map) {
-			live -= 1;
-			if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-			if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+		if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 		}
-	}
-	if (!info.colliding) {
+	}else {
         pos.x -= 0.5;
         collisionSystem->updateCollider(collider, pos);
         collider->changePositionAbsolute(pos);
@@ -68,12 +65,8 @@ void Enemy2::update(int deltaTime)
 			if (info.collider->collisionGroup == Collision::CollisionGroups::Map) {
 				if (jumpAngle < 180)jumpAngle = 180 - jumpAngle;
 				if (jumpAngle > 180)jumpAngle = 360 - (jumpAngle - 180);
-			}
-
-			else {
-				live -= 1;
-				if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+			} else if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
 		}
 

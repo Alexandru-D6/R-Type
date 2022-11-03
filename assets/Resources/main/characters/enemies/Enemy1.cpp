@@ -60,8 +60,10 @@ void Enemy1::update(int deltaTime)
 	if (sprite->animation() != LANDING_LEFT || (sprite->animation() == LANDING_LEFT && sprite->isFinidhedAnimation())) {
 		
 		CollisionSystem::CollisionInfo info;
-		if (!rot)info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(-0.5, 0));
+
+		if (!rot) info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(-0.5, 0));
 		else info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0.5, 0));
+
 		if (info.colliding) {
 			//if(sprite->animation() == MOVE_LEFT)sprite->changeAnimation(STAND_LEFT, false);
 			
@@ -70,14 +72,14 @@ void Enemy1::update(int deltaTime)
 				if (rot)rotate(0.f, 180.f, 0.f);
 				else rotate(0.f, 0.f, 0.f);
 			}
-			else { 
-				live -= 1; 
-				if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+			else if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
+
 		}
 		else {
 			if (landed && sprite->animation() != MOVE_LEFT && sprite->animation() != FLY_LEFT && sprite->animation() != JUMP_LEFT) sprite->changeAnimation(MOVE_LEFT, false);
+
 			if (!rot) {
 				pos.x -= 0.5;
 				collider->changePositionRelative(glm::vec2(-0.5, 0));
@@ -106,43 +108,48 @@ void Enemy1::update(int deltaTime)
             CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
 
 			if (info.colliding) {
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Map)bJumping = false;
-				else {
-					live -= 1;
-					if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+				if (info.collider->collisionGroup == Collision::CollisionGroups::Map) {
+					bJumping = false;
 				}
-            } else {
+				else if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+					CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+				}
+
+            }
+			else {
                 collider->changePositionRelative(glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
                 pos.y = startY - 96.0f * sin(3.14159f * jumpAngle / 180.f);
             }
 		}
-	} else {
+	}
+	else {
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0, FALL_STEP));
 
 		if (info.colliding) {
 			//sprite->changeAnimation(FLY_LEFT, false);
 			if (info.collider->collisionGroup == Collision::CollisionGroups::Map) {
-				if (sprite->animation() == FLY_LEFT)sprite->changeAnimation(LANDING_LEFT, false);
+				if (sprite->animation() == FLY_LEFT) {
+					sprite->changeAnimation(LANDING_LEFT, false);
+				}
+
 				bJumping = false;
 				landed = true;
 				jumpAngle = 0;
 				startY = pos.y;
 			}
-				
-			else {
-				live -= 1;
-				if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-				if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+			else if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
 			
-        } else {
+        }
+		else {
 			sprite->changeAnimation(FLY_LEFT, false);
             landed = false;
             pos.y += FALL_STEP;
             collider->changePositionRelative(glm::vec2(0, FALL_STEP));
         }
 	}
+
 	if (sprite->animation() == JUMP_LEFT && sprite->isFinidhedAnimation()) sprite->changeAnimation(FLY_LEFT, false);
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));

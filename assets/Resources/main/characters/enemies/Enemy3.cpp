@@ -59,13 +59,10 @@ void Enemy3::update(int deltaTime) {
 	if(!landed){
 		CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy3::collider, glm::vec2(0, FALL_STEP));
 		if (info.colliding) {
-			if (info.colliding) {
-				if (info.collider->collisionGroup != Collision::CollisionGroups::Map) {
-					live -= 1;
-					if (info.collider->collisionGroup == Collision::CollisionGroups::PlayerProjectiles)ProjectileFactory::getInstance()->destroyProjectile(info.collider->getId());
-					if (info.collider->collisionGroup == Collision::CollisionGroups::Player)CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
-				}
+			if (info.collider->collisionGroup == Collision::CollisionGroups::Player) {
+				CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 			}
+
 			landed = true;
 			startY = pos.y;
         } else {
