@@ -30,6 +30,7 @@ void GameScene::init() {
 
     ProjectileFactory::getInstance()->setProjection(&projection);
     ProjectileFactory::getInstance()->init();
+	ProjectileFactory::getInstance()->mapSpeed = map->getSpeed();
     
 	cExplosion = ExplosionFactory::getInstance();
 	cFactory = CharacterFactory::getInstance();
@@ -46,7 +47,10 @@ void GameScene::init() {
 
 void GameScene::update(int deltaTime) {
     currentTime += deltaTime;
-	map->moveMap(-0.0);
+	map->moveMap(map->getSpeed());
+	
+	//if (Game::instance().getKey('w')) map->moveMap(-5.0);
+	//else if (Game::instance().getKey('q')) map->moveMap(5.0);
 
     cFactory->update(deltaTime);
     ProjectileFactory::getInstance()->update(deltaTime);
