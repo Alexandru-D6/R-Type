@@ -11,7 +11,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 	rot = false;
 	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Player);
 
-    sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), &spritesheet, projection);
+    sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1/16.0, 1/16.0), spritesheet, projection);
     sprite->setNumberAnimations(7);
 
         sprite->setAnimationSpeed(STAND_RIGHT, 8);
