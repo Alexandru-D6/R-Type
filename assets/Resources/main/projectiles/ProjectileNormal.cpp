@@ -91,7 +91,7 @@ void ProjectileNormal::projectileConfigurator(ProjectileType type, const glm::ve
 void ProjectileNormal::collisionRoutine() {
     collisionWait--;
 
-	if (posProjectile.x >= 500.0f || posProjectile.y >= 300.0f || posProjectile.y < 0.0f || posProjectile.x <= 0.0f) {
+	if (posProjectile.x >= 500.0f || posProjectile.y >= 300.0f || posProjectile.y < 0.0f || posProjectile.x <= -50.0f) {
 		ProjectileFactory::getInstance()->destroyProjectile(idProjectile);
 		return;
 	}
