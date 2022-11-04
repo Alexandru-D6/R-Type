@@ -42,6 +42,7 @@ void Enemy1::init(const glm::ivec2 &tileMapPos) {
     tileMapDispl = tileMapPos;
 
     collider->addCollider(glm::ivec4(5, 8, 21, 23));
+	collisionSystem->updateCollider(collider, glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
     collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
 #ifdef SHOW_HIT_BOXES
@@ -105,7 +106,7 @@ void Enemy1::update(int deltaTime)
 			collider->changePositionRelative(glm::vec2(0, startY-pos.y));
 			pos.y = startY;
 		} else {
-            CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
+            CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::vec2(0, (startY - 96.0f * sin(3.14159f * jumpAngle / 180.f)) - pos.y));
 
 			if (info.colliding) {
 				if (info.collider->collisionGroup == Collision::CollisionGroups::Map) {
@@ -123,7 +124,7 @@ void Enemy1::update(int deltaTime)
 		}
 	}
 	else {
-        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Enemy1::collider, glm::vec2(0, FALL_STEP));
+        CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, glm::vec2(0, FALL_STEP));
 
 		if (info.colliding) {
 			//sprite->changeAnimation(FLY_LEFT, false);

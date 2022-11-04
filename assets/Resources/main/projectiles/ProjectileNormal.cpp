@@ -31,7 +31,6 @@ void ProjectileNormal::init(Texture *spritesheet, int type) {
 
 void ProjectileNormal::update(int deltaTime) {
     posProjectile += projVelocity;
-    collisionSystem->updateCollider(collider, posProjectile);
     collider->changePositionAbsolute(posProjectile);
 
 	if (!collisionRoutine()) return;
@@ -39,6 +38,8 @@ void ProjectileNormal::update(int deltaTime) {
     sprite->setPosition(posProjectile);
 
     sprite->update(deltaTime);
+
+	Projectile::update(deltaTime);
 }
 
 void ProjectileNormal::render() {
@@ -97,7 +98,7 @@ bool ProjectileNormal::collisionRoutine() {
     if (collisionWait <= 0) {
         collisionWait = 0;
         CollisionSystem::CollisionInfo info = collisionSystem->isColliding(collider, projVelocity);
-
+		
         if (info.colliding) {
 			switch (info.collider->collisionGroup) {
 			case Collision::Map:
@@ -111,7 +112,7 @@ bool ProjectileNormal::collisionRoutine() {
 				break;
 			case Collision::Player:
 				if (projectileType == ProjectileType::EnemyProjectile) {
-					//CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
+					CharacterFactory::getInstance()->damageCharacter(info.collider->getId(), 1);
 					
 				}
 				break;

@@ -24,6 +24,7 @@ void Character::update(int deltaTime)
 		return;
 	}
 
+	collisionSystem->updateCollider(collider, pos);
 	clippingAvoidance();
 }
 

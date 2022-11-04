@@ -10,7 +10,7 @@ void Projectile::init(Texture *spritesheet, int type) {
 }
 
 void Projectile::update(int deltaTime) {
-    throw exception("Not Implemented Method");
+	collisionSystem->updateCollider(collider, posProjectile);
 }
 
 void Projectile::render() {

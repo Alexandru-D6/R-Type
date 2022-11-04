@@ -37,6 +37,8 @@ void ProjectileFireball::update(int deltaTime) {
     sprite->setPosition(posProjectile);
 
     sprite->update(deltaTime);
+
+	Projectile::update(deltaTime);
 }
 
 void ProjectileFireball::render() {

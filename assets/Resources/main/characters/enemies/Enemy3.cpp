@@ -30,6 +30,7 @@ void Enemy3::init(const glm::ivec2 &tileMapPos) {
 	tileMapDispl = tileMapPos;
 
 	collider->addCollider(glm::ivec4(5, 8, 21, 23));
+	collisionSystem->updateCollider(collider, glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
 #ifdef SHOW_HIT_BOXES

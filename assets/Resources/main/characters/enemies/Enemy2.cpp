@@ -49,7 +49,6 @@ void Enemy2::update(int deltaTime)
 		}
 	}else {
         pos.x -= 0.5;
-        collisionSystem->updateCollider(collider, pos);
         collider->changePositionAbsolute(pos);
 	}
 
@@ -72,7 +71,6 @@ void Enemy2::update(int deltaTime)
 
 		else {
             pos.y = startY - 50.0f * sin(3.14159f * jumpAngle / 180.f);
-            collisionSystem->updateCollider(collider, pos);
             collider->changePositionAbsolute(pos);
 		}
 	}

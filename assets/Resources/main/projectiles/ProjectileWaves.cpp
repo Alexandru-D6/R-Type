@@ -90,6 +90,8 @@ void ProjectileWaves::update(int deltaTime) {
 
     auxSprite1->update(deltaTime);
     auxSprite2->update(deltaTime);
+
+	Projectile::update(deltaTime);
 }
 
 void ProjectileWaves::render() {
