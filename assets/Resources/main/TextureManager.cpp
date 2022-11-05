@@ -61,7 +61,7 @@ Texture* TextureManager::getSpriteSheet(Textures type) {
 			image = "images/player/player.png";
 			break;
 		case TextureManager::ExplosionProyectileEnemy:
-			image = "images/misc/explosion2.png";
+			image = "images/player/force-pit-beam.png";
 			break;
 		
 		}
