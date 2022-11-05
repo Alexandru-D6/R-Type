@@ -4,6 +4,7 @@
 #include "sound\AudioManager.h"
 #include "characters\Character.h"
 #include "ForceDevice.h"
+#include "ui\Text.h"
 
 class Player : public Character {
 
@@ -34,8 +35,9 @@ private:
 private:
 
     ForceDevice *forceDevice;
+	Text text;
 	bool godmode = false;
-
+	int contGod = 0;
     bool latchKeys[256];
 
 };

@@ -65,6 +65,9 @@ void Player::init(const glm::ivec2 &tileMapPos) {
     forceDevice = new ForceDevice(projection);
     forceDevice->init(collider);
     forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 32.0f), float(tileMapDispl.y + pos.y)));
+
+	if (!text.init("fonts/OpenSans-Bold.ttf"))
+		cout << "Could not load font!!!" << endl;
 }
 
 void Player::update(int deltaTime)
@@ -170,9 +173,16 @@ void Player::inputController() {
         latchKeys['c'] = true;
 		AudioManager::getInstance()->playSoundEffect(AudioManager::RunningInThe90s, 42);
     }
+	if (Game::instance().getKey('g') && !latchKeys['g']) {
+		latchKeys['g'] = true;
+
+		godmode = !godmode;
+		contGod = 60;
+	}
 
     if (!Game::instance().getKey('x') && latchKeys['x']) latchKeys['x'] = false;
     else if (!Game::instance().getKey('c') && latchKeys['c']) latchKeys['c'] = false;
+	else if (!Game::instance().getKey('g') && latchKeys['g']) latchKeys['g'] = false;
 }
 
 void Player::setPosition(const glm::vec2 &pos) {
@@ -181,6 +191,13 @@ void Player::setPosition(const glm::vec2 &pos) {
 }
 
 void Player::render() {
+	string word = "";
+	if (contGod > 0) {
+		if (godmode) word = "Invulnerability activated";
+		else word = "Invulnerability desactivated";
+		text.render(word, glm::vec2(0,32), 32, glm::vec4(1, 1, 1, 1), Text::Left); 
+		contGod-=1;
+	}
 	Character::render();
 	forceDevice->render();
 }

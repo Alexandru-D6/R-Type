@@ -29,10 +29,6 @@ Explosion::Explosion(Explosions type, glm::mat4 &project, const glm::vec2 &pos, 
 		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*1.f, 1.0f / 16.0f*10.f));
 		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*2.f, 1.0f / 16.0f*10.f));
 		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*3.f, 1.0f / 16.0f*10.f));
-		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*1.f, 1.0f / 16.0f*10.f));
-		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*2.f, 1.0f / 16.0f*10.f));
-		sprite->addKeyframe(0, glm::vec2(1.0f / 10.0f*3.f, 1.0f / 16.0f*10.f));
-
 
 
 	}
