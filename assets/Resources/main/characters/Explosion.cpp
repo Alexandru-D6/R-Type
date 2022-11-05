@@ -3,8 +3,8 @@
 Explosion::Explosion(Explosions type, glm::mat4 &project, const glm::vec2 &pos, const glm::vec4 &box) {
 	ended = false;
 	spritesheet;
-	if (Explosions::ExplosionNormal == type) {
-		spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Explosion);
+	if (Explosions::ExplosionEnemy == type) {
+		spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::ExplosionEnemy);
 	}
 	else {
 		spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::ExplosionPlayer);

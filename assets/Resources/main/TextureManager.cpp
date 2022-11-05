@@ -54,12 +54,16 @@ Texture* TextureManager::getSpriteSheet(Textures type) {
 		case TextureManager::ExplosionPlayer:
 			image = "images/misc/explosion1.png";
 			break;
-		case TextureManager::Explosion:
+		case TextureManager::ExplosionEnemy:
 			image = "images/misc/explosion2.png";
 			break;
-		default:
-			image = "images/player/force-pit-beam.png";
+		case TextureManager::ExplosionProyectilePlayer:
+			image = "images/player/player.png";
 			break;
+		case TextureManager::ExplosionProyectileEnemy:
+			image = "images/misc/explosion2.png";
+			break;
+		
 		}
 
 		spritesheet.loadFromFile(image, TEXTURE_PIXEL_FORMAT_RGBA);
