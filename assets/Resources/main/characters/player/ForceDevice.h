@@ -3,11 +3,14 @@
 
 #include <vector>
 #include <set>
+#include <iostream>
+#include <string>
 
 #include "textures\Sprite.h"
 #include "textures\TileMap.h"
 #include "collisions\Collision.h"
 #include "collisions\CollisionSystem.h"
+#include "ui/Text.h"
 
 #include "GeneralDefines.h"
 
@@ -62,6 +65,9 @@ private:
     CollisionSystem *collisionSystem;
 
     bool latchKeys[256];
+	int cont = 0;
+	Text text;
+	bool levelup = false;
 
     bool isAtached = true;
     bool isLeft = false;
