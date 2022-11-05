@@ -35,6 +35,8 @@ private:
 private:
 
     ForceDevice *forceDevice;
+	bool forceSpawned = false;
+
 	Text text;
 	bool godmode = false;
 
