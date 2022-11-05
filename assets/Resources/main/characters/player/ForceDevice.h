@@ -64,10 +64,11 @@ private:
     Collision *shipCollider;
     CollisionSystem *collisionSystem;
 
-    bool latchKeys[256];
 	int cont = 0;
 	Text text;
 	bool levelup = false;
+	bool latchKeys[256] = { false };
+
 
     bool isAtached = true;
     bool isLeft = false;
@@ -77,6 +78,10 @@ private:
     glm::vec2 targetPosition;
 
     glm::vec2 forceVelocity = glm::vec2(3.0f,1.0f);
+						
+						/* ATTACHED   | NO ATTACHED*/
+	int shotDelay[6] = {   5, 10, 20,  0, 20, 40 };
+	int currentShotCountdown = 1;
 
 };
 
