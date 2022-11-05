@@ -30,6 +30,9 @@ public:
     void update(int deltaTime);
     void render();
 
+	void setMapSpeed(float newSpeed);
+	void teleport(float newPos);
+
 private:
 
     void initShaders();

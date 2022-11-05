@@ -56,6 +56,9 @@ void GameScene::update(int deltaTime) {
 	//if (Game::instance().getKey('w')) map->moveMap(-5.0);
 	//else if (Game::instance().getKey('q')) map->moveMap(5.0);
 
+	if (Game::instance().getKey('1')) teleport(0);
+	else if (Game::instance().getKey('2')) teleport(3000);
+
     cFactory->update(deltaTime);
     ProjectileFactory::getInstance()->update(deltaTime);
 	cExplosion->update(deltaTime);
@@ -67,6 +70,19 @@ void GameScene::render() {
     cFactory->render();
     ProjectileFactory::getInstance()->render();
 	cExplosion->render();
+}
+
+void GameScene::setMapSpeed(float newSpeed) {
+	map->setSpeed(newSpeed);
+	CharacterFactory::getInstance()->mapSpeed = newSpeed;
+	ProjectileFactory::getInstance()->mapSpeed = newSpeed;
+}
+
+void GameScene::teleport(float newPos) {
+	map->moveMap(abs(map->getPosition()) - newPos);
+
+	CharacterFactory::getInstance()->destroyAllCharacters();
+	ProjectileFactory::getInstance()->destroyAllProjectiles();
 }
 
 void GameScene::initShaders() {
