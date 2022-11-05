@@ -178,17 +178,8 @@ void Player::inputController() {
 		contGod = 60;
 	}
 	else if (Game::instance().getKey('f') && !latchKeys['f']) {
-		if (!forceSpawned) {
-			forceDevice = new ForceDevice(projection);
-			forceDevice->init(collider);
-			forceDevice->setPosition(glm::vec2(-20.0f, 256.0f / 2.0f));
-			forceSpawned = true;
-		}
-		else {
-			forceDevice->deleteRoutine();
-			delete forceDevice;
-			forceSpawned = false;
-		}
+		if (!forceSpawned) spawnForce();
+		else destroyForce();
 	}
 
 
@@ -232,5 +223,22 @@ void Player::render() {
 void Player::damage(int dmg) {
 	if (!godmode) {
 		Character::damage(dmg);
+	}
+}
+
+void Player::spawnForce() {
+	if (!forceSpawned) {
+		forceDevice = new ForceDevice(projection);
+		forceDevice->init(collider);
+		forceDevice->setPosition(glm::vec2(-20.0f, 256.0f / 2.0f));
+		forceSpawned = true;
+	}
+}
+
+void Player::destroyForce() {
+	if (forceSpawned) {
+		forceDevice->deleteRoutine();
+		delete forceDevice;
+		forceSpawned = false;
 	}
 }
