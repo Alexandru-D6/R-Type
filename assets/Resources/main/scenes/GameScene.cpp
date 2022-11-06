@@ -42,11 +42,7 @@ void GameScene::init() {
 	cFactory->mapSpeed = map->getSpeed();
 
 	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cPlayer, glm::vec2(-30.f, 128.0f));
-	//cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cEnemy1, glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize()+200, INIT_PLAYER_Y_TILES * map->getTileSize()));
-	//cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cEnemy2, glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 200, INIT_PLAYER_Y_TILES * map->getTileSize()));
-	//cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cEnemy4, glm::vec2(INIT_PLAYER_X_TILES * map->getTileSize() + 200, INIT_PLAYER_Y_TILES * map->getTileSize()));
-
-
+	
 }
 
 void GameScene::update(int deltaTime) {
