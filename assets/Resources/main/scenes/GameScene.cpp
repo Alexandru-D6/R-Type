@@ -38,7 +38,7 @@ void GameScene::init() {
 	cFactory = CharacterFactory::getInstance();
 	cFactory->setProjection(&projection);
 	cFactory->setTileMapPos(glm::ivec2(SCREEN_X, SCREEN_Y));
-	cFactory->setSpawnFiles("images/background/testing-long-map_entities-computed_entitiesSpawn.txt");
+	cFactory->setSpawnFiles("images/background/level00_entities-computed_entitiesSpawn.txt");
 	cFactory->setMap(map);
 	cFactory->mapSpeed = map->getSpeed();
 
