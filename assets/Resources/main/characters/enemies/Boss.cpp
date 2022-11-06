@@ -167,6 +167,7 @@ void Boss::render() {
 	spriteTail->render();
 	spriteRightPart->render();
 	spriteLeftPart->render();
+
 #ifdef SHOW_HIT_BOXES
 	for (int i = 0; i < colliders.size(); i++) {
 		colliders[i]->render();
@@ -181,6 +182,7 @@ void Boss::setPosition(const glm::vec2 &pos) {
 	spriteLeftPart->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 87), float(tileMapDispl.y + pos.y + 30)));
 	spriteTail->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 39), float(tileMapDispl.y + pos.y + 62)));
 	spriteHead->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 39), float(tileMapDispl.y + pos.y -2)));
+
 	for (int i = 0; i < colliders.size(); i++) {
 		collisionSystem->updateCollider(colliders[i], this->pos);
 		colliders[i]->changePositionAbsolute(this->pos);
