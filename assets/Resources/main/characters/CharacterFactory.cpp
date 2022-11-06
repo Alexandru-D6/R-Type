@@ -151,7 +151,7 @@ void CharacterFactory::spawnCharacter(int type, const glm::vec2 &pos) {
 		IdreservedBoss.push_back(last_id);
 		break;
 	case cWorm:
-		character = new Worm(projection, last_id, tileMapPos);
+		character = new Worm(projection, last_id);
 		character->setPosition(pos);
 		break;
 	default:

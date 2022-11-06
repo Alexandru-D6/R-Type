@@ -1,16 +1,16 @@
 #include "Worm.h"
 
-Worm::Worm(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos) :Character(project, id, Collision::Enemy) {
-	init(tileMapPos);
+Worm::Worm(glm::mat4 *project, int id) :Character(project, id, Collision::Enemy) {
+	init();
 }
 
-void Worm::init(const glm::ivec2 &tileMapPos) {
-	tileMapDispl = tileMapPos;
+void Worm::init() {
 
 	for (int i = 0; i <= 8; ++i) {
-		parts.push_back(new Part(projection,id,i,tileMapPos));
+		parts.push_back(new Part(projection,id,i));
 	}
 
+#pragma region DummySprite
 	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Boss);
 
 	sprite = Sprite::createSprite(glm::ivec2(26, 22), glm::vec2(1 / 2.0, 1 / 2.0), spritesheet, projection);
@@ -20,16 +20,8 @@ void Worm::init(const glm::ivec2 &tileMapPos) {
 	sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*1.0, 0.f));
 
 	sprite->changeAnimation(0, false);
-	tileMapDispl = tileMapPos;
+#pragma endregion
 
-	collider->addCollider(glm::ivec4(0, 0, 26, 22));
-	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
-
-#ifdef SHOW_HIT_BOXES
-	collider->showHitBox();
-#endif // SHOW_HIT_BOXES
-
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 
 }
 
@@ -40,49 +32,46 @@ void Worm::update(int deltaTime)
 
 	if (!info.colliding) {
 		pos.x += mov;
-		collider->changePositionRelative(glm::vec2(mov,0.f));
-		sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
+		//collider->changePositionRelative(glm::vec2(mov,0.f));
+		//sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 		for (int i = 0; i < ((int)parts.size() - 1); ++i) {
-			parts[i]->setPosition(parts[i + 1]->getPosition());
+			//parts[i]->setPosition(parts[i + 1]->getPosition());
 		}
-		parts[(parts.size() - 1)]->setPosition(pos);
+		//parts[(parts.size() - 1)]->setPosition(pos);
 	}
+
+	setPosition(glm::vec2(0.0f,0.0f));
 	
 }
 
 void Worm::render()
 {
-	sprite->render();
-#ifdef SHOW_HIT_BOXES
-	collider->render();
-#endif // SHOW_HIT_BOXES
 	for (int i = 0; i < (int)parts.size(); ++i) {
 		parts[i]->render();
 	}
 }
 
 void Worm::setPosition(const glm::vec2 &pos) {
-	for (int i = 0; i < (int)parts.size(); ++i) {
-		parts[i]->setPosition(pos);
+	for (int i = 1; i < (int)parts.size(); ++i) {
+		parts[i]->setPosition(parts[i-1]->getPosition() + glm::vec2(16.0f,0.0f));
 	}
-	this->pos = pos;
-	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
-	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
+	parts[0]->setPosition(pos);
+
 }
 
 
 
-Part::Part(glm::mat4 *project, int id, int idBody, const glm::ivec2 &tileMapPos) :Character(project, id, Collision::Enemy) {
+Part::Part(glm::mat4 *project, int id, int idBody) :Character(project, id, Collision::Enemy) {
 	this->idBody = idBody;
-	init(tileMapPos);
+	init();
 }
 
-void Part::init(const glm::ivec2 &tileMapPos) {
+void Part::init() {
 	bJumping = false;
 
 	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Boss);
 
-	if (idBody == 8) {
+	if (idBody == 0) {
 		sprite = Sprite::createSprite(glm::ivec2(26, 22), glm::vec2(1.f / 9.34f, 1.f / 11.f), spritesheet, projection);
 		sprite->setNumberAnimations(1);
 
@@ -92,7 +81,7 @@ void Part::init(const glm::ivec2 &tileMapPos) {
 		collider->addCollider(glm::ivec4(0, 0, 26, 22));
 		collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 	}
-	else if (idBody == 0) {
+	else if (idBody == 8) {
 		sprite = Sprite::createSprite(glm::ivec2(26, 22), glm::vec2(1.f / 9.34f, 1.f / 11.f), spritesheet, projection);
 		sprite->setNumberAnimations(1);
 
@@ -119,7 +108,6 @@ void Part::init(const glm::ivec2 &tileMapPos) {
 	
 
 	sprite->changeAnimation(0, false);
-	tileMapDispl = tileMapPos;
 
 	
 
@@ -130,7 +118,18 @@ void Part::init(const glm::ivec2 &tileMapPos) {
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
 }
 
-void Part::update(int deltaTime)
-{
+void Part::update(int deltaTime) {
 	
+}
+
+void Part::setPosition(const glm::vec2 &pos) {
+
+	/*if (idBody >= 1 && idBody <= 7) {
+		pos
+	}*/
+
+	this->pos = pos;
+	sprite->setPosition(this->pos);
+	collisionSystem->updateCollider(collider, this->pos);
+	collider->changePositionAbsolute(this->pos);
 }

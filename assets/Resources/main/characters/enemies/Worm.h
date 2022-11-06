@@ -7,14 +7,16 @@
 class Part : public Character {
 public:
 
-	Part(glm::mat4 *project, int id, int idBody, const glm::ivec2 &tileMapPos);
+	Part(glm::mat4 *project, int id, int idBody);
 
 	void update(int deltaTime);
 	
+	glm::vec2 getPosition() { return pos; };
+	void setPosition(const glm::vec2 &pos);
 
 private:
 
-	void init(const glm::ivec2 &tileMapPos);
+	void init();
 	int idBody;
 };
 
@@ -22,7 +24,7 @@ class Worm : public Character {
 
 public:
 
-	Worm(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos);
+	Worm(glm::mat4 *project, int id);
 
 	void update(int deltaTime);
 	void render();
@@ -30,7 +32,7 @@ public:
 
 private:
 
-	void init(const glm::ivec2 &tileMapPos);
+	void init();
 	std::vector<Part*> parts;
 };
 
