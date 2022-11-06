@@ -6,6 +6,7 @@ Boss::Boss(glm::mat4 *project, int id, const glm::ivec2 &tileMapPos):Character(p
 
 void Boss::init(const glm::ivec2 &tileMapPos) {
     bJumping = false;
+	live = 3000;
 	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Boss);
 	//Body
     sprite = Sprite::createSprite(glm::ivec2(110, 92), glm::vec2(1.f/2.209090909f, 1/ 2.630434782608696f), spritesheet, projection);
@@ -77,38 +78,19 @@ void Boss::init(const glm::ivec2 &tileMapPos) {
 
 //Positions
 	//dentral
-    collider->addCollider(glm::ivec4(15, 3, 95, 80));
-	collider->addCollider(glm::ivec4(37,0,72,3));
-	collider->addCollider(glm::ivec4(45,80,65,91));
-	//quad1
-	collider->addCollider(glm::ivec4(1, 21, 15, 37));
-	collider->addCollider(glm::ivec4(3, 15, 15, 21));
-	collider->addCollider(glm::ivec4(10, 6, 15, 15));
-	collider->addCollider(glm::ivec4(6, 10, 10, 15));
-	collider->addCollider(glm::ivec4(5, 50, 15, 57));
-	//GreenBall collider->addCollider(glm::ivec4(-1, 40, 15, 55));
-	//quad2
-	collider->addCollider(glm::ivec4(95, 21, 109, 37));
-	collider->addCollider(glm::ivec4(95, 15, 107, 21));
-	collider->addCollider(glm::ivec4(95, 6, 100, 15));
-	collider->addCollider(glm::ivec4(100, 10, 103, 15));
-	collider->addCollider(glm::ivec4(95, 50, 105, 57));
-	//GreenBall collider->addCollider(glm::ivec4(95, 40, 112, 54));
-	//quad3
-	collider->addCollider(glm::ivec4(11, 73, 15, 85));
-	collider->addCollider(glm::ivec4(9, 83, 12, 91));
-	collider->addCollider(glm::ivec4(21, 80, 29, 84));
-	//quad4
-	collider->addCollider(glm::ivec4(95, 73, 99, 85));
-	collider->addCollider(glm::ivec4(97, 83, 101, 91));
-	collider->addCollider(glm::ivec4(81, 80, 89, 84));
-	//special
+	for (int i = 0; i < 19; ++i) {
+		Collision* coll = new Collision(id, projection, Collision::CollisionGroups::Enemy);;
+		coll->addCollider(boxcoordenates[i]);
+		collisionSystem->updateCollider(coll, glm::vec2(tileMapDispl.x + pos.x, pos.y));
+		coll->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
+		colliders.push_back(coll);
+	}
 
-	
-    collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
 #ifdef SHOW_HIT_BOXES
-   collider->showHitBox();
+	for (int i = 0; i < colliders.size(); i++) {
+		colliders[i]->showHitBox();
+	}
 #endif // SHOW_HIT_BOXES
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
@@ -180,21 +162,29 @@ void Boss::update(int deltaTime)
 }
 
 void Boss::render() {
-	Character::render();
+	sprite->render();
 	spriteHead->render();
 	spriteTail->render();
 	spriteRightPart->render();
 	spriteLeftPart->render();
+#ifdef SHOW_HIT_BOXES
+	for (int i = 0; i < colliders.size(); i++) {
+		colliders[i]->render();
+	}
+#endif // SHOW_HIT_BOXES
 }
 
 void Boss::setPosition(const glm::vec2 &pos) {
 	this->pos = pos;
 	sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
-	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 	spriteRightPart->setPosition(glm::vec2(float(tileMapDispl.x + pos.x - 3), float(tileMapDispl.y + pos.y + 30)));
 	spriteLeftPart->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 87), float(tileMapDispl.y + pos.y + 30)));
 	spriteTail->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 39), float(tileMapDispl.y + pos.y + 62)));
 	spriteHead->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 39), float(tileMapDispl.y + pos.y -2)));
+	for (int i = 0; i < colliders.size(); i++) {
+		collisionSystem->updateCollider(colliders[i], this->pos);
+		colliders[i]->changePositionAbsolute(this->pos);
+	}
 
 
 
