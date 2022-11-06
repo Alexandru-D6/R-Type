@@ -46,10 +46,6 @@ void GameScene::init() {
 	ObjectFactory::getInstance()->setProjection(&projection);
 	ObjectFactory::getInstance()->init();
 	ObjectFactory::getInstance()->mapSpeed = map->getSpeed();
-
-	ObjectFactory::getInstance()->spawnObject(glm::vec2(1000.0f,128.0f), Object::ModifierMBlue);
-	ObjectFactory::getInstance()->spawnObject(glm::vec2(1500.0f, 128.0f), Object::ModifierMBlue);
-	ObjectFactory::getInstance()->spawnObject(glm::vec2(1600.0f, 128.0f), Object::ModifierMBlue);
 	
 }
 
@@ -116,12 +112,17 @@ void GameScene::inputManager() {
 		latchKeys['5'] = true;
 		teleport(4000);
 	}
+	else if (Game::instance().getKey('p') && !latchKeys['p']) {
+		latchKeys['p'] = true;
+		setMapSpeed(0.0f);
+	}
 
 	if (!Game::instance().getKey('1') && latchKeys['1']) latchKeys['1'] = false;
 	else if (!Game::instance().getKey('2') && latchKeys['2']) latchKeys['2'] = false;
 	else if (!Game::instance().getKey('3') && latchKeys['3']) latchKeys['3'] = false;
 	else if (!Game::instance().getKey('4') && latchKeys['4']) latchKeys['4'] = false;
 	else if (!Game::instance().getKey('5') && latchKeys['5']) latchKeys['5'] = false;
+	else if (!Game::instance().getKey('p') && latchKeys['p']) latchKeys['p'] = false;
 }
 
 void GameScene::initShaders() {
