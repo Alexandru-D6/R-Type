@@ -18,7 +18,6 @@ public:
 public:
 
 	glm::vec2 anchorPoint;
-	glm::vec2 lastDir;
 
 private:
 

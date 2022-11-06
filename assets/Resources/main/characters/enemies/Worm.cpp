@@ -30,7 +30,8 @@ void Worm::init() {
 	targetPosition = position[currentTarget];
 
 	//<------<
-	pos = glm::vec2(220.0f, 128.0f);
+	pos = glm::vec2(200.0f, 128.0f);
+	parts[0]->setPosition(glm::vec2(200.0f, 128.0f));
 	for (int i = 1; i <= 8; ++i) {
 		parts[i]->setPosition(parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint - parts[i]->anchorPoint + glm::vec2(16.0f, 0.0f));
 	}
@@ -60,17 +61,20 @@ void Worm::rotateSprite(Part *part, const glm::vec2 &vector) {
 	part->rotateSprite(glm::vec3(0.0f, 0.0f, angle));
 }
 
-void Worm::setPosition(const glm::vec2 &movement) {
+void Worm::setPosition(const glm::vec2 &newDir) {
 	for (int i = (int)parts.size() - 1; i > 0; --i) {
-		glm::vec2 dir = getDir(	parts[i]->getPosition() + parts[i]->anchorPoint,
-								parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint);
-		parts[i]->setPosition(parts[i - 1]->getPosition());
-		rotateSprite(parts[i], dir);
+		if (distance(	parts[i]->getPosition() + parts[i]->anchorPoint, 
+						parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint) >= 10.0f) {
+			glm::vec2 dir = getDir(	parts[i]->getPosition() + parts[i]->anchorPoint,
+									parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint);
+			parts[i]->setPosition(parts[i]->getPosition() + dir);
+			rotateSprite(parts[i], dir);
+		}
 	}
 
-	this->pos = this->pos + movement;
+	this->pos = this->pos + newDir;
 	parts[0]->setPosition(pos);
-	rotateSprite(parts[0], movement);
+	rotateSprite(parts[0], newDir);
 }
 
 void Worm::changeTarget() {
