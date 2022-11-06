@@ -42,6 +42,14 @@ void GameScene::init() {
 	cFactory->mapSpeed = map->getSpeed();
 
 	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cPlayer, glm::vec2(-30.f, 128.0f));
+
+	ObjectFactory::getInstance()->setProjection(&projection);
+	ObjectFactory::getInstance()->init();
+	ObjectFactory::getInstance()->mapSpeed = map->getSpeed();
+
+	ObjectFactory::getInstance()->spawnObject(glm::vec2(1000.0f,128.0f), Object::ModifierMBlue);
+	ObjectFactory::getInstance()->spawnObject(glm::vec2(1500.0f, 128.0f), Object::ModifierMBlue);
+	ObjectFactory::getInstance()->spawnObject(glm::vec2(1600.0f, 128.0f), Object::ModifierMBlue);
 	
 }
 
@@ -56,6 +64,9 @@ void GameScene::update(int deltaTime) {
     cFactory->update(deltaTime);
     ProjectileFactory::getInstance()->update(deltaTime);
 	cExplosion->update(deltaTime);
+
+	ObjectFactory::getInstance()->update(deltaTime);
+
 }
 
 void GameScene::render() {
@@ -64,12 +75,16 @@ void GameScene::render() {
     cFactory->render();
     ProjectileFactory::getInstance()->render();
 	cExplosion->render();
+
+	ObjectFactory::getInstance()->render();
+
 }
 
 void GameScene::setMapSpeed(float newSpeed) {
 	map->setSpeed(newSpeed);
 	CharacterFactory::getInstance()->mapSpeed = newSpeed;
 	ProjectileFactory::getInstance()->mapSpeed = newSpeed;
+	ObjectFactory::getInstance()->mapSpeed = newSpeed;
 }
 
 void GameScene::teleport(float newPos) {
@@ -77,6 +92,7 @@ void GameScene::teleport(float newPos) {
 
 	CharacterFactory::getInstance()->destroyAllCharacters();
 	ProjectileFactory::getInstance()->destroyAllProjectiles();
+	ObjectFactory::getInstance()->destroyAllObjects();
 }
 
 void GameScene::inputManager() {
