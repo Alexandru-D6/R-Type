@@ -11,8 +11,14 @@ public:
 
 	void update(int deltaTime);
 	
+	void rotateSprite(glm::vec3 rotation);
 	glm::vec2 getPosition() { return pos; };
 	void setPosition(const glm::vec2 &pos);
+
+public:
+
+	glm::vec2 rearAnchorPoint;
+	glm::vec2 frontAnchorPoint;
 
 private:
 
@@ -28,6 +34,8 @@ public:
 
 	void update(int deltaTime);
 	void render();
+
+	void rotateSprites(const glm::vec2 &vector);
 	void setPosition(const glm::vec2 &pos);
 
 private:
