@@ -85,9 +85,9 @@ void ProjectileFactory::destroyProjectile(const int &id) {
 	else if (projectiles[id]->getType() == Projectile::R9mk3) {
 		ExplosionFactory::getInstance()->spawnExplosion(Explosion::Explosions::ExplosionProyectileR9mk3, projection, projectiles[id]->getPos(), projectiles[id]->getBox());
 	}
-	else if (projectiles[id]->getType() == Projectile::Waves) {
+	/*else if (projectiles[id]->getType() == Projectile::Waves) {
 		ExplosionFactory::getInstance()->spawnExplosion(Explosion::Explosions::ExplosionProyectileWaves, projection, projectiles[id]->getPos(), projectiles[id]->getBox());
-	}
+	}*/
 	else if (projectiles[id]->getType() == Projectile::Misil) {
 		ExplosionFactory::getInstance()->spawnExplosion(Explosion::Explosions::ExplosionEnemy, projection, projectiles[id]->getPos(), projectiles[id]->getBox());
 	}
