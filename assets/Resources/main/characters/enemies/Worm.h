@@ -17,8 +17,8 @@ public:
 
 public:
 
-	glm::vec2 rearAnchorPoint;
-	glm::vec2 frontAnchorPoint;
+	glm::vec2 anchorPoint;
+	glm::vec2 lastDir;
 
 private:
 
@@ -35,8 +35,21 @@ public:
 	void update(int deltaTime);
 	void render();
 
-	void rotateSprites(const glm::vec2 &vector);
-	void setPosition(const glm::vec2 &pos);
+	void rotateSprite(Part *part, const glm::vec2 &vector);
+	void setPosition(const glm::vec2 &movement);
+
+private:
+
+	glm::vec2 targetPosition;
+	int currentTarget = 0;
+
+	glm::vec2 position[4] = {	glm::vec2(225.0f,128.0f),
+								glm::vec2(350.0f,50.0f),
+								glm::vec2(50.0f,50.0f),
+								glm::vec2(50.0f,50.0f) };
+	
+	void changeTarget();
+	glm::vec2 getDir(const glm::vec2 &posA, const glm::vec2 &posB);
 
 private:
 

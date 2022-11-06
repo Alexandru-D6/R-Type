@@ -52,7 +52,7 @@ void GameScene::init() {
 
 	setMapSpeed(0.0f);
 
-	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cWorm, glm::vec2(300.0f, 128.0f));
+	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cWorm, glm::vec2(225.0f, 128.0f));
 	
 }
 

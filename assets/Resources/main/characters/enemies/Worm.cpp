@@ -22,23 +22,27 @@ void Worm::init() {
 	sprite->changeAnimation(0, false);
 #pragma endregion
 
+	position[0] = glm::vec2(270.0f, 128.0f);
+	position[1] = glm::vec2(220.0f, 178.0f);
+	position[2] = glm::vec2(170.0f, 128.0f);
+	position[3] = glm::vec2(220.0f, 78.0f);
+
+	targetPosition = position[currentTarget];
+
+	//<------<
+	pos = glm::vec2(220.0f, 128.0f);
+	for (int i = 1; i <= 8; ++i) {
+		parts[i]->setPosition(parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint - parts[i]->anchorPoint + glm::vec2(16.0f, 0.0f));
+	}
 
 }
 
 void Worm::update(int deltaTime)
 {
-	float mov = -1.f;
-	pos += mov;
-	setPosition(pos);
-	rotateSprites(glm::vec2(mov, mov));
-	//CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Worm::collider, glm::vec2(mov, 0));
+	changeTarget();
 
-	/*if (!info.colliding) {
-		pos.x += mov;
-		setPosition(pos);
-	}*/
-
-	//setPosition(glm::vec2(20.0f,20.0f));
+	glm::vec2 dir = getDir(pos, targetPosition);
+	setPosition(dir);
 	
 }
 
@@ -49,21 +53,40 @@ void Worm::render()
 	}
 }
 
-void Worm::rotateSprites(const glm::vec2 &vector) {
+void Worm::rotateSprite(Part *part, const glm::vec2 &vector) {
 	float angle = atan2(vector.y, vector.x) * (180.0f / PI);
+	angle += 180.0f;
 
-	for (int i = 0; i < (int)parts.size(); ++i) {
-		parts[i]->rotateSprite(glm::vec3(0.0f, 0.0f, angle));
+	part->rotateSprite(glm::vec3(0.0f, 0.0f, angle));
+}
+
+void Worm::setPosition(const glm::vec2 &movement) {
+	for (int i = (int)parts.size() - 1; i > 0; --i) {
+		glm::vec2 dir = getDir(	parts[i]->getPosition() + parts[i]->anchorPoint,
+								parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint);
+		parts[i]->setPosition(parts[i - 1]->getPosition());
+		rotateSprite(parts[i], dir);
+	}
+
+	this->pos = this->pos + movement;
+	parts[0]->setPosition(pos);
+	rotateSprite(parts[0], movement);
+}
+
+void Worm::changeTarget() {
+
+	if (abs(distance(targetPosition, pos)) <= 5.0f) {
+		currentTarget++;
+		if (currentTarget > 3) currentTarget = 0;
+		targetPosition = position[currentTarget];
 	}
 }
 
-void Worm::setPosition(const glm::vec2 &pos) {
-	for (int i = (int)parts.size() - 1; i > 0; --i) {
-		parts[i]->setPosition(parts[i - 1]->getPosition() + parts[i - 1]->rearAnchorPoint - parts[i]->frontAnchorPoint);
-	}
-
-	this->pos = pos;
-	parts[0]->setPosition(pos);
+glm::vec2 Worm::getDir(const glm::vec2 &posA, const glm::vec2 &posB) {
+	glm::vec2 vector = posB - posA;
+	float angle = atan2(vector.y, vector.x);
+	glm::vec2 dir = glm::vec2(cos(angle), sin(angle));
+	return dir;
 }
 
 
@@ -88,8 +111,7 @@ void Part::init() {
 		collider->addCollider(glm::ivec4(0, 0, 26, 22));
 		collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
-		frontAnchorPoint = glm::vec2(0.0f, 11.0f);
-		rearAnchorPoint = glm::vec2(26.0f, 11.0f);
+		anchorPoint = glm::vec2(18.0f, 11.0f);
 
 	}
 	else if (idBody == 8) {
@@ -102,8 +124,7 @@ void Part::init() {
 		collider->addCollider(glm::ivec4(0, 0, 26, 22));
 		collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
-		rearAnchorPoint = glm::vec2(26.0f, 11.0f);
-		frontAnchorPoint = glm::vec2(0.0f, 11.0f);
+		anchorPoint = glm::vec2(8.0f, 11.0f);
 	}
 	else {
 		sprite = Sprite::createSprite(glm::ivec2(16, 16), glm::vec2(1.f / 16.f, 1 / 16.0), spritesheet, projection);
@@ -118,8 +139,8 @@ void Part::init() {
 		collider->addCollider(glm::ivec4(0, 0, 16, 16));
 		collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 
-		rearAnchorPoint = glm::vec2(16.0f, 8.0f);
-		frontAnchorPoint = glm::vec2(0.0f, 8.0f);
+		anchorPoint = glm::vec2(8.0f, 8.0f);
+
 	}
 	
 
