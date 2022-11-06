@@ -22,18 +22,11 @@ void Worm::init() {
 	sprite->changeAnimation(0, false);
 #pragma endregion
 
-	position[0] = glm::vec2(270.0f, 128.0f);
-	position[1] = glm::vec2(220.0f, 178.0f);
-	position[2] = glm::vec2(170.0f, 128.0f);
-	position[3] = glm::vec2(220.0f, 78.0f);
+	targetPosition = Routes[0][currentTarget];
 
-	targetPosition = position[currentTarget];
-
-	//<------<
-	pos = glm::vec2(200.0f, 128.0f);
-	parts[0]->setPosition(glm::vec2(200.0f, 128.0f));
-	for (int i = 1; i <= 8; ++i) {
-		parts[i]->setPosition(parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint - parts[i]->anchorPoint + glm::vec2(16.0f, 0.0f));
+	pos = spawnPoint;
+	for (int i = 0; i <= 8; ++i) {
+		parts[i]->setPosition(spawnPoint);
 	}
 
 }
@@ -64,25 +57,27 @@ void Worm::rotateSprite(Part *part, const glm::vec2 &vector) {
 void Worm::setPosition(const glm::vec2 &newDir) {
 	for (int i = (int)parts.size() - 1; i > 0; --i) {
 		if (distance(	parts[i]->getPosition() + parts[i]->anchorPoint, 
-						parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint) >= 10.0f) {
+						parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint) >= 13.0f) {
 			glm::vec2 dir = getDir(	parts[i]->getPosition() + parts[i]->anchorPoint,
 									parts[i - 1]->getPosition() + parts[i - 1]->anchorPoint);
-			parts[i]->setPosition(parts[i]->getPosition() + dir);
-			rotateSprite(parts[i], dir);
+			parts[i]->setPosition(parts[i]->getPosition() + 2.0f * dir);
+			rotateSprite(parts[i], 2.0f * 2.0f * dir);
 		}
 	}
 
-	this->pos = this->pos + newDir;
+	this->pos = this->pos + 2.0f * newDir;
 	parts[0]->setPosition(pos);
-	rotateSprite(parts[0], newDir);
+	rotateSprite(parts[0], 2.0f * newDir);
 }
 
 void Worm::changeTarget() {
 
-	if (abs(distance(targetPosition, pos)) <= 5.0f) {
+	if (abs(distance(targetPosition, pos)) <= 1.0f) {
 		currentTarget++;
-		if (currentTarget > 3) currentTarget = 0;
-		targetPosition = position[currentTarget];
+		if (currentTarget >= 47) currentTarget = 0;
+		targetPosition = Routes[0][currentTarget];
+		targetPosition.y -= 10.0f;
+		targetPosition.x -= 10.0f;
 	}
 }
 
