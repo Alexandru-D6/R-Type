@@ -25,7 +25,7 @@ private:
 	void updateBoxBalls();
 	void spawnWorm();
 	void spawnGreenBalls();
-	void warmReturn(int id);
+	void wormReturn(int id);
 	void updateColliders();
 	void ExplosionsOfDeath();
 

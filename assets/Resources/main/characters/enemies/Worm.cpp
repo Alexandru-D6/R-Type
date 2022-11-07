@@ -1,8 +1,9 @@
 #include "Worm.h"
 
-Worm::Worm(glm::mat4 *project, int id, bool upOrDown) :Character(project, id, Collision::Enemy) {
+Worm::Worm(glm::mat4 *project, int id, bool upOrDown, int bossID) :Character(project, id, Collision::Enemy) {
 	this->upOrDown = upOrDown;
-	live = 7;
+	live = 0;
+	this->bossID = bossID;
 	init();
 }
 
@@ -38,7 +39,10 @@ void Worm::init() {
 
 void Worm::update(int deltaTime)
 {
-	if (currentRute == SpawnPoint) goingToSpawn = true;
+	if (currentRute == SpawnPoint) {
+		if (!goingToSpawn) CharacterFactory::getInstance()->wormRetun(this->id, bossID);
+		goingToSpawn = true;
+	}
 
 	if (!goingToSpawn) {
 		changeTarget();
@@ -150,7 +154,7 @@ void Worm::damage(int dmg, int id) {
 	for (int i = 1; i < parts.size() - 1; ++i) {
 			if (id == parts[i]->getId() && !parts[i]->isdamaged()) {
 			parts[i]->damage(dmg, id);
-			live -= 1;
+			live += 1;
 		}
 	}
 }

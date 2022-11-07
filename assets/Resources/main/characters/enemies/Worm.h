@@ -35,7 +35,7 @@ class Worm : public Character {
 
 public:
 
-	Worm(glm::mat4 *project, int id, bool upOrDown);
+	Worm(glm::mat4 *project, int id, bool upOrDown, int bossID);
 
 	void update(int deltaTime);
 	void render();
@@ -82,6 +82,7 @@ private:
 
 	void init();
 	std::vector<Part*> parts;
+	int bossID;
 
 	glm::vec2 spawnPoint = glm::vec2(220.0f, 128.0f);
 
