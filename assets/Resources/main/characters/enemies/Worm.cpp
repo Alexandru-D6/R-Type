@@ -138,18 +138,18 @@ void Worm::changeTarget() {
 Worm::routesEnum Worm::nextRoute() {
 	srand(time(NULL));
 	if (upOrDown) {
-		if (currentRute == RouteUp && live != 7) {
+		if (currentRute == RouteUp && live == 7) currentRute = SpawnPoint;
+		else {
 			int newOptions = rand() % IAUp[(int)currentRute].size();
 			currentRute = (routesEnum)IAUp[(int)currentRute][newOptions];
 		}
-		else currentRute = SpawnPoint;
 	}
 	else {
-		if (currentRute == RouteDown && live != 7) {
+		if (currentRute == RouteDown && live == 7) currentRute = SpawnPoint;
+		else {
 			int newOptions = rand() % IADown[(int)currentRute - 3].size();
 			currentRute = (routesEnum)IADown[(int)currentRute - 3][newOptions];
 		}
-		else currentRute = SpawnPoint;
 	}
 	return currentRute;
 }
