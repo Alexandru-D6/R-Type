@@ -17,6 +17,9 @@ CharacterFactory::~CharacterFactory() {
 
 void CharacterFactory::lateDestroyCharacter() {
 	for (auto it = pendingToBeDestroyed.begin(); it != pendingToBeDestroyed.end(); ++it) {
+		if (!IdreservedBoss.empty() && *it == (IdreservedBoss[0] - 1))IdreservedBoss.clear();
+		else if (!IdreservedWorm1.empty() && *it == (IdreservedWorm1[0] - 1))IdreservedWorm1.clear();
+		else if (!IdreservedWorm2.empty() && *it == (IdreservedWorm2[0] - 1))IdreservedWorm2.clear();
 		characters[*it]->deleteRoutine();
 
 		if (characters[*it] == player) player = nullptr;

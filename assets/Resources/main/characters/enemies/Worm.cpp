@@ -243,5 +243,5 @@ void Part::rotateSprite(glm::vec3 rotation) {
 void Part::damage(int dmg, int id) {
 	sprite->changeAnimation(1, false);
 	damaged = true;
-	ExplosionFactory::getInstance()->spawnExplosion(Explosion::ExplosionEnemy, projection, pos, glm::vec4(0,0,16,16));
+	ExplosionFactory::getInstance()->spawnExplosion(Explosion::ExplosionEnemy, projection, pos, getBoundingBox());
 }
