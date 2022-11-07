@@ -43,7 +43,6 @@ void GameScene::init() {
 	cFactory->mapSpeed = map->getSpeed();
 
 	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cPlayer, glm::vec2(-30.f, 200.0f));
-	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cBoss, glm::vec2(200, 100));
 
 
 	ObjectFactory::getInstance()->setProjection(&projection);
@@ -51,8 +50,6 @@ void GameScene::init() {
 	ObjectFactory::getInstance()->mapSpeed = map->getSpeed();
 
 	setMapSpeed(0.0f);
-
-	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cWorm, glm::vec2(225.0f, 128.0f));
 	
 }
 

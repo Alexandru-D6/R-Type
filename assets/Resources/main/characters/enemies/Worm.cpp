@@ -54,6 +54,7 @@ void Worm::update(int deltaTime)
 		setPosition(dir);
 
 		if (parts.size() > 0 && distance(parts[0]->getPosition(), spawnPoint) <= 3.0f) {
+			parts[0]->deleteRoutine();
 			parts.erase(parts.begin());
 		}
 

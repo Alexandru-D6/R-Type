@@ -19,7 +19,6 @@ public:
 	bool isdamaged();
 	void damage(int dmg, int id);
 
-
 public:
 
 	glm::vec2 anchorPoint;
