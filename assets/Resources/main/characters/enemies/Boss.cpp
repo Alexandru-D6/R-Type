@@ -217,6 +217,13 @@ void Boss::updateBoxBalls(){
 void Boss::damage(int dmg, int id) {
 	dmg += 10;
 	if (id > this->id) {
+
+		sprite->setFlicker();
+		spriteHead->setFlicker();
+		spriteLeftPart->setFlicker();
+		spriteRightPart->setFlicker();
+		spriteTail->setFlicker();
+
 		if (id == (this->id + 1)) { 
 			lifeLeft -= dmg;
 			if (lifeLeft <= 0) {
@@ -336,7 +343,16 @@ void  Boss::wormReturn(int id, bool upOrDown) {
 		spriteTail->changeAnimation(1, false);
 	}
 
-	live -= CharacterFactory::getInstance()->getHealthCharacter(id);
+	int dmg = CharacterFactory::getInstance()->getHealthCharacter(id);
+	live -= dmg;
+
+	if (dmg > 0) {
+		sprite->setFlicker();
+		spriteHead->setFlicker();
+		spriteLeftPart->setFlicker();
+		spriteRightPart->setFlicker();
+		spriteTail->setFlicker();
+	}
 }
 
 void Boss::ExplosionsOfDeath() {
