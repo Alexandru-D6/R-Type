@@ -39,6 +39,10 @@ void Worm::init() {
 
 void Worm::update(int deltaTime)
 {
+	for (auto part : parts) {
+		if (!part->isdamaged()) part->shoot();
+	}
+
 	if (currentRute == SpawnPoint) {
 		if (!goingToSpawn) CharacterFactory::getInstance()->wormRetun(this->id, bossID, upOrDown);
 		goingToSpawn = true;
@@ -175,6 +179,7 @@ Part::Part(glm::mat4 *project, int id, int idBody) :Character(project, id, Colli
 
 void Part::init() {
 	bJumping = false;
+	shootDelay = 60;
 
 	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Boss);
 
@@ -233,7 +238,6 @@ void Part::init() {
 }
 
 void Part::update(int deltaTime) {
-	
 }
 
 void Part::setPosition(const glm::vec2 &pos) {
@@ -251,9 +255,32 @@ void Part::rotateSprite(glm::vec3 rotation) {
 	rotate(rotation.x, rotation.y, rotation.z);
 }
 
-
 void Part::damage(int dmg, int id) {
 	sprite->changeAnimation(1, false);
 	damaged = true;
 	ExplosionFactory::getInstance()->spawnExplosion(Explosion::ExplosionEnemy, projection, pos, getBoundingBox());
+}
+
+void Part::shoot() {
+	if (shootDelay == 0) {
+		shootDelay = 60;
+		int valor = rand() % 20;
+		if (valor == 1) {
+			glm::vec2 playerpos;
+			bool existsPlayer = CharacterFactory::getInstance()->getPlayerPos(playerpos);
+
+			if (!existsPlayer) return;
+
+			glm::vec2 dir = (playerpos + glm::vec2(16.f, 7.f)) - (pos + anchorPoint);
+
+			float angle = atan2(dir.y, dir.x);
+			dir = glm::vec2(cos(angle), sin(angle));
+
+			float velocity = 1.5f;
+			dir *= velocity;
+
+			ProjectileFactory::getInstance()->spawnProjectile(pos + anchorPoint, dir, false, Projectile::EnemyProjectile);
+		}
+	}
+	else shootDelay -= 1;
 }

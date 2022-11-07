@@ -19,6 +19,8 @@ public:
 	bool isdamaged();
 	void damage(int dmg, int id);
 
+	void shoot();
+
 public:
 
 	glm::vec2 anchorPoint;
