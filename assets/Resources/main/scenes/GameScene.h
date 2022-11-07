@@ -53,9 +53,6 @@ private:
 
 	bool latchKeys[256] = { false };
 
-	// TODO: remove this
-	Worm *worm;
-
 };
 
 #endif // _SCENE_INCLUDE
