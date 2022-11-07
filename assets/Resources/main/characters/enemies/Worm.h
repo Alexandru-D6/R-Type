@@ -16,6 +16,9 @@ public:
 	void rotateSprite(glm::vec3 rotation);
 	glm::vec2 getPosition() { return pos; };
 	void setPosition(const glm::vec2 &pos);
+	bool isdamaged();
+	void damage(int dmg, int id);
+
 
 public:
 
@@ -25,6 +28,8 @@ private:
 
 	void init();
 	int idBody;
+	bool damaged;
+	
 };
 
 class Worm : public Character {
@@ -38,6 +43,7 @@ public:
 
 	void rotateSprite(Part *part, const glm::vec2 &vector);
 	void setPosition(const glm::vec2 &movement);
+	void damage(int dmg, int id);
 
 private:
 

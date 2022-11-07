@@ -2,13 +2,14 @@
 
 Worm::Worm(glm::mat4 *project, int id, bool upOrDown) :Character(project, id, Collision::Enemy) {
 	this->upOrDown = upOrDown;
+	live = 7;
 	init();
 }
 
 void Worm::init() {
 
 	for (int i = 0; i <= 8; ++i) {
-		parts.push_back(new Part(projection,id,i));
+		parts.push_back(new Part(projection,id+i+1,i));
 	}
 
 #pragma region DummySprite
@@ -144,10 +145,19 @@ glm::vec2 Worm::getDir(const glm::vec2 &posA, const glm::vec2 &posB) {
 	return dir;
 }
 
+void Worm::damage(int dmg, int id) {
+	for (int i = 1; i < parts.size() - 1; ++i) {
+			if (id == parts[i]->getId() && !parts[i]->isdamaged()) {
+			parts[i]->damage(dmg, id);
+			live -= 1;
+		}
+	}
+}
 
 
 Part::Part(glm::mat4 *project, int id, int idBody) :Character(project, id, Collision::Enemy) {
 	this->idBody = idBody;
+	damaged = false;
 	init();
 }
 
@@ -221,6 +231,17 @@ void Part::setPosition(const glm::vec2 &pos) {
 	collider->changePositionAbsolute(this->pos);
 }
 
+bool Part::isdamaged() {
+	return damaged;
+}
+
 void Part::rotateSprite(glm::vec3 rotation) {
 	rotate(rotation.x, rotation.y, rotation.z);
+}
+
+
+void Part::damage(int dmg, int id) {
+	sprite->changeAnimation(1, false);
+	damaged = true;
+	ExplosionFactory::getInstance()->spawnExplosion(Explosion::ExplosionEnemy, projection, pos, glm::vec4(0,0,16,16));
 }
