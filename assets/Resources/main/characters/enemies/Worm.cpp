@@ -1,6 +1,7 @@
 #include "Worm.h"
 
-Worm::Worm(glm::mat4 *project, int id) :Character(project, id, Collision::Enemy) {
+Worm::Worm(glm::mat4 *project, int id, bool upOrDown) :Character(project, id, Collision::Enemy) {
+	this->upOrDown = upOrDown;
 	init();
 }
 
@@ -22,7 +23,10 @@ void Worm::init() {
 	sprite->changeAnimation(0, false);
 #pragma endregion
 
-	targetPosition = Routes[0][currentTarget];
+	if (upOrDown) currentRute = RouteUp;
+	else currentRute = RouteDown;
+
+	targetPosition = Routes[(int)currentRute][currentTarget];
 
 	pos = spawnPoint;
 	for (int i = 0; i <= 8; ++i) {
@@ -33,10 +37,29 @@ void Worm::init() {
 
 void Worm::update(int deltaTime)
 {
-	changeTarget();
+	if (currentRute == SpawnPoint) goingToSpawn = true;
 
-	glm::vec2 dir = getDir(pos, targetPosition);
-	setPosition(dir);
+	if (!goingToSpawn) {
+		changeTarget();
+
+		glm::vec2 dir = getDir(pos, targetPosition);
+		setPosition(dir);
+	}
+	else {
+		targetPosition = spawnPoint;
+		
+		pos = parts[0]->getPosition();
+		glm::vec2 dir = getDir(pos, targetPosition);
+		setPosition(dir);
+
+		if (parts.size() > 0 && distance(parts[0]->getPosition(), spawnPoint) <= 3.0f) {
+			parts.erase(parts.begin());
+		}
+
+		if (parts.size() == 0) {
+			CharacterFactory::getInstance()->destroyCharacter(id);
+		}
+	}
 	
 }
 
@@ -73,12 +96,45 @@ void Worm::setPosition(const glm::vec2 &newDir) {
 void Worm::changeTarget() {
 
 	if (abs(distance(targetPosition, pos)) <= 1.0f) {
+		ableToChange = true;
+		if (currentTarget >= routesSize[(int)currentRute]) {
+			currentRute = nextRoute();
+			currentTarget = 0;
+		}
+		targetPosition = Routes[(int)currentRute][currentTarget];
 		currentTarget++;
-		if (currentTarget >= 47) currentTarget = 0;
-		targetPosition = Routes[0][currentTarget];
+
+		//Offset to rectify deviation from script
 		targetPosition.y -= 10.0f;
 		targetPosition.x -= 10.0f;
 	}
+
+	if (ableToChange && currentTarget == 0) {
+		ableToChange = false;
+
+		currentRute = nextRoute();
+		currentTarget = 0;
+
+		targetPosition = Routes[(int)currentRute][currentTarget];
+		currentTarget++;
+
+		//Offset to rectify deviation from script
+		targetPosition.y -= 10.0f;
+		targetPosition.x -= 10.0f;
+	}
+}
+
+Worm::routesEnum Worm::nextRoute() {
+	srand(time(NULL));
+	if (upOrDown) {
+		int newOptions = rand() % IAUp[(int)currentRute].size();
+		currentRute = (routesEnum)IAUp[(int)currentRute][newOptions];
+	}
+	else {
+		int newOptions = rand() % IADown[(int)currentRute-3].size();
+		currentRute = (routesEnum)IADown[(int)currentRute-3][newOptions];
+	}
+	return currentRute;
 }
 
 glm::vec2 Worm::getDir(const glm::vec2 &posA, const glm::vec2 &posB) {
