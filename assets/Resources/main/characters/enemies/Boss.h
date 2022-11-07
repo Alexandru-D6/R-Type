@@ -29,7 +29,7 @@ private:
 	void updateColliders();
 	void ExplosionsOfDeath();
 
-
+#pragma region Parameters
 	int delay = 100;
 	//Worms
 	int delaySpawnWorm = 600;
@@ -86,6 +86,7 @@ private:
 		glm::ivec4(81, 80, 89, 84),
 		//special
 	};
+#pragma endregion
 
 };
 
