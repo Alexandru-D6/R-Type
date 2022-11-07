@@ -85,6 +85,6 @@ void Character::clippingAvoidance() {
 	}
 }
 
-void Character::wormReturn(int id) {
+void Character::wormReturn(int id, bool upOrDown) {
 	throw exception("Not Implemented Method");
 }

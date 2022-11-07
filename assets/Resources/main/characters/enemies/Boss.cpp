@@ -269,11 +269,11 @@ void  Boss::spawnWorm() {
 			switch (isGoingtoSpawnWorm)
 			{
 			case 0:
-				CharacterFactory::getInstance()->spawnCharacter(CharacterFactory::CharacterAvailable::cWormUp, glm::vec2(0.0f,0.0f));
+				CharacterFactory::getInstance()->spawnCharacter(CharacterFactory::CharacterAvailable::cWormDown, glm::vec2(0.0f,0.0f));
 				spawnedDown = true;
 				break;
 			case 1:
-				CharacterFactory::getInstance()->spawnCharacter(CharacterFactory::CharacterAvailable::cWormDown, glm::vec2(0.0f, 0.0f));
+				CharacterFactory::getInstance()->spawnCharacter(CharacterFactory::CharacterAvailable::cWormUp, glm::vec2(0.0f, 0.0f));
 				spawnedUp = true;
 				break;
 			}
@@ -326,7 +326,16 @@ void  Boss::spawnGreenBalls() {
 	if ((!spawnedLeft || !spawnedRight) && delaySpawnGreenBall>0) delaySpawnGreenBall -= 1;
 }
 
-void  Boss::wormReturn(int id) {
+void  Boss::wormReturn(int id, bool upOrDown) {
+	if (upOrDown) {
+		spawnedUp = false;
+		spriteHead->changeAnimation(1, false);
+	}
+	else {
+		spawnedDown = false;
+		spriteTail->changeAnimation(1, false);
+	}
+
 	live -= CharacterFactory::getInstance()->getHealthCharacter(id);
 }
 

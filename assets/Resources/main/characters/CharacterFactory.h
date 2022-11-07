@@ -50,7 +50,7 @@ public:
 
 	void increasePlayerForce();
 
-	void wormRetun(int idSource, int idDest);
+	void wormRetun(int idSource, int idDest, bool upOrDown);
 
 public:
 

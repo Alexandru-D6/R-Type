@@ -289,7 +289,7 @@ void CharacterFactory::increasePlayerForce() {
 	if (player != nullptr) player->increaseForce();
 }
 
-void CharacterFactory::wormRetun(int idSource, int idDest) {
+void CharacterFactory::wormRetun(int idSource, int idDest, bool upOrDown) {
 	auto it = characters.find(idDest);
-	if (it != characters.end()) it->second->wormReturn(idSource);
+	if (it != characters.end()) it->second->wormReturn(idSource, upOrDown);
 }

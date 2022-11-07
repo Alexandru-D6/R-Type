@@ -37,7 +37,7 @@ public:
 
 	void clippingAvoidance();
 
-	virtual void wormReturn(int id);
+	virtual void wormReturn(int id, bool upOrDown);
 
 protected:
 

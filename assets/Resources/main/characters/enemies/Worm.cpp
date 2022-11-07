@@ -40,7 +40,7 @@ void Worm::init() {
 void Worm::update(int deltaTime)
 {
 	if (currentRute == SpawnPoint) {
-		if (!goingToSpawn) CharacterFactory::getInstance()->wormRetun(this->id, bossID);
+		if (!goingToSpawn) CharacterFactory::getInstance()->wormRetun(this->id, bossID, upOrDown);
 		goingToSpawn = true;
 	}
 
@@ -59,6 +59,7 @@ void Worm::update(int deltaTime)
 
 		if (parts.size() > 0 && distance(parts[0]->getPosition(), spawnPoint) <= 3.0f) {
 			parts[0]->deleteRoutine();
+			delete parts[0];
 			parts.erase(parts.begin());
 		}
 
@@ -133,12 +134,18 @@ void Worm::changeTarget() {
 Worm::routesEnum Worm::nextRoute() {
 	srand(time(NULL));
 	if (upOrDown) {
-		int newOptions = rand() % IAUp[(int)currentRute].size();
-		currentRute = (routesEnum)IAUp[(int)currentRute][newOptions];
+		if (currentRute == RouteUp && live != 7) {
+			int newOptions = rand() % IAUp[(int)currentRute].size();
+			currentRute = (routesEnum)IAUp[(int)currentRute][newOptions];
+		}
+		else currentRute = SpawnPoint;
 	}
 	else {
-		int newOptions = rand() % IADown[(int)currentRute-3].size();
-		currentRute = (routesEnum)IADown[(int)currentRute-3][newOptions];
+		if (currentRute == RouteDown && live != 7) {
+			int newOptions = rand() % IADown[(int)currentRute - 3].size();
+			currentRute = (routesEnum)IADown[(int)currentRute - 3][newOptions];
+		}
+		else currentRute = SpawnPoint;
 	}
 	return currentRute;
 }
