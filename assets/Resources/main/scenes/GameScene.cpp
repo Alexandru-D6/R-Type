@@ -34,6 +34,7 @@ void GameScene::init() {
 	ProjectileFactory::getInstance()->mapSpeed = map->getSpeed();
     
 	cExplosion = ExplosionFactory::getInstance();
+	cExplosion->setMap(map);
 	cFactory = CharacterFactory::getInstance();
 	cFactory->setProjection(&projection);
 	cFactory->setTileMapPos(glm::ivec2(SCREEN_X, SCREEN_Y));
@@ -42,7 +43,7 @@ void GameScene::init() {
 	cFactory->mapSpeed = map->getSpeed();
 
 	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cPlayer, glm::vec2(-30.f, 200.0f));
-	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cBoss, glm::vec2(100, 100));
+	cFactory->spawnCharacter(CharacterFactory::CharacterAvailable::cBoss, glm::vec2(200, 100));
 
 
 	ObjectFactory::getInstance()->setProjection(&projection);

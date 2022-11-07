@@ -17,16 +17,42 @@ public:
     void update(int deltaTime);
 	void render();
 	void setPosition(const glm::vec2 &pos);
+	void damage(int dmg, int id) override;
 
 private:
 
 	void init(const glm::ivec2 &tileMapPos);
+	void updateBoxBalls();
+	void spawnWorm();
+	void spawnGreenBalls();
+	void warmReturn(int id);
+	void updateColliders();
+
+
 	int delay = 100;
-	vector<Collision*>colliders;
+	//Worms
+	int delaySpawnWorm = 600;
+	int delaySpawnWormAnimation = 0;
+	int isGoingtoSpawnWorm = 0;
+	bool spawnedUp = false;
+	bool spawnedDown = false;
+	//GreenBalls
+	int delaySpawnGreenBall = 600;
+	int delaySpawnGreenBallAnimation = 0;
+	int isGoingtoSpawnGreenBall = 0;
+	bool spawnedLeft = false;
+	bool spawnedRight = false;
+	int lifeLeft = 0;
+	int lifeRight = 0;
+	
+	//Sprites
 	Sprite *spriteHead;
 	Sprite *spriteTail;
 	Sprite *spriteRightPart;
 	Sprite *spriteLeftPart;
+	//Colliders
+	vector<Collision*>collidersBody;
+	vector<Collision*>collidersGreenBalls;
 	glm::ivec4 boxcoordenates[19] = {
 		//central
 		glm::ivec4(15, 3, 95, 80),
