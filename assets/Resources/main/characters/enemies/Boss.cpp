@@ -128,7 +128,7 @@ void Boss::update(int deltaTime)
 	spriteLeftPart->update(deltaTime);
 	delay -= 1;
 	if((rand()%700)==1)AudioManager::getInstance()->playSoundEffect(AudioManager::BossRoar, 80);
-	//if (delay <= 0) ExplosionsOfDeath();
+	if (delay <= 0) ExplosionsOfDeath();
 	//Head
 	if (spriteHead->animation() == 1 && spriteHead->isFinidhedAnimation()) {
 		spriteHead->changeAnimation(0, false);
@@ -401,7 +401,21 @@ void Boss::ExplosionsOfDeath() {
 	}
 	if (loop == 0) {
 		CharacterFactory::getInstance()->destroyCharacter(id);
+		CharacterFactory::getInstance()->bossIsDead(true);
 		AudioManager::getInstance()->playSoundEffect(AudioManager::Explode, 80);
 	}
 	
+}
+
+void Boss::deleteRoutine() {
+	for (int i = 0; i < collidersBody.size(); i++) {
+		collisionSystem->removeColliderFromGroup(collidersBody[i]);
+		delete collidersBody[i];
+	}
+	collidersBody.clear();
+	for (int i = 0; i < collidersGreenBalls.size(); i++) {
+		collisionSystem->removeColliderFromGroup(collidersGreenBalls[i]);
+		delete collidersGreenBalls[i];
+	}
+	collidersGreenBalls.clear();
 }
