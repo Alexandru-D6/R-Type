@@ -31,10 +31,6 @@ public:
 	void destroyForce();
 	void increaseForce(int power);
 
-protected:
-
-	void rotate(const float& angleX, const float& angleY, const float& angleZ) override;
-
 private:
 
 	void init(const glm::ivec2 &tileMapPos);
@@ -62,9 +58,6 @@ private:
 	float currentCharge = 0;
 
 	bool latchKeys[256] = { false };
-
-	glm::vec2 projectileOffset = glm::vec2(62.0f, 6.0f);
-	bool rotated = false;
 
 };
 

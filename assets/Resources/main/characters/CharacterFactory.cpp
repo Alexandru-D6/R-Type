@@ -22,6 +22,9 @@ CharacterFactory::~CharacterFactory() {
 
 void CharacterFactory::lateDestroyCharacter() {
 	for (auto it = pendingToBeDestroyed.begin(); it != pendingToBeDestroyed.end(); ++it) {
+		if (!IdreservedBoss.empty() && *it == (IdreservedBoss[0] - 1))IdreservedBoss.clear();
+		else if (!IdreservedWorm1.empty() && *it == (IdreservedWorm1[0] - 1))IdreservedWorm1.clear();
+		else if (!IdreservedWorm2.empty() && *it == (IdreservedWorm2[0] - 1))IdreservedWorm2.clear();
 		characters[*it]->deleteRoutine();
 
 		if (characters[*it] == player) player = nullptr;
@@ -151,15 +154,47 @@ void CharacterFactory::spawnCharacter(int type, const glm::vec2 &pos) {
 		}
 		break;
 	case cEnemy1:
-		character = new BloodEnemy1(projection, last_id, tileMapPos);
+		character = new Enemy1(projection, last_id, tileMapPos);
 		character->setPosition(pos);
 		break;
 	case cEnemy2:
-		character = new BloodEnemy1(projection, last_id, tileMapPos);
+		character = new Enemy2(projection, last_id, tileMapPos);
 		character->setPosition(pos);
 		break;
+	case cEnemy3:
+		character = new Enemy3(projection, last_id, tileMapPos);
+		character->setPosition(pos);
+		break;
+	case cEnemy4:
+		character = new Enemy4(projection, last_id, tileMapPos);
+		character->setPosition(pos);
+		break;
+	case cBoss:
+		character = new Boss(projection, last_id, tileMapPos);
+		character->setPosition(pos);
+		++last_id;
+		IdreservedBoss.push_back(last_id);
+		++last_id;
+		IdreservedBoss.push_back(last_id);
+		break;
+	case cWormDown:
+	case cWormUp:
+		character = new Worm(projection, last_id, (type == cWormUp) ? true : false, IdreservedBoss[0]-1);
+		if (IdreservedWorm1.empty()) {
+			for (int i = 0; i < 9; ++i) {
+				last_id += 1;
+				IdreservedWorm1.push_back(last_id);
+			}
+		}
+		else {
+			for (int i = 0; i < 9; ++i) {
+				last_id += 1;
+				IdreservedWorm2.push_back(last_id);
+			}
+		}
+		break;
 	default:
-		character = new BloodEnemy1(projection, last_id, tileMapPos);
+		character = new Enemy1(projection, last_id, tileMapPos);
 		character->setPosition(pos);
 		break;
 	}
@@ -212,7 +247,9 @@ void CharacterFactory::destroyAllCharactersToTeleport() {
 		if (player != nullptr && it->first != player->getId()) pendingToBeDestroyed.insert(it->first);
 		++it;
 	}
-
+	IdreservedBoss.clear();
+	IdreservedWorm1.clear();
+	IdreservedWorm2.clear();
 	nextSpawn = 0;
 }
 
@@ -223,7 +260,9 @@ void CharacterFactory::destroyAllCharactersToEnd() {
 		pendingToBeDestroyed.insert(it->first);
 		++it;
 	}
-
+	IdreservedBoss.clear();
+	IdreservedWorm1.clear();
+	IdreservedWorm2.clear();
 	nextSpawn = 0;
 }
 
@@ -242,7 +281,42 @@ void CharacterFactory::killCharacter(const int &id) {
 void CharacterFactory::damageCharacter(const int &id, int dmg) {
 	auto search = characters.find(id);
 	if (search != characters.end()) search->second->damage(dmg,id);
-
+	else{
+		bool found = false;
+		for (int i = 0; i < IdreservedBoss.size();++i) {
+			if (id == IdreservedBoss[i]) {
+				if (i == 0) {
+					auto search = characters.find((id - 1));
+					if (search != characters.end()) search->second->damage(dmg,id);
+					found = true;
+				}
+				if (i == 1 && !found) {
+					auto search = characters.find(id - 2);
+					if (search != characters.end()) search->second->damage(dmg, id);
+					found = true;
+				}
+			}
+		}
+		if (!found) {
+			for (int i = 0; i < IdreservedWorm1.size(); ++i) {
+				if (id == IdreservedWorm1[i] && !found) {
+					auto search = characters.find((id -i -1));
+					if (search != characters.end()) search->second->damage(dmg, id);
+					found = true;
+				}
+			}
+			if (!found) {
+				for (int i = 0; i < IdreservedWorm2.size(); ++i) {
+					if (id == IdreservedWorm2[i] && !found) {
+						auto search = characters.find((id - i - 1));
+						if (search != characters.end()) search->second->damage(dmg, id);
+						found = true;
+					}
+				}
+			}
+		}
+			
+	}
 }
 
 void CharacterFactory::increasePlayerForce(int power) {
@@ -264,5 +338,7 @@ bool CharacterFactory::isBossDead() {
 
 void CharacterFactory::exterminateWorms() {
 
+	if (!IdreservedWorm1.empty())destroyCharacter(IdreservedWorm1[0] - 1);
+	if (!IdreservedWorm2.empty())destroyCharacter(IdreservedWorm2[0] - 1);
 	ProjectileFactory::getInstance()->destroyAllProjectiles();
 }

@@ -11,12 +11,43 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 	rot = false;
 
 #pragma region Player
-	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::PlayerStt);
-	sprite = Sprite::createSprite(glm::ivec2(64, 32), glm::vec2(1 / 2.0, 1 / 4.0), spritesheet, projection);
-	sprite->setNumberAnimations(1);
+	spritesheet = TextureManager::getInstance()->getSpriteSheet(TextureManager::Textures::Player);
+	sprite = Sprite::createSprite(glm::ivec2(32, 16), glm::vec2(1 / 16.0, 1 / 16.0), spritesheet, projection);
+	sprite->setNumberAnimations(7);
 
 	sprite->setAnimationSpeed(STAND_RIGHT, 8);
-	sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.f, 0.f));
+	sprite->addKeyframe(STAND_RIGHT, glm::vec2(0.0625*8.0, 0.f));
+
+	sprite->setAnimationSpeed(STAND_UP, 8);
+	sprite->addKeyframe(STAND_UP, glm::vec2(0.0625*3.0, 0.0625*2.0f));
+
+	sprite->setAnimationSpeed(MOVE_UP, 8);
+	sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*0.0, 0.0625*2.0f));
+	sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*1.0, 0.0625*2.0f));
+	sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*2.0, 0.0625*2.0f));
+	sprite->addKeyframe(MOVE_UP, glm::vec2(0.0625*3.0, 0.0625*2.0f));
+
+
+	sprite->setAnimationSpeed(STAND_DOWN, 8);
+	sprite->addKeyframe(STAND_DOWN, glm::vec2(0.0625*3.0, 0.0625*4.0f));
+
+	sprite->setAnimationSpeed(MOVE_DOWN, 8);
+	sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*5.0, 0.0625*4.0f));
+	sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*4.0, 0.0625*4.0f));
+	sprite->addKeyframe(MOVE_DOWN, glm::vec2(0.0625*3.0, 0.0625*4.0f));
+
+	sprite->setAnimationSpeed(UP_RETURN, 8);
+	sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
+	sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*1.0, 0.0625*2.0f));
+	sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*0.0, 0.0625*2.0f));
+	//sprite->addKeyframe(UP_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
+
+
+	sprite->setAnimationSpeed(DOWN_RETURN, 8);
+	sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*3.0, 0.0625*4.0f));
+	sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*4.0, 0.0625*4.0f));
+	sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*5.0, 0.0625*4.0f));
+	//sprite->addKeyframe(DOWN_RETURN, glm::vec2(0.0625*2.0, 0.0625*2.0f));
 
 	sprite->changeAnimation(0, false);
 	tileMapDispl = tileMapPos;
@@ -51,7 +82,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 	boost->changeAnimation(0, false);
 #pragma endregion
 
-	collider->addCollider(glm::ivec4(3, 6, 62, 21));
+	collider->addCollider(glm::ivec4(3, 3, 30, 14));
 	collisionSystem->addColliderIntoGroup(collider);
 	collisionSystem->updateCollider(collider, glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
 	collider->changePositionAbsolute(glm::vec2(tileMapDispl.x + pos.x, tileMapDispl.y + pos.y));
@@ -61,7 +92,7 @@ void Player::init(const glm::ivec2 &tileMapPos) {
 #endif // SHOW_HIT_BOXES
 
     sprite->setPosition(glm::vec2(float(tileMapDispl.x + pos.x), float(tileMapDispl.y + pos.y)));
-	chargeProjectile->setPosition(pos + projectileOffset);
+	chargeProjectile->setPosition(glm::vec2(pos.x + 30.0f, pos.y + 4.0f));
 	boost->setPosition(glm::vec2(pos.x - 32.0f, pos.y + 2.0f));
 
 	if (!text.init("fonts/OpenSans-Bold.ttf"))
@@ -83,10 +114,6 @@ void Player::update(int deltaTime)
 #pragma region Player movement and Animation
 
 		if (Game::instance().getSpecialKey(GLUT_KEY_LEFT) && ((pos.x-3)>=0)) {
-			if (rot == false) {
-				rot = true;
-				rotate(0.f, 180.f, 0.f);
-			}
 			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(-3, 0));
 			CollisionSystem::CollisionInfo info2;
 			if (forceSpawned) info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(-3, 0));
@@ -109,10 +136,6 @@ void Player::update(int deltaTime)
 			}
 		}
 		else if (Game::instance().getSpecialKey(GLUT_KEY_RIGHT)&&((pos.x + 3) <= 415)) {
-			if (rot == true) {
-				rot = false;
-				rotate(0.f, 0.f, 0.f);
-			}
 			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(3, 0));
 			CollisionSystem::CollisionInfo info2;
 			if (forceSpawned) info2 = collisionSystem->isColliding(forceDevice->getCollider(), glm::ivec2(3, 0));
@@ -136,6 +159,15 @@ void Player::update(int deltaTime)
 		}
 
 		if (Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+			if (sprite->animation() == STAND_RIGHT) {
+				sprite->changeAnimation(MOVE_DOWN, false);
+			}
+			else if (sprite->animation() == STAND_UP) {
+				sprite->changeAnimation(UP_RETURN, false);
+			}
+			else if (sprite->animation() == STAND_UP || sprite->animation() == MOVE_UP) {
+				sprite->changeAnimation(UP_RETURN, false);
+			}
 
 			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(0, 2));
 			CollisionSystem::CollisionInfo info2;
@@ -157,6 +189,15 @@ void Player::update(int deltaTime)
 			}
 		}
 		else if (Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+			if (sprite->animation() == STAND_RIGHT) {
+				sprite->changeAnimation(MOVE_UP, false);
+			}
+			else if (sprite->animation() == STAND_DOWN) {
+				sprite->changeAnimation(DOWN_RETURN, false);
+			}
+			else if (sprite->animation() == STAND_DOWN || sprite->animation() == MOVE_DOWN) {
+				sprite->changeAnimation(DOWN_RETURN, false);
+			}
 
 			CollisionSystem::CollisionInfo info = collisionSystem->isColliding(Player::collider, glm::ivec2(0, -2));
 			CollisionSystem::CollisionInfo info2;
@@ -195,10 +236,31 @@ void Player::update(int deltaTime)
 		}
 		
 
+		if (sprite->animation() == MOVE_UP && sprite->isFinidhedAnimation() == true) {
+			sprite->changeAnimation(STAND_UP, false);
+		}
+		else if (sprite->animation() == STAND_UP && !Game::instance().getSpecialKey(GLUT_KEY_UP)) {
+			sprite->changeAnimation(UP_RETURN, false);
+		}
+		else if (sprite->animation() == UP_RETURN && sprite->isFinidhedAnimation() == true) {
+			sprite->changeAnimation(STAND_RIGHT, false);
+		}
+		else if (sprite->animation() == DOWN_RETURN && sprite->isFinidhedAnimation() == true) {
+			sprite->changeAnimation(STAND_RIGHT, false);
+		}
+		else if (sprite->animation() == MOVE_DOWN && sprite->isFinidhedAnimation() == true) {
+			sprite->changeAnimation(STAND_DOWN, false);
+		}
+		else if (sprite->animation() == STAND_DOWN && !Game::instance().getSpecialKey(GLUT_KEY_DOWN)) {
+			sprite->changeAnimation(DOWN_RETURN, false);
+		}
 
 #pragma endregion
 
-		chargeProjectile->setPosition(pos + projectileOffset);
+		if (!forceSpawned || (forceSpawned && !forceDevice->isAttached())) chargeProjectile->setPosition(glm::vec2(pos.x + 30.0f, pos.y + 4.0f));
+		else chargeProjectile->setPosition(glm::vec2(pos.x + 40.0f, pos.y + 2.0f));
+
+		if (forceSpawned) forceDevice->update(deltaTime);
 	}
 	else {
 		if (pos.x < 350.0f) {
@@ -255,7 +317,7 @@ void Player::inputController() {
 			soundcharge = false;
 		}
 
-		ProjectileFactory::getInstance()->spawnProjectile(pos + glm::vec2(rotated ? 0.0f : 62.0f, rotated ? 13.0f : 10.0f), glm::vec2(rotated ? -3.0f : 3.0f, 0.0f), false, (Projectile::ProjectileType)((int)Projectile::R9mk0 + mk));
+		ProjectileFactory::getInstance()->spawnProjectile(pos + glm::vec2(32.0f, 6.0f), glm::vec2(3.0f, 0.0f), false, (Projectile::ProjectileType)((int)Projectile::R9mk0 + mk));
 		currentCharge = 0.0f;
 	}
 	else if (!Game::instance().getKey('c') && latchKeys['c']) latchKeys['c'] = false;
@@ -263,24 +325,11 @@ void Player::inputController() {
 	else if (!Game::instance().getKey('f') && latchKeys['f']) latchKeys['f'] = false;
 }
 
-void Player::rotate(const float& angleX, const float& angleY, const float& angleZ) {
-	Character::rotate(angleX, angleY, angleZ);
-
-	if (angleY != 0.0f) {
-		rotated = true;
-		projectileOffset = glm::vec2(-12.0f, 6.0f);
-	} else {
-		rotated = false;
-		projectileOffset = glm::vec2(62.0f, 6.0f);
-	}
-
-	chargeProjectile->setRotation(glm::vec3(angleX, angleY, angleZ));
-}
-
 void Player::setPosition(const glm::vec2 &pos) {
 	Character::setPosition(pos);
-	chargeProjectile->setPosition(pos + projectileOffset);
+	chargeProjectile->setPosition(glm::vec2(pos.x + 30.0f, pos.y + 4.0f));
 	if (isInitAnimation) boost->setPosition(glm::vec2(pos.x - 23.0f, pos.y - 6.0f));
+	if (forceSpawned) forceDevice->setPosition(glm::vec2(float(tileMapDispl.x + pos.x + 32.0f), float(tileMapDispl.y + pos.y)));
 }
 
 void Player::render() {
@@ -293,6 +342,7 @@ void Player::render() {
 	}
 
 	Character::render();
+	if (forceSpawned) forceDevice->render();
 	if (currentCharge != 0) chargeProjectile->render();
 	if (isInitAnimation) boost->render();
 }
@@ -305,12 +355,25 @@ void Player::damage(int dmg, int id) {
 }
 
 void Player::spawnForce() {
+	if (!forceSpawned) {
+		forceDevice = new ForceDevice(projection);
+		forceDevice->init(collider);
+		forceDevice->setPosition(glm::vec2(-20.0f, 256.0f / 2.0f));
+		forceSpawned = true;
+	}
 }
 
 void Player::destroyForce() {
+	if (forceSpawned) {
+		forceDevice->deleteRoutine();
+		delete forceDevice;
+		forceSpawned = false;
+	}
 }
 
 void Player::increaseForce(int power) {
+	if (!forceSpawned) spawnForce();
+	else forceDevice->setForceLevel(forceDevice->getForceLevel()+1, power);
 }
 
 void Player::initAnimation() {

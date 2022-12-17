@@ -40,7 +40,6 @@ void Game::changeToMainMenu(bool lateRender) {
 	if (!lateRender) {
 		scene = MainMenuScene::getMainMenu();
 		scene->init();
-		music.playMusicTrack(Game::Songs::Menu);
 	}
 }
 
@@ -92,8 +91,8 @@ void Game::exit() {
 }
 
 void Game::keyPressed(int key) {
-	if (key == 27) // Escape code
-		changeToMainMenu(true);
+    if(key == 27) // Escape code
+        bPlay = false;
     keys[key] = true;
 }
 

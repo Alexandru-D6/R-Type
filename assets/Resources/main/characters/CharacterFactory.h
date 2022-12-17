@@ -4,8 +4,12 @@
 #include <map>
 
 #include "Character.h"
-#include "enemies\BloodEnemy1.h"
-//#include "enemies\BloodEnemy2.h"
+#include "enemies\Enemy1.h"
+#include "enemies\Enemy2.h"
+#include "enemies\Enemy3.h"
+#include "enemies\Enemy4.h"
+#include "enemies\Boss.h"
+#include "enemies\Worm.h"
 #include "player\Player.h"
 #include "ExplosionFactory.h"
 
@@ -20,7 +24,7 @@ private:
 	void lateDestroyCharacter();
 
 public:
-	enum CharacterAvailable{cPlayer, cEnemy1, cEnemy2};
+	enum CharacterAvailable{cPlayer, cEnemy1, cEnemy2, cEnemy3, cEnemy4, cBoss, cWormUp, cWormDown};
 
 	static CharacterFactory *getInstance();
 	static void deleteReference();

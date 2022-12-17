@@ -33,9 +33,6 @@ Texture* TextureManager::getSpriteSheet(Textures type) {
 		case TextureManager::Player:
 			image = "images/player/player.png";
 			break;
-		case TextureManager::PlayerStt:
-			image = "images/player/player-stt.png";
-			break;
 		case TextureManager::Force:
 			image = "images/player/force-pit-beam.png";
 			break;
@@ -45,8 +42,11 @@ Texture* TextureManager::getSpriteSheet(Textures type) {
 		case TextureManager::Waves:
 			image = "images/projectiles/waves.png";
 			break;
-		case TextureManager::BloodEnemies:
-			image = "images/enemies/enemigos.png";
+		case TextureManager::Enemies:
+			image = "images/Enemies/basic-enemies.png";
+			break;
+		case TextureManager::Boss:
+			image = "images/enemies/Boss.png";
 			break;
 		case TextureManager::PoweUp:
 			image = "images/misc/power-ups.png";
